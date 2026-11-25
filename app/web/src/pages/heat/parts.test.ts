@@ -15,6 +15,8 @@ describe("Model or Calculation", () => {
   });
   test("the district's Model: its demand's profile (also before it is moved), or its measured column", () => {
     expect(districtSource(undefined, "Heat_Demand", [])).toEqual({ from: "profile" });
+    expect(districtSource(undefined, "Heat_Demand", ["Heat_Demand"])).toEqual({ from: "measured", column: "Heat_Demand" }); // not moved: its measurement
+    expect(districtSource("profile", "Heat_Demand", ["Heat_Demand"])).toEqual({ from: "profile" }); // moved to a profile: the profile
     expect(districtSource("off", "Heat_Demand", ["Heat_Demand"])).toEqual({ from: "measured", column: "Heat_Demand" });
     expect(districtSource("data", "Heat_Demand", ["Heat_Demand"])).toEqual({ from: "measured", column: "Heat_Demand" });
     expect(districtSource("off", "Q_houses", [])).toHaveProperty("why");

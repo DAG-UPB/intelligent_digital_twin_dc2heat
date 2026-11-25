@@ -91,11 +91,11 @@ BDEW, AGFW/ZfK, Jürgens et al. 2024. "estimate": contingency, study, CO₂ rise
 | Pipes | 4,516 m: 196 transmission (DN250), 2,825 distribution (DN200–32), 1,494 house connections (DN65–32) |
 | Plant | HP 4,223 kW = half the peak hour (ceiling 4,399), seasonal COP 4.05, 19,064 MWh (85.6 %), 4,711 MWh electricity; boiler 4,320 kW, 3,206 MWh (14.4 %) |
 | Density, losses | 5.0 MWh/(m·a), 3.4 % |
-| Money | capex 17.55 M€, 17.50 after Modul 1; no funding gap; NPV +2.76 M€ (+0.72 without residual); break-even year 19, payback 12.0 a; LCOH 120 €/MWh vs 130 sold |
+| Money | capex 17.55 M€, 17.50 after Modul 1; no funding gap; NPV +2.58 M€ (+0.72 without residual); break-even year 19, payback 12.0 a; LCOH 121 €/MWh vs 130 sold |
 
-Sensitivity: BEW off 2.71 M€ / year 19; heat 110 €/MWh → gap 2.89 M€ closed by Modul 2 alone, NPV 0; heat 90 → the
-full 40 % grant + Modul 4 at 12.5 €/MWh, NPV 0; heat 70 → −2.44 M€ with full aid; pipe × 0.6 → 5.90 M€ / year 14;
-suburban 5.05 / 15; 3 % → 7.29 / 16. Quick analysis on the same site (all 150 sinks, a tank): HP 4,399 kW, 21,957 MWh
+Sensitivity: BEW off 2.53 M€ / year 19; heat 110 €/MWh → gap 3.08 M€ closed by Modul 2 alone, NPV 0; heat 90 → the
+full 40 % grant + Modul 4 at 13.8 €/MWh, NPV 0; heat 70 → −2.63 M€ with full aid; pipe × 0.6 → 5.71 M€ / year 14;
+suburban 4.86 / 15; 3 % → 7.01 / 16. Quick analysis on the same site (all 150 sinks, a tank): HP 4,399 kW, 21,957 MWh
 delivered, 72.6 %, 5,441 MWh electricity, 2,836 t CO₂.
 
 ## Traps

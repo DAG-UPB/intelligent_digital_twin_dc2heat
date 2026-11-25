@@ -323,8 +323,9 @@ function step(s: OpSeries, p: OpPlant, i: number, dt: number, level: number, pre
 function ruleWant(strategy: "heat" | "price", s: OpSeries, p: OpPlant, i: number, level: number, dt: number, cheap: boolean) {
   const d = Math.max(0, s.demand[i]);
   if (strategy === "heat" || cheap) return Infinity; // as much as it can: the demand, then the tank
-  // expensive: the tank serves first, as much as it can give (the bucket: all of it)
-  return Math.max(0, d - (p.rc ? tankStep(s, p, i, dt, level).give : level / dt));
+  // expensive: the tank serves first, as much as it can give after its standing loss (as step() draws it; before, the
+  // bucket's level before the loss: the step's loss was bought as backup)
+  return Math.max(0, d - tankStep(s, p, i, dt, level).give);
 }
 
 /** The day's median price of each step (the rule's threshold), days by `stepsPerDay`. */
@@ -514,6 +515,15 @@ function run(strategy: Strategy, s: OpSeries, p: OpPlant, dt: number, obj: Objec
 }
 
 /**
+ * The page's price defaults, in step with the heat network's economics (district/networkCost.ts DEFAULT_PARAMS, its
+ * sources; operation.test.ts checks it): its electricity, 179 €/MWh for industry (BDEW), is the synthetic year's mean
+ * spot (0.080 €/kWh) plus these fees and levies; its peak boiler's heat, gas 60 €/MWh and CO₂ 60 €/t burnt at 95 %,
+ * costs 0.076 €/kWh. Before, 0.14 and 0.11: electricity about a third dearer than the network's, the backup half again.
+ */
+export const FEES_EUR_KWH = 0.1;
+export const BACKUP_EUR_KWH = 0.076;
+
+/**
  * A synthetic day-ahead electricity price, €/kWh (a stand-in: no market data in the app), shaped like the German
  * day-ahead market of the last years: a seasonal level (dearer in winter), a morning and a stronger evening peak (both
  * higher in winter), a midday dip from solar that is deepest in late spring and early summer (then the spot goes
@@ -521,7 +531,7 @@ function run(strategy: Strategy, s: OpSeries, p: OpPlant, dt: number, obj: Objec
  * `fixed` adds the grid fees and levies. The grid's CO₂ follows the same drivers (solar at noon is clean, the
  * evening peak is gas). Both by unix seconds.
  */
-export function syntheticPrice(times: number[], spread = 1, fixed = 0.14): { price: number[]; co2: number[] } {
+export function syntheticPrice(times: number[], spread = 1, fixed = FEES_EUR_KWH): { price: number[]; co2: number[] } {
   let seed = 7;
   const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647 - 0.5;
   const price: number[] = [];
@@ -573,7 +583,7 @@ export function marketSeries(times: number[], m: { times: number[]; price_eur_mw
  * the period times `spread` (1: as it was), plus `fixed` (grid fees and levies); the CO₂ of the generation mix as it
  * was. A step without a market value takes the synthetic year's (syntheticPrice); `missing` counts them.
  */
-export function marketPrice(times: number[], m: MarketSeries, spread = 1, fixed = 0.14): { price: number[]; co2: number[]; missing: { price: number; co2: number } } {
+export function marketPrice(times: number[], m: MarketSeries, spread = 1, fixed = FEES_EUR_KWH): { price: number[]; co2: number[]; missing: { price: number; co2: number } } {
   const synth = m.spot.some((v) => v == null) || m.co2.some((v) => v == null) ? syntheticPrice(times, spread, fixed) : null;
   const known = m.spot.filter((v): v is number => v != null);
   const mean = known.length ? known.reduce((a, b) => a + b, 0) / known.length : 0;
@@ -617,25 +627,26 @@ export function breakdown(r: OpResult, s: OpSeries, p: OpPlant, times: number[],
 export interface OpSummary {
   objective: Objective;
   cooling: boolean; // the data center's avoided cooling counted (cost and CO₂ net of it)
-  best: { scenario: string; strategy: string; costEur: number; co2T: number; dcMwh: number; backupMwh: number; coolMwh: number };
-  base: { scenario: string; costEur: number; co2T: number; dcMwh: number; backupMwh: number; coolMwh: number };
+  best: { scenario: string; strategy: string; costEur: number; co2T: number; plantMwh: number; backupMwh: number; coolMwh: number };
+  base: { scenario: string; costEur: number; co2T: number; plantMwh: number; backupMwh: number; coolMwh: number };
 }
 
 /**
- * The cheapest (or cleanest) run of the scenarios without a what-if on the demand or the heat (those are not a plant to
- * pick), against heat-led in the same scenario: the same prices and plant, so the difference is the strategy's (against
- * the first scenario's heat-led it mixed in another price spread or size). The data center's heat delivered is the
- * demand less the backup (every run meets the same demand).
+ * The cheapest (or cleanest) run of the scenarios at the page's prices and without a what-if on the demand or the heat
+ * (another price spread is a market to expect, not a plant to pick: its saving is no saving at today's prices), against
+ * heat-led in the same scenario: the same prices and plant, so the difference is the strategy's. The plant's heat
+ * delivered is the demand less the backup (every run meets the same demand).
  */
 export function summaryOf(
   out: ScenarioRun[],
-  scenarios: { id: number; name: string; demandX?: number | null; supplyX?: number | null }[],
+  scenarios: { id: number; name: string; spread?: number | null; demandX?: number | null; supplyX?: number | null }[],
   objective: Objective,
   cooling: boolean,
+  spread = 1, // the page's price spread: a scenario with its own (spread set and other) is left out
 ): OpSummary | null {
-  const fig = (t: OpResult["totals"], demandMwh: number) => ({ costEur: t.costEur, co2T: t.co2T, dcMwh: demandMwh - t.backupMwh, backupMwh: t.backupMwh, coolMwh: t.coolMwh });
+  const fig = (t: OpResult["totals"], demandMwh: number) => ({ costEur: t.costEur, co2T: t.co2T, plantMwh: demandMwh - t.backupMwh, backupMwh: t.backupMwh, coolMwh: t.coolMwh });
   const pick = (t: OpResult["totals"]) => (objective === "cost" ? t.costEur : t.co2T);
-  const same = (id: number) => !scenarios.some((s) => s.id === id && ((s.demandX ?? 1) !== 1 || (s.supplyX ?? 1) !== 1));
+  const same = (id: number) => !scenarios.some((s) => s.id === id && ((s.demandX ?? 1) !== 1 || (s.supplyX ?? 1) !== 1 || (s.spread ?? spread) !== spread));
   const all = out.filter((r) => same(r.id)).flatMap((r) => STRATEGIES.map((st) => ({ r, st, t: r.runs[st.id].totals })));
   if (!all.length) return null;
   const top = all.reduce((x, y) => (pick(y.t) < pick(x.t) ? y : x));

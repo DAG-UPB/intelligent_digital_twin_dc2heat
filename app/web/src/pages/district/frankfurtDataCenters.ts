@@ -1,7 +1,6 @@
 /**
- * The built-in example data centers of the Site map: the app's own datasets (simulation and MiniDC testbed), placed on
- * two Frankfurt buildings (outlines from OpenStreetMap, © OpenStreetMap contributors, ODbL); their figure comes from
- * the datasets. Further examples (real sites) are machine-local: `_local/map_examples.json` in the data directory,
+ * The built-in example data center of the Site map: the app's own simulated datasets, placed on a Frankfurt building
+ * (outline from OpenStreetMap, © OpenStreetMap contributors, ODbL); its figure comes from the datasets. Further examples (real sites) are machine-local: `_local/map_examples.json` in the data directory,
  * served by GET /api/district/examples and never part of the repository.
  */
 import type { ExampleDataCenter } from "../../api";
@@ -20,20 +19,6 @@ export const BUILT_IN_EXAMPLES: ExampleDataCenter[] = [
       "bubble shows it; 63 kW only sizes this marker); a simulation, not the ECB's data center",
     source: "https://www.openstreetmap.org/way/156432555",
     appDataset: true,
-  },
-  {
-    name: "MiniDC demonstrator · Evangelische Akademie Frankfurt",
-    buildings: [[[50.109777,8.681612],[50.109759,8.681623],[50.109763,8.681639],[50.109636,8.681718],[50.109567,8.681761],[50.109564,8.681747],[50.109549,8.681756],[50.109521,8.681774],[50.109519,8.681776],[50.109486,8.681654],[50.109481,8.681634],[50.109505,8.681619],[50.109527,8.681605],[50.109524,8.681593],[50.109596,8.681548],[50.109718,8.681472],[50.109719,8.681471],[50.109721,8.681479],[50.109798,8.68143],[50.109811,8.681422],[50.109848,8.681566],[50.109842,8.68157],[50.109777,8.681612]]],
-    address: "Römerberg 9, 60311 Frankfurt am Main",
-    lat: 50.109647,
-    lon: 8.681612,
-    heatKw: 0.5,
-    basis:
-      "the app's datasets (demonstrator, minidc_exp_1 … 5): a small testbed (< 1 kW); its data have no power column " +
-      "(CPU temperatures, a stress level, fans, pumps, water temperatures), so 0.5 kW is a placeholder, not a measurement",
-    source: "https://www.openstreetmap.org/way/72473802",
-    appDataset: true,
-    labelLeft: true, // the ECB is 1.5 km east at the same latitude
   },
 ];
 

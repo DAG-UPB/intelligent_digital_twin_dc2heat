@@ -91,7 +91,7 @@ Which KPIs appear today:
 |---|---|
 | Simulations 1–5 | PUE (partial), IT energy, and the note that there is no reused-heat column |
 | Simulation 1 · with heat exchangers | PUE 1.10, ERF 0.33 and ERE 0.73 with the condenser HEX (ERF 0.25 and ERE 0.82 with the hall HEX), IT energy 669 MWh, heat reused 243 MWh with the condenser HEX (73 % of the demand covered; hall HEX 186 MWh, 56 %) |
-| MiniDC, demonstrator, real data sets | The note: choose the KPI variables |
+| Real data sets | The note: choose the KPI variables |
 
 ## Data files too big to load
 

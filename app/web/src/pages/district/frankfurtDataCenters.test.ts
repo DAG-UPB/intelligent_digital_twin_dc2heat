@@ -17,7 +17,6 @@ test("every example data center sits in Frankfurt and has a heat figure with its
 test("only the app's own datasets are built in (real sites are machine-local)", () => {
   expect(BUILT_IN_EXAMPLES.map((d) => (d.appDataset ? d.name : "not an app dataset"))).toEqual([
     "Simulation data center · European Central Bank",
-    "MiniDC demonstrator · Evangelische Akademie Frankfurt",
   ]);
 });
 

@@ -45,6 +45,14 @@ const STAMPS: uPlot.Axis.TimeValuesConfig = [
   [60, "{HH}:{mm}", "\n{D}.{M}.{YYYY}", null, "\n{D}.{M}.", null, null, null, 1],
 ];
 
+/** A value axis's ticks as every number on the page ("12.500", "0,2"; uPlot's own: "12,500", "0.2"), with the
+ * decimals their spacing needs. */
+export const germanTicks = (_u: unknown, ticks: number[]) => {
+  const step = ticks.length > 1 ? Math.abs(ticks[1] - ticks[0]) : Math.abs(ticks[0] ?? 1);
+  const d = step > 0 ? Math.min(6, Math.max(0, -Math.floor(Math.log10(step) + 1e-9))) : 0;
+  return ticks.map((t) => fmt(t, d));
+};
+
 /**
  * European dates on every uPlot time chart (ticks 15.1. and 14:00, legend 15.01.2024 14:00), not uPlot's US default
  * (1/15, 2pm), with month names in the page's language. The clock is the browser's (uPlot's default): the time stamps
@@ -53,7 +61,8 @@ const STAMPS: uPlot.Axis.TimeValuesConfig = [
  */
 export function europeanTime(o: uPlot.Options): uPlot.Options {
   if (o.scales?.x?.time === false) return o;
-  const [xAxis = {}, ...yAxes] = o.axes ?? [{}, {}];
+  const [xAxis = {}, ...given] = o.axes ?? [{}, {}];
+  const yAxes = given.map((a) => ({ values: germanTicks, ...a })); // a chart's own values win
   const [xSeries = {}, ...lines] = o.series;
   const names = LANG === "de" ? NAMES_DE : undefined;
   return {

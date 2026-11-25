@@ -123,7 +123,6 @@ A dataset may hold several graphs. Every `*.json` file of the folder is listed a
 | `causal_graph_manual.json` | The domain-knowledge graph drawn by experts, kept unchanged as the reference. | the local import scripts (`app/data/_local/scripts/`) |
 | `causal_graph_pcmci.json` | Same variables and links as the manual graph, each link's lags (1..5) discovered with PCMCI. Modelling trains on this one by default. | the local import scripts (`app/data/_local/scripts/`), `scripts/make_sim_1_modified.py` |
 | `causal_graph_pc.json` | The same with the PC algorithm (on the last 5000 rows for the imported data centers, because PC is slow on long series). | same |
-| `causal_graph_dk_1.json` … `_dk_5.json` | Domain-knowledge variants of different quality (MiniDC experiment 2 only), from the paper's DK-quality analysis. | the local import scripts (`app/data/_local/scripts/`) |
 | `causal_graph_discovered.json` | `sim_1` and `sim_1_modified` only: a graph found by full causal discovery with tigramite (PCMCI by default, over all variables and lags, with `link_strengths`), kept for comparison with the manual graph. In `sim_1` it was the default graph until the manual graph replaced it. | The first version of the app (its full causal discovery, since removed); not reproduced by a script |
 | any other name | Graphs saved by the user. | the user |
 

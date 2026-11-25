@@ -30,10 +30,10 @@ test("menu: the user's versions newest first, then the examples; per folder Simu
 test.each([
   ["Simulation 1 · with heat exchangers", "Sim 1 · HEX"],
   ["Simulation 2", "Sim 2"],
-  ["MiniDC testbed · experiment 1", "MiniDC · exp 1"],
+  ["Lab testbed · experiment 1", "Lab · exp 1"],
   ["Plant A (water-cooled) · rack 2", "Plant A · rack 2"],
   ["Plant B (air-cooled) · 5 min", "Plant B · 5 min"],
-  ["Demonstrator (MiniDC experiment 1)", "Demonstrator"],
+  ["Pilot (lab experiment 1)", "Pilot"],
   ["sim_3", "sim_3"],
   ["Testbed", "Testbed"], // nothing would be left: keep the name
   ["(draft)", "(draft)"],

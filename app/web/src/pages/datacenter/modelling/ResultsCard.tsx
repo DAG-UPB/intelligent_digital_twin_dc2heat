@@ -81,7 +81,7 @@ export function ResultsCard({
   picked: string | null; // its row marked
   onPick: (v: string) => void;
 }) {
-  const hasLevers = levers.length > 0;
+  const hasLevers = levers.length > 0 && eventCount > 0; // no change of a lever in the test period: nothing to score after one
   const span = hasLevers ? 4 : 3;
   const units = useMemo(() => unitsOf(configOf(dataset ?? undefined)), [dataset]);
   const [inspect, setInspect] = useState<{ v: string; name: string } | null>(null);

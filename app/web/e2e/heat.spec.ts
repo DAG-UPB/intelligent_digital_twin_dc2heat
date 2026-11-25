@@ -150,9 +150,10 @@ test("every part runs its Model or the Calculation; the Model says where it come
   await expect(logic(page, "Heat distribution").getByRole("radio", { name: "Model" })).toBeDisabled();
   await expect(logic(page, "Heat distribution").getByRole("radio", { name: "Calculation" })).toHaveAttribute("aria-checked", "true");
   await expect(page.getByText(/Model: no model yet: train one, or pick its plant models/)).toBeVisible();
-  // the district's Model: the profile its Modelling gives the demand (it starts as one); Calculation: the Site map's sinks
+  // the district's Model: its measured demand while its Modelling has not moved it (before: a default profile, unrelated
+  // to the measurement); Calculation: the Site map's sinks
   await expect(logic(page, "District").getByRole("radio", { name: "Model" })).toHaveAttribute("aria-checked", "true");
-  await expect(card(page, "District").getByText(/The profile of Heat_Demand/)).toBeVisible();
+  await expect(card(page, "District").getByText(/Heat_Demand, as measured/)).toBeVisible();
   await logic(page, "District").getByRole("radio", { name: "Calculation" }).click();
   await expect(card(page, "District").getByText(/Generated from the heat sinks/)).toBeVisible();
 });

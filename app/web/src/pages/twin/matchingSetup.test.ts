@@ -64,6 +64,10 @@ test("parts switched off: no heat pump, no tank, no direct steps; a plant model'
   expect([model.cop, model.hpKw]).toEqual([[3, 3, 3, 3], 250]);
 });
 
+test("a plant model's COP is clamped as matchHeat runs it (before: a COP of 12 went to Operation as it was)", () => {
+  expect(buildSetup(run({ partSeries: { hpCop: [12, 0.5, 3, 3] } })).cop).toEqual([8, 1.1, 3, 3]);
+});
+
 test("saved rounded, read back only for its data center; an old setup without direct, opts or result still reads", () => {
   stub();
   saveSetup({ ...buildSetup(run()), q: [400.04, 1, 2, 3] });

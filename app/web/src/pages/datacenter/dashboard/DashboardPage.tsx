@@ -278,7 +278,9 @@ export default function DashboardPage({ scope = "dc", starter }: { scope?: Struc
       : kpiKey && kpiRows?.key !== kpiKey
         ? `loading ${periodLabel(period, years)}…`
         : "all data"; // too many rows to load, or the load failed: the whole file's
-  const kpiTitle = scenario ? PARTS[scope].title : `${PARTS[scope].title} · ${periodSaid}`;
+  // Scenarios before a run: the period's measured KPIs as in Historical; after one, the twin's over its test period
+  // (before, the whole file's summed over every year, under a title without any period)
+  const kpiTitle = `${PARTS[scope].title} · ${scenario && played ? "test period" : periodSaid}`;
   const scenarioReady = dc ? !!cols?.it_power : runColumns.length > 0;
   // what the page shows, for the assistant (lib/live.ts): the KPIs as numbers with units over the period chosen
   useSnapshotDetail(() => ({
@@ -421,14 +423,14 @@ export default function DashboardPage({ scope = "dc", starter }: { scope?: Struc
             ) : dc ? (
               s.kpis.length > 0 && (
                 <KpiRow open={kpiTab === "more"} className="dash__kpis dash__kpis--center">
-                  {(!scenario && dcTiles ? dcTiles : s.kpis).map((k) => (
+                  {(dcTiles ?? s.kpis).map((k) => (
                     <Kpi key={k.label} label={k.label} value={compact(k.value)} unit={k.unit ?? undefined} sub={k.note} edge tone="var(--accent)" />
                   ))}
                 </KpiRow>
               )
             ) : kpis.length > 0 ? (
               <KpiRow open={kpiTab === "more"} className="dash__kpis dash__kpis--center">
-                {(!scenario && partTiles ? partTiles : kpis).map((k) => (
+                {(partTiles ?? kpis).map((k) => (
                   <Kpi
                     key={k.label}
                     label={k.label}
@@ -457,7 +459,7 @@ export default function DashboardPage({ scope = "dc", starter }: { scope?: Struc
             {dc && !scenario && s.kpi_note && <p className="muted dash__note">{s.kpi_note}</p>}
             {/* one row of tabs under the tiles, as Explore's; the open one under it, one at a time */}
             {(() => {
-              const tiles = scenario && played ? played : dc ? (!scenario && dcTiles ? dcTiles : s.kpis) : !scenario && partTiles ? partTiles : kpis;
+              const tiles = scenario && played ? played : dc ? (dcTiles ?? s.kpis) : (partTiles ?? kpis);
               const extra = Math.max(0, tiles.length - 5); // KpiRow shows five
               const open = kpiTab ?? null; // closed until clicked (a data center without IT power never gets its KPIs)
               const tabs = [

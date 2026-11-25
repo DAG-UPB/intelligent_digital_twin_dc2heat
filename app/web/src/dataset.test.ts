@@ -27,9 +27,9 @@ test("switchDataset remembers the choice and reloads, even when storage is block
   const setItem = vi.fn();
   const reload = vi.fn();
   vi.stubGlobal("window", { location: { reload, hash: "#/dc/pid" } });
-  (await load({ getItem: () => null, setItem })).switchDataset("minidc_exp_1");
-  expect(setItem).toHaveBeenCalledWith("dataset", "minidc_exp_1");
-  expect(setItem).toHaveBeenCalledWith("dataset:dc/pid", "minidc_exp_1"); // the page on screen opens on it
+  (await load({ getItem: () => null, setItem })).switchDataset("lab_exp_1");
+  expect(setItem).toHaveBeenCalledWith("dataset", "lab_exp_1");
+  expect(setItem).toHaveBeenCalledWith("dataset:dc/pid", "lab_exp_1"); // the page on screen opens on it
   const blocked = () => {
     throw new Error("SecurityError");
   };
@@ -41,11 +41,11 @@ test("each page has its own dataset: its choice, else the last one chosen, else 
   const store: Record<string, string> = {};
   const m = await load({ getItem: (k) => store[k] ?? null, setItem: (k, v) => void (store[k] = v) });
   expect(m.datasetOf("dc/pid")).toBe("sim_recovery_air");
-  m.chooseDataset("dc/pid", "minidc_exp_1");
-  expect(m.datasetOf("dc/pid")).toBe("minidc_exp_1");
-  expect(m.datasetOf("twin/map")).toBe("minidc_exp_1"); // a page without a choice opens on the last one
+  m.chooseDataset("dc/pid", "lab_exp_1");
+  expect(m.datasetOf("dc/pid")).toBe("lab_exp_1");
+  expect(m.datasetOf("twin/map")).toBe("lab_exp_1"); // a page without a choice opens on the last one
   m.chooseDataset("twin/map", "sim_2");
-  expect([m.datasetOf("dc/pid"), m.datasetOf("twin/map")]).toEqual(["minidc_exp_1", "sim_2"]);
+  expect([m.datasetOf("dc/pid"), m.datasetOf("twin/map")]).toEqual(["lab_exp_1", "sim_2"]);
   m.openDataset("sim_2");
   expect(m.DATASET).toBe("sim_2"); // the live binding the pages read
 });
@@ -71,8 +71,8 @@ test("a failed fetch is retried, a good one is cached", async () => {
 
 test("after a data-version switch the same data center stays open if the version has it, else its first", async () => {
   const { datasetAfterSwitch } = await load({ getItem: () => null });
-  expect(datasetAfterSwitch(["minidc_exp_1", "sim_1"], "sim_1")).toBe("sim_1");
-  expect(datasetAfterSwitch(["minidc_exp_1", "sim_1"], "sim_9")).toBe("minidc_exp_1");
+  expect(datasetAfterSwitch(["lab_exp_1", "sim_1"], "sim_1")).toBe("sim_1");
+  expect(datasetAfterSwitch(["lab_exp_1", "sim_1"], "sim_9")).toBe("lab_exp_1");
   expect(datasetAfterSwitch([], "sim_9")).toBe("sim_9");
 });
 

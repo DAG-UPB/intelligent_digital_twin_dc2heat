@@ -29,7 +29,6 @@ const SECTIONS: { id: string; text: string }[] = [
 
 const DATA_CENTERS: [string, string][] = [
   ["Simulations", "Simulated data centers with hourly data and known behaviour: the best place to learn the app. “Simulation 1 · with heat exchangers” also has two heat-recovery points."],
-  ["MiniDC testbed", "A small experimental data center. Each experiment is one measured run; the Demonstrator is based on experiment 1."],
 ];
 
 export default function AboutPage() {

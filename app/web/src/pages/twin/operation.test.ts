@@ -1,7 +1,9 @@
 import { describe, expect, it } from "vitest";
 import { DEFAULT_OPTIONS, matchHeat } from "../../lib/matching";
 import type { ScenarioRun } from "./operation.worker";
-import { breakdown, COOLING, CHARGE_DT, chargeCop, coolingPerKwh, dailyMedian, defaultRc, rejectorWater, tankTau, wetBulb, type Rejection, hpLimit, hpMax, marketPrice, marketSeries, operate, operationJob, summaryOf, syntheticPrice, tankStep, tankTemp, type OpPlant, type OpSeries, type TankRc } from "./operation";
+import { BACKUP_EUR_KWH, breakdown, COOLING, FEES_EUR_KWH, CHARGE_DT, chargeCop, coolingPerKwh, dailyMedian, defaultRc, rejectorWater, tankTau, wetBulb, type Rejection, hpLimit, hpMax, marketPrice, marketSeries, operate, operationJob, summaryOf, syntheticPrice, tankStep, tankTemp, type OpPlant, type OpSeries, type TankRc } from "./operation";
+import { CO2 } from "../../lib/partKpis";
+import { DEFAULT_PARAMS } from "../district/networkCost";
 
 const plant: OpPlant = { hpKw: 100, tauH: 0, tankKwh: 200, lossPctH: 0, backupPrice: 0.12, backupCo2: 0.22 };
 // two days: plenty of source heat, a flat demand, cheap nights and dear evenings
@@ -282,19 +284,27 @@ describe("the page's best case (summaryOf)", () => {
     demandMwh: 100,
     runs: Object.fromEntries(([["heat", heat], ["price", price], ["mpc", mpc]] as const).map(([k, c]) => [k, { totals: totals(c), years: [], months: [], hp: [], level: [] }])),
   }) as unknown as ScenarioRun;
-  const scenarios = [{ id: 1, name: "As set above" }, { id: 2, name: "Wider price swings" }];
+  const scenarios = [{ id: 1, name: "As set above" }, { id: 2, name: "Storage of 8 h" }];
 
   it("compares the best run with heat-led in its own scenario, not the first one's (audit P8)", () => {
     const sum = summaryOf([run(1, 353_904, 352_000, 350_000), run(2, 362_465, 355_000, 340_000)], scenarios, "cost", false)!;
-    expect(sum.best).toMatchObject({ scenario: "Wider price swings", strategy: "MPC (look-ahead)", costEur: 340_000 });
-    expect(sum.base).toMatchObject({ scenario: "Wider price swings", costEur: 362_465 }); // before: 353,904, heat-led at spread 1
-    expect(sum.best.dcMwh).toBe(90);
+    expect(sum.best).toMatchObject({ scenario: "Storage of 8 h", strategy: "MPC (look-ahead)", costEur: 340_000 });
+    expect(sum.base).toMatchObject({ scenario: "Storage of 8 h", costEur: 362_465 }); // before: 353,904, the first scenario's heat-led
+    expect(sum.best.plantMwh).toBe(90);
   });
 
   it("a what-if on the demand or the heat is no plant to pick; nothing left: null", () => {
     const sum = summaryOf([run(1, 100, 99, 98), run(2, 50, 40, 30)], [scenarios[0], { id: 2, name: "Demand ×2", demandX: 2 }], "cost", false)!;
     expect(sum.best.scenario).toBe("As set above");
     expect(summaryOf([run(2, 50, 40, 30)], [{ id: 2, name: "Demand ×2", demandX: 2 }], "cost", false)).toBeNull();
+  });
+
+  it("another price spread is a market, not a plant: left out (before, the best case came from doubled price swings)", () => {
+    const wider = [scenarios[0], { id: 2, name: "Wider price swings", spread: 2 }];
+    expect(summaryOf([run(1, 100, 99, 98), run(2, 120, 90, 80)], wider, "cost", false)!.best.scenario).toBe("As set above");
+    // the page at spread 2: a scenario set to 2 is at its prices, "as set above" too (its spread empty)
+    expect(summaryOf([run(1, 100, 99, 98), run(2, 120, 90, 80)], wider, "cost", false, 2)!.best.scenario).toBe("Wider price swings");
+    expect(summaryOf([run(1, 100, 99, 98), run(2, 120, 90, 80)], [scenarios[0], { id: 2, name: "Spread 1 typed", spread: 1 }], "cost", false)!.best.scenario).toBe("Spread 1 typed");
   });
 });
 
@@ -433,5 +443,16 @@ describe("the worker's job (operationJob)", () => {
     expect(j.scenarios[1].plant.rc).toMatchObject({ chargeKw: 200, dischargeKw: 160 }); // 800 of 200 kWh: × 4
     expect(j.scenarios[0].plant.rc).toBe(input.plant.rc); // the same tank: the same object
     expect(operationJob(1, { ...input, plant: { ...input.plant, tankKwh: 0 } }).scenarios[1].plant.rc).toMatchObject({ chargeKw: 50 }); // no tank to grow from
+  });
+});
+
+describe("the price defaults follow the heat network's (networkCost.ts)", () => {
+  it("fees: its electricity less the synthetic year's mean spot; backup: its peak boiler's gas and CO₂", () => {
+    const t0 = Date.UTC(2024, 0, 1) / 1000;
+    const spot = syntheticPrice(Array.from({ length: 8784 }, (_, i) => t0 + i * 3600), 1, 0).price;
+    const mean = spot.reduce((a, b) => a + b) / spot.length;
+    const p = DEFAULT_PARAMS;
+    expect(mean + FEES_EUR_KWH).toBeCloseTo(p.elecPrice / 1000, 2);
+    expect(BACKUP_EUR_KWH).toBeCloseTo((p.gasPrice + CO2.gas * p.co2Price) / (p.boilerEffPct / 100) / 1000, 3);
   });
 });

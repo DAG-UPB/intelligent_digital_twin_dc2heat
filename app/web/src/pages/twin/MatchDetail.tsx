@@ -63,7 +63,7 @@ export function MatchDetail({ res, demand, stepHours }: { res: MatchResult; dema
       rows: [
         ["Saved", `${fmt(co2SavedT(T.deliveredMwh, T.hpElecMwh))} t`],
         ["Gas not burnt", `${fmt((T.deliveredMwh * CO2.gas) / CO2.boiler)} t`, `${CO2.gas} kg/kWh, boiler ${CO2.boiler * 100} %`],
-        ["Heat pump's grid power", `− ${fmt(T.hpElecMwh * CO2.grid)} t`, `${CO2.grid} kg/kWh`],
+        ["Heat pump's grid power", `−${fmt(T.hpElecMwh * CO2.grid)} t`, `${CO2.grid} kg/kWh`],
       ],
     },
   ];

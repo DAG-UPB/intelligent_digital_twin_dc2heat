@@ -49,7 +49,7 @@ export const DEFAULT_OPTIONS: MatchOptions = {
 };
 
 export const COP_MAX = 8;
-const COP_MIN = 1.1;
+export const COP_MIN = 1.1;
 
 /** The Carnot COP's share `eff` lifting from tSrc to tHot (°C): eff · T_hot[K] / lift, the lift at least 5 K. Not
  * clamped: each caller clamps its own way (carnotCop below, pages/twin/operation.ts chargeCop). */

@@ -28,7 +28,7 @@ export const GUIDE: GuideStep[] = [
     ],
     todo: [
       "Pick a project, then on a page its data center. Only that page re-opens on it; every page keeps its own, remembered in this browser, and a page not set yet opens on the last one you chose. Which causal graph a page draws is chosen on the page (Graph file).",
-      "New to the app? Start with “Simulation 1 · with heat exchangers”: it has everything filled in.",
+      "New to the app? Start with Case 1 (Case, right of the sub-tabs): it has everything filled in.",
     ],
   },
   {

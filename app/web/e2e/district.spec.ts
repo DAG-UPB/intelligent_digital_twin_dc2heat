@@ -324,9 +324,9 @@ test("site map: built-in example data centers plus the machine-local ones, under
   });
   await page.goto("/#/district/map");
   const labels = page.locator(".site__dc-label");
-  await expect(labels).toHaveCount(3);
+  await expect(labels).toHaveCount(2);
   await expect(labels.filter({ hasText: "Plant <b>A</b> · 600 kW" })).toHaveCount(1); // escaped: shown as text
-  await expect(labels.filter({ hasText: "MiniDC demonstrator" })).toHaveCount(1);
+  await expect(labels.filter({ hasText: "Simulation data center" })).toHaveCount(1);
   const source = page.locator(".leaflet-overlay-pane path.leaflet-interactive").last(); // the site's source bubble stays on top
   await expect(async () => expect((await source.boundingBox())?.width).toBeGreaterThan(10)).toPass();
   await source.hover({ force: true });

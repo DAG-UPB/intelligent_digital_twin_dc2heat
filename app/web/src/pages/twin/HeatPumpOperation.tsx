@@ -23,7 +23,7 @@ import { Segmented } from "../../ui/Segmented";
 import { usableFor } from "../heat/partComponents";
 import { pointLabel } from "../heat/points";
 import { useComponentList } from "../heat/usePartComponents";
-import { COOLING, coolingPerKwh, defaultRc, hpMax, marketSeries, REJECTIONS, STRATEGIES, summaryOf, type Rejection, tankTemp, type Objective, type OpPlant, type OpScenario as Scenario, type OpSummary, type Strategy, type TankRc } from "./operation";
+import { BACKUP_EUR_KWH, COOLING, coolingPerKwh, FEES_EUR_KWH, defaultRc, hpMax, marketSeries, REJECTIONS, STRATEGIES, summaryOf, type Rejection, tankTemp, type Objective, type OpPlant, type OpScenario as Scenario, type OpSummary, type Strategy, type TankRc } from "./operation";
 import { useOperationRuns } from "./useOperationRuns";
 
 // canvas colours (uPlot can't read CSS vars), one per strategy
@@ -55,6 +55,8 @@ interface Props {
   stepHours: number;
   hpKw: number; // a starting size (the chosen design option's)
   tankKwh: number;
+  lossPctH?: number; // Heat Matching's tank loss, %/h (none: the default)
+  tauH?: number; // Heat Matching's heat pump time constant, h (none: 0.5)
   sizedAs: string; // the design option it starts from
 }
 
@@ -73,8 +75,12 @@ const saving = (base: number, x: number) => {
 };
 
 export function HeatPumpOperation(p: Props) {
-  const [plant, setPlant] = useKept<OpPlant>("op-plant", { hpKw: p.hpKw, tauH: 0.5, tankKwh: p.tankKwh, lossPctH: DEFAULT_OPTIONS.tankLossPct, backupPrice: 0.11, backupCo2: CO2.gas / CO2.boiler });
-  useEffect(() => setPlant((x) => ({ ...x, hpKw: p.hpKw, tankKwh: p.tankKwh })), [p.hpKw, p.tankKwh, setPlant]);
+  const [plant, setPlant] = useKept<OpPlant>("op-plant", { hpKw: p.hpKw, tauH: p.tauH ?? DEFAULT_OPTIONS.hpTauH, tankKwh: p.tankKwh, lossPctH: p.lossPctH ?? DEFAULT_OPTIONS.tankLossPct, backupPrice: BACKUP_EUR_KWH, backupCo2: CO2.gas / CO2.boiler });
+  // the plant Heat Matching ran: its sizes, and its tank loss and time constant where it had them (they were the defaults)
+  useEffect(
+    () => setPlant((x) => ({ ...x, hpKw: p.hpKw, tankKwh: p.tankKwh, ...(p.lossPctH != null && { lossPctH: p.lossPctH }), ...(p.tauH != null && { tauH: p.tauH }) })),
+    [p.hpKw, p.tankKwh, p.lossPctH, p.tauH, setPlant],
+  );
   const setP =
     <K extends keyof OpPlant>(k: K) =>
     (v: OpPlant[K]) =>
@@ -90,7 +96,7 @@ export function HeatPumpOperation(p: Props) {
   const hasCop = !!p.cop;
   useEffect(() => setCopModel(hasCop ? "matching" : ""), [hasCop]);
   const [spread, setSpread] = useKept("op-spread", 1);
-  const [fees, setFees] = useKept("op-fees", 0.14);
+  const [fees, setFees] = useKept("op-fees", FEES_EUR_KWH);
   // the market's price and CO₂ (SMARD, GET /api/market/hourly) for the page's hours, when someone dropped its files in
   const [priceFrom, setPriceFrom] = useKept<"market" | "synthetic">("op-price-from", "market");
   const [market, setMarket] = useState<{ hours: MarketHours | null; error: string | null }>({ hours: null, error: null });
@@ -194,7 +200,7 @@ export function HeatPumpOperation(p: Props) {
 
   // the key figures for the page (operation.ts summaryOf): the cheapest (or cleanest) run against heat-led in its scenario
   const { onSummary } = p;
-  useEffect(() => onSummary?.(out ? summaryOf(out, scenarios, objective, countCooling) : null), [out, onSummary, objective, scenarios, countCooling]);
+  useEffect(() => onSummary?.(out ? summaryOf(out, scenarios, objective, countCooling, spread) : null), [out, onSummary, objective, scenarios, countCooling, spread]);
 
   const sel = out?.find((r) => r.id === picked) ?? out?.[0];
   const selScenario = scenarios.find((s) => s.id === sel?.id);
@@ -207,7 +213,8 @@ export function HeatPumpOperation(p: Props) {
   const bar = (st: Strategy, base: { costEur: number; co2T: number; backupMwh: number }, x: { costEur: number; co2T: number; backupMwh: number }) => {
     const v = metric === "saved" ? val(base) - val(x) : base.backupMwh - x.backupMwh;
     const pctText = metric === "saved" && val(base) ? ` · ${fmt((100 * v) / val(base), 1)} %` : "";
-    const text = metric === "saved" ? `${fmt(v, objective === "cost" ? 0 : 1)} ${unit}${pctText}` : `${fmt(v, 0)} MWh`;
+    // a minus sign as the table's, not the hyphen toLocaleString writes
+    const text = (metric === "saved" ? `${fmt(v, objective === "cost" ? 0 : 1)} ${unit}${pctText}` : `${fmt(v, 0)} MWh`).replace(/-/g, "−");
     return { label: STRATEGIES.find((s) => s.id === st)!.label, value: v, color: BAR[st], text };
   };
   const ran = scenarios.flatMap((sc) => {
@@ -465,14 +472,14 @@ export function HeatPumpOperation(p: Props) {
       {scenarioBars.length > 0 && (
         <>
           <div className="plan-bars-head">
-            <h3 className="plan-h3">{metric === "saved" ? `What each strategy saves against heat-led (${unit})` : "Data center heat used more than heat-led (MWh)"}</h3>
+            <h3 className="plan-h3">{metric === "saved" ? `What each strategy saves against heat-led (${unit})` : "Backup heat avoided against heat-led (MWh)"}</h3>
             <Segmented<Metric>
               label="Bars show"
               value={metric}
               onChange={setMetric}
               options={[
                 { id: "saved", label: objective === "cost" ? "Saving" : "CO₂ saved" },
-                { id: "heat", label: "Waste heat used" },
+                { id: "heat", label: "Backup avoided" },
               ]}
             />
           </div>
@@ -485,7 +492,7 @@ export function HeatPumpOperation(p: Props) {
           <p className="plan-note">
             {metric === "saved"
               ? `Heat-led's ${what} minus the strategy's, over the period (the same demand, the same plant). Below zero: it costs more.`
-              : "Every strategy meets the same demand; what the heat pump does not give comes from the backup. Above zero: less backup, more of the data center's heat used. Below zero: it saves by letting the backup do more."}
+              : "Every strategy meets the same demand; what the heat pump does not give comes from the backup. Above zero: less backup, the heat pump gives more (the data center's heat plus its own electricity). Below zero: it saves by letting the backup do more."}
           </p>
         </>
       )}
@@ -493,7 +500,7 @@ export function HeatPumpOperation(p: Props) {
       {sel && (
         <>
           <h3 className="plan-h3">
-            {selScenario?.name ?? "Scenario"} · by month · {metric === "saved" ? `saving (${unit})` : "waste heat used (MWh)"}
+            {selScenario?.name ?? "Scenario"} · by month · {metric === "saved" ? `saving (${unit})` : "backup heat avoided (MWh)"}
           </h3>
           <BarChart
             label="By month"
@@ -553,7 +560,7 @@ export function HeatPumpOperation(p: Props) {
           </div>
           <p className="plan-note">
             Over the whole period:{" "}
-            {STRATEGIES.map((st) => `${st.label} ${fmt(sel.runs[st.id].totals.runHours, 0)} h running, ${fmt(sel.runs[st.id].totals.starts, 0)} starts`).join(
+            {STRATEGIES.map((st) => `${st.label} ${fmt(sel.runs[st.id].totals.runHours, 0)} h running, ${sel.runs[st.id].totals.starts === 1 ? "1 start" : `${fmt(sel.runs[st.id].totals.starts, 0)} starts`}`).join(
               " · ",
             )}
             .

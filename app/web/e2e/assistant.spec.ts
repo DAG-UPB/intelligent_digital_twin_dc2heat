@@ -372,5 +372,5 @@ test("the assistant moves the Site map", async ({ page, request }) => {
   await expect.poll(async () => (await (await request.get("/api/live/ui-state")).json()).state?.route).toBe("twin/map"); // #/district/map forwards to the whole twin's site map
   const site = (await snap(request)).detail;
   expect(site.examples_on_the_map.length).toBeGreaterThan(0);
-  expect((await doIt(request, "map_focus", { example: "MiniDC" })).did).toContain("MiniDC");
+  expect((await doIt(request, "map_focus", { example: "Simulation" })).did).toContain("Simulation data center");
 });

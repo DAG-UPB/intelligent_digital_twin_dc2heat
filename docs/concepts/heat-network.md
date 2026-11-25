@@ -280,23 +280,23 @@ Fixed in the code: the boiler's life (30 years, KWW table 20), the substation ex
 | Heat density, losses | 5.0 MWh/(m·a); 768 MWh a year, 3.4 % |
 | Investment | 17.55 M€: heat pump 4.01, grid 0.15, transmission 0.87, distribution 5.12, house connections 1.29, substations 1.67, pumps 0.84, boiler 0.43, planning 1.47, contingency 1.59, study 0.10; 17.50 M€ after the Modul 1 grant |
 | BEW | no funding gap: no Modul 2 grant and no operating aid |
-| NPV, 20 years at 5 % | +2.76 M€ (+0.72 M€ without the residual value); the network pumps' electricity 100 MWh a year (0.5 % of the heat; the longest way 536 m, a head of 2.6 bar) |
+| NPV, 20 years at 5 % | +2.58 M€ (+0.72 M€ without the residual value); the network pumps' electricity 100 MWh a year (0.5 % of the heat; the longest way 536 m, a head of 2.6 bar) |
 | Break-even | year 19 (simple payback 12.0 years) |
-| Cost of heat | 120 €/MWh, against the 130 €/MWh it is sold at |
+| Cost of heat | 121 €/MWh, against the 130 €/MWh it is sold at |
 
 How the result moves when one assumption changes:
 
 | Case | BEW aid | NPV | Break-even | Cost of heat |
 |---|---|---|---|---|
-| BEW off | none (no Modul 1 either) | +2.71 M€ | year 19 | 120 €/MWh |
-| Heat price 110 €/MWh | a gap of 2.89 M€, closed by the Modul 2 grant alone; no operating aid | 0 | year 20 | 120 €/MWh |
-| Heat price 90 €/MWh | a gap of 8.55 M€: the full 40 % grant (6.81 M€) and the operating aid cut to 12.5 €/MWh | 0 | year 20 | 120 €/MWh |
-| Heat price 70 €/MWh | the full 40 % grant and the full operating aid (35.5 €/MWh) | −2.44 M€ | none | 120 €/MWh |
-| Pipe costs × 0.6 | none | +5.90 M€ | year 14 | 109 €/MWh |
-| Suburban pipe prices | none | +5.05 M€ | year 15 | 112 €/MWh |
-| Discount rate 3 % | none | +7.29 M€ | year 16 | 109 €/MWh |
-| Heat price 160 €/MWh | none | +11.25 M€ | year 11 | 120 €/MWh |
-| Heat pump for the full peak | a gap of 0.13 M€, closed by the Modul 2 grant | 0 | year 20 | 131 €/MWh (36 buildings, 1,249 m, 4,399 kW: the most the data center allows, under the design peak) |
+| BEW off | none (no Modul 1 either) | +2.53 M€ | year 19 | 121 €/MWh |
+| Heat price 110 €/MWh | a gap of 3.08 M€, closed by the Modul 2 grant alone; no operating aid | 0 | year 20 | 121 €/MWh |
+| Heat price 90 €/MWh | a gap of 8.74 M€: the full 40 % grant (6.86 M€) and the operating aid cut to 13.8 €/MWh | 0 | year 20 | 121 €/MWh |
+| Heat price 70 €/MWh | the full 40 % grant and the full operating aid (35.5 €/MWh) | −2.63 M€ | none | 121 €/MWh |
+| Pipe costs × 0.6 | none | +5.71 M€ | year 14 | 110 €/MWh |
+| Suburban pipe prices | none | +4.86 M€ | year 15 | 113 €/MWh |
+| Discount rate 3 % | none | +7.01 M€ | year 16 | 109 €/MWh |
+| Heat price 160 €/MWh | none | +11.06 M€ | year 11 | 121 €/MWh |
+| Heat pump for the full peak | a gap of 0.27 M€, closed by the Modul 2 grant | 0 | year 20 | 132 €/MWh (36 buildings, 1,249 m, 4,399 kW: the most the data center allows, under the design peak) |
 
 The cost of heat does not follow the heat price: it is counted without the aid that is sized to close the gap at that price (Modul 1 only).
 

@@ -304,11 +304,9 @@ Outlines are stored as `[lat, lon]` rings (Leaflet's order). GeoJSON is `[lon, l
 ### Example data centers (example layer)
 
 The Site map always shows example data centers as an overlay ("Data centers (example)" in the layer control, on by
-default). Two are built in: the app's own datasets placed on Frankfurt buildings, drawn as red rings: the simulations
-(`sim_*`) on the European Central Bank (63 kW, the maximum IT power `ITE_Ener` of `sim_1_modified`; mean 38 kW) and
-the MiniDC testbed (`demonstrator`, `minidc_exp_*`) on the Evangelische Akademie Frankfurt (shown as "< 1 kW": its
-data have no power column, so the 0.5 kW behind the marker is a placeholder). These datasets' `site.json` puts their
-data-center building there, so their Site map opens on it. The built-in list is static
+default). One is built in: the app's own simulations (`sim_*`) placed on a Frankfurt building, the European Central
+Bank, drawn as a red ring (63 kW, the maximum IT power `ITE_Ener` of `sim_1_modified`; mean 38 kW). These datasets'
+`site.json` puts their data-center building there, so their Site map opens on it. The built-in list is static
 (`app/web/src/pages/district/frankfurtDataCenters.ts`).
 
 Further examples, such as real sites to compare with, are machine-local: `app/data/_local/map_examples.json` (never

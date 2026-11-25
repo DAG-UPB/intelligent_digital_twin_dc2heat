@@ -136,7 +136,7 @@ export default function QuickWindow({
   const sourceLine =
     from === "twin"
       ? hmDate
-        ? `Heat Matching's year as it last ran, ${hmDate} · ${twin.label}`
+        ? `Heat Matching's year as it last ran, ${hmDate} · ${hm ? `${pointTitle(hm.at)} · ${hm.dcFrom}` : twin.label}` // its own point and model, not this card's guess
         : `${twin.label}${twin.dc && twin.dc.share < 0.99 ? ` · ${fmt(twin.dc.share * 100)} % of the year from its period, the rest its mean day` : ""}`
       : src
         ? `${fmt(kw)} kW waste heat at ${fmt(tC)} °C, flat all year (the Data center card)`

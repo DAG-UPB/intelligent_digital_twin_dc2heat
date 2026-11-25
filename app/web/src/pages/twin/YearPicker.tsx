@@ -155,8 +155,9 @@ export function YearPicker({ s, outTemp, win, per, onIndex, label, spanSec }: Pr
       <div className="heat-chart-head">
         <span className="caps">The year · daily mean</span>
         <span className="heat-meta">
-          {win.kind} {index + 1} · {dateOf(xs[a], spanSec)} – {dateOf(xs[b - 1], spanSec)} · outdoor {fmt(mean(outTemp), 1)} °C · DC heat {fmt(mean(s.q), 1)} kW
-          · demand {fmt(mean(s.demand), 1)} kW · delivered {fmt(mean(s.delivered), 1)} kW
+          {/* one text, its parts joined by " · " (each translated on its own); its days in UTC as the windows are cut (the
+              browser's clock put a week's last hour on the next day: "15 Jan – 22 Jan") */}
+          {`${win.kind} ${index + 1} · ${dateOf(xs[a], spanSec, "UTC")} – ${dateOf(xs[b - 1], spanSec, "UTC")} · outdoor ${fmt(mean(outTemp), 1)} °C · DC heat ${fmt(mean(s.q), 1)} kW · demand ${fmt(mean(s.demand), 1)} kW · delivered ${fmt(mean(s.delivered), 1)} kW`}
         </span>
       </div>
       <div

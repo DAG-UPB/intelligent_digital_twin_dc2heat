@@ -104,6 +104,13 @@ export default function PlanningPage() {
     const d = hmHp ? hmHp.direct : hpv?.hex && run ? run.viaHp.map((v) => !v) : undefined;
     return d?.slice(0, nOp);
   }, [hmHp, hpv, runs, variants, nOp]);
+  // Operation's series, cut to one length once: new arrays on every render restarted its year-long job each time its
+  // answer re-rendered this page (onSummary), a job every few seconds for as long as the page was open
+  const opSeries = useMemo(() => {
+    if (!src || !demand || !times) return null;
+    const m = Math.min(src.q.length, demand.length);
+    return { times: times.slice(0, m), q: src.q.slice(0, m).map((x) => x * usable), tSrc: src.t.slice(0, m), demand: demand.slice(0, m) };
+  }, [src, demand, times, usable]);
   const sketch = hmHp
     ? { parts: hmHp.parts, hpKw: hmHp.hpKw, tankKwh: hmHp.tankKwh }
     : { parts: { hex: hpv?.hex ?? true, hp: !!hpv, tank: (hpv?.tankKwh ?? 0) > 0 }, hpKw: (hpv?.hpMw ?? 0) * 1000, tankKwh: hpv?.tankKwh ?? 0 };
@@ -170,10 +177,10 @@ export default function PlanningPage() {
                 <Kpi
                   label="Heat delivered by the plant"
                   hint="The district's demand less the backup heat: the heat pump's (its electricity included, not only the data center's heat), the tank's and the direct heat exchanger's"
-                  value={fmt(summary.best.dcMwh)}
+                  value={fmt(summary.best.plantMwh)}
                   unit="MWh"
                   tone="var(--heat-strong)"
-                  sub={`${change(summary.best.dcMwh, summary.base.dcMwh, "MWh")} vs heat-led`}
+                  sub={`${change(summary.best.plantMwh, summary.base.plantMwh, "MWh")} vs heat-led`}
                 />
                 <Kpi label="Backup heat" value={fmt(summary.best.backupMwh)} unit="MWh" tone="var(--danger)" sub={`${change(summary.best.backupMwh, summary.base.backupMwh, "MWh")} vs heat-led`} />
                 {summary.cooling && (
@@ -188,7 +195,7 @@ export default function PlanningPage() {
               </KpiRow>
               <p className="plan-note">
                 Best case: <b>{summary.best.strategy}</b> in the scenario <b>{summary.best.scenario}</b> (the {summary.objective === "cost" ? "cheapest" : "least CO₂"} of the scenarios
-                below), against heat-led in the same scenario.
+                below at the prices set above), against heat-led in the same scenario.
               </p>
             </>
           )}
@@ -209,12 +216,12 @@ export default function PlanningPage() {
         </Field>
       )}
 
-      {src && demand && supply !== undefined && times && (hmHp || hpv) && (
+      {opSeries && supply !== undefined && (hmHp || hpv) && (
         <HeatPumpOperation
-          times={times.slice(0, Math.min(src.q.length, demand.length))}
-          q={src.q.slice(0, demand.length).map((x) => x * usable)}
-          tSrc={src.t.slice(0, demand.length)}
-          demand={demand.slice(0, src.q.length)}
+          times={opSeries.times}
+          q={opSeries.q}
+          tSrc={opSeries.tSrc}
+          demand={opSeries.demand}
           supply={supply}
           at={at}
           tOut={tOut}
@@ -226,6 +233,8 @@ export default function PlanningPage() {
           stepHours={stepHours}
           hpKw={sketch.hpKw}
           tankKwh={sketch.tankKwh}
+          lossPctH={hmHp?.opts?.tankLossPct}
+          tauH={hmHp?.opts?.hpTauH}
           sizedAs={hmHp ? "on Heat Matching" : hpv!.name}
         />
       )}

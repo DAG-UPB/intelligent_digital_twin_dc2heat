@@ -581,7 +581,7 @@ export const PARAMS: ParamDef[] = [
     max: 60,
     step: 1,
     source: DEA_NET,
-    note: "DEA 45 (30-60); also the pumps' and the grid connection's",
+    note: "DEA 45 (30-60); the network pumps last 20 years, the grid connection fee is paid once (no value left at the end)",
   },
   { key: "hpLife", group: "Money", label: "Heat pump's life", unit: "years", min: 10, max: 40, step: 1, source: DEA_HP },
   { key: "substationLife", group: "Money", label: "Substations' life", unit: "years", min: 10, max: 40, step: 1, source: KWW },
@@ -590,6 +590,8 @@ export const BEW_SOURCE = BEW;
 export const BEW_M4_SOURCE = BEW_M4;
 
 const BOILER_LIFE = 30; // KWW Tab 20
+// ponytail: an estimate (large network pumps last some 15-25 years; before, the pipes' 40); a setting if it matters
+const PUMP_LIFE = 20;
 const PA_PER_M = 150; // the DN table's specific pressure loss (PIPE_SOURCE: Nussbaumer & Thalmann 2017), the pumps' head per metre
 const SUBSTATION_B = 0.37917; // KWW Tab 40: I = a · P_kW^b
 const BEW_MIN_SHARE = 0.75; // BEW: a new network needs this share of renewable or waste heat
@@ -717,7 +719,7 @@ export interface SizedPipe {
   lossW: number;
 }
 
-export type Asset = "hp" | "pipes" | "substations" | "boiler" | "soft";
+export type Asset = "hp" | "pipes" | "pumps" | "substations" | "boiler" | "soft";
 
 /** One line of the investment. */
 export interface CostLine {
@@ -921,7 +923,7 @@ export function networkEconomics(site: Site, net: HeatNetwork, params: NetworkPa
       label: "Grid connection",
       detail: `${fmt(elecKw)} kW el × ${fmt(p.gridEurPerKwEl)} €/kW`,
       eur: elecKw * p.gridEurPerKwEl,
-      asset: "pipes",
+      asset: "soft", // a one-off fee: never renewed, no value left at the end (before: under the pipes' 40 years)
       eligible: true,
     },
     {
@@ -954,7 +956,7 @@ export function networkEconomics(site: Site, net: HeatNetwork, params: NetworkPa
       label: "Network pumps",
       detail: `${fmt(designKw)} kW × ${fmt(p.pumpsEurPerKw)} €/kW`,
       eur: designKw * p.pumpsEurPerKw,
-      asset: "pipes",
+      asset: "pumps",
       eligible: true,
     },
     {
@@ -1000,7 +1002,7 @@ export function networkEconomics(site: Site, net: HeatNetwork, params: NetworkPa
 
   // the cash flows of an investment after grants `invest` and a share `aid` of the operating aid: year 0 the
   // investment, then a year of operation each
-  const life: Record<Asset, number> = { hp: p.hpLife, pipes: p.pipeLife, substations: p.substationLife, boiler: BOILER_LIFE, soft: Infinity };
+  const life: Record<Asset, number> = { hp: p.hpLife, pipes: p.pipeLife, pumps: PUMP_LIFE, substations: p.substationLife, boiler: BOILER_LIFE, soft: Infinity };
   const N = p.years;
   const r = p.discountPct / 100;
   const hpCapex = st.direct ? 0 : hard[0].eur; // the heat pump's O&M (none without one)

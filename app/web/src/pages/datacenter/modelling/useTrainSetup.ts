@@ -33,8 +33,9 @@ import { sumEstimates, type TrainingEstimate } from "./estimate";
 import { defaultInputs, leversOf, modelColumns } from "./inputs";
 
 /** Inputs taken from the data for a graph file: its drivers (no parents but their own past), the actuators, weather-like columns. */
-export const inputsFor = (ds: DatasetInfo, file: string, scope?: StructureScope) =>
-  fetchSuggestedDrivers(ds.id, file, scope)
+export const inputsFor = (ds: DatasetInfo, file: string, scope?: StructureScope, saved = true) =>
+  // a graph not saved yet (a starter the page draws) has no file to ask: its 404 was only noise in the console
+  (saved ? fetchSuggestedDrivers(ds.id, file, scope) : Promise.resolve([] as string[]))
     .catch(() => [] as string[])
     .then((suggested) => defaultInputs(modelColumns(ds), suggested, configOf(ds).actuators));
 
@@ -146,15 +147,16 @@ export function useTrainSetup(link: StructureLink) {
 
   // On graph change: take from the data what it gives no causes: the graph's drivers (no parents but their own
   // past), the actuators and weather-like columns.
+  const graphSaved = !!graphFile && link.files.includes(graphFile);
   useEffect(() => {
     if (!dataset || !graphFile) return;
     let live = true;
-    inputsFor(dataset, graphFile, scope).then((inputs) => live && setInputs(inputs));
+    inputsFor(dataset, graphFile, scope, graphSaved).then((inputs) => live && setInputs(inputs));
     return () => {
       live = false;
     };
     // the drivers come from the saved graph: again after a save above (link.saved)
-  }, [dataset, graphFile, scope, link.saved]);
+  }, [dataset, graphFile, scope, link.saved, graphSaved]);
 
   /** Add a data column to the structure above as a node without links (unsaved there, like any edit). */
   const addVariable = async (v: string): Promise<string | null> => {

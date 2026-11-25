@@ -3,7 +3,66 @@
 Newest first, one entry per change: the date, who (person · agent), the area, what changed and why, the files, the
 checks run (and what could not be checked), what stays open. Keep it short; the details are in the code and the docs.
 
-## 2026-11-25 · David · Claude · container: first build and run
+## 2026-11-25 · owner · Claude · economics review: Operation's best case and prices, the network's asset lives
+
+A review of the economic calculations (every Case 1 figure reproduced by hand from the code; no unit or arithmetic
+error) found choices that made the figures misleading; all fixed, each with a test showing old and new:
+- **Best case** (`operation.ts summaryOf`): picked across price spreads, so the headline came from doubled price swings
+  (2,048,559 €, −123,923 € vs heat-led). Now only scenarios at the page's spread (and still no what-if).
+- **Prices** (`FEES_EUR_KWH` 0.10, `BACKUP_EUR_KWH` 0.076, were 0.14 and 0.11): electricity was about a third dearer
+  than the heat network's (BDEW 179 €/MWh), the backup half again its peak boiler's (gas 60 + CO₂ 60 €/t at 95 %);
+  a test keeps them in step with `networkCost.ts DEFAULT_PARAMS`. The boiler efficiency of Heat Matching's CO₂ (90 %:
+  the buildings' own boilers) and the network's (95 %: a new peak boiler) differ on purpose and stay.
+- **Bars** "Waste heat used" showed avoided backup heat (data center heat + the heat pump's electricity): now *Backup
+  avoided*; `dcMwh` → `plantMwh`.
+- **Operation's plant** takes Heat Matching's tank loss and τ (were the defaults), its plant-model COP clamped as
+  `matchHeat` runs it; the price rule draws the tank after its standing loss (as the step does).
+- **Network** (`networkCost.ts`): the grid connection fee had a residual value under the pipes' 40 years, the pumps too:
+  the fee is now `soft` (paid once, no value left), the pumps their own 20 years. The residual value's escalation was
+  checked and already follows VDI 2067 (not changed).
+Case 1 moved: network NPV 2,762,387 € → 2.58 M€ (cost of heat 120 → 121 €/MWh; without residual unchanged 0.72 M€;
+sensitivity table in `docs/concepts/heat-network.md` and the wiki re-read from the page). Operation on the synthetic
+year: best case MPC · Storage of 4 h 1,611,583 € (−77,881 €, −4.6 % vs heat-led), heat-led as set above 2,149,417 →
+1,689,639 €; plant heat 22,886 MWh (MPC buys ~970 MWh of backup where the price ÷ COP passes 0.076 €/kWh). Heat
+Matching's figures unchanged (78.98 %, 23,700.9 MWh, 6,131.7 MWh). Checks below.
+
+## 2026-11-25 · owner · Claude · page review: bugs found by clicking through every page
+
+- Operation started a new year-long job every ~4 s while open (new input arrays each render, `PlanningPage`
+  `opSeries` memo): now one job per change.
+- Heat Matching ran a district with a measured demand on a default profile (Case 4: 2.37 GWh against 0.17 measured):
+  `districtSource` takes the measurement until the variable is moved (`parts.ts`).
+- Quick analysis' *As in Heat Matching* named this card's guess of the extraction point, not Heat Matching's.
+- Scenarios mode: the KPI tiles showed the whole file over every year under a title without a period: now the
+  period's (as Historical) and *test period* once a run is in; the step count formatted.
+- Heat Matching named the data center's heat "Trained model · LR" without a trained model: *Measured* or *Site map*.
+- German: "IT … kW · 2 Entnahmepunkte" (was "Entnahmepunkte: IT … · 2"), the year line, rows/other/reads/measured,
+  "x % von … gedeckt", running hours; years as "J"; chart axes as every number ("12.500", "0,2"; `germanTicks`
+  in `europeanTime`); no hyphenation inside buttons.
+- No 404 for an unsaved starter graph's drivers; "1 start"; minus signs in the bars; the year line's dates in UTC
+  (a week showed 8 days); no setpoint text without a change; the guide starts at Case 1.
+Files: `pages/twin/` (`operation.ts`, `HeatPumpOperation.tsx`, `PlanningPage.tsx`, `matchingSetup.ts`,
+`HeatDistributionPage.tsx`, `YearPicker.tsx`, `MatchDetail.tsx`), `pages/heat/` (`parts.ts`, `HeatFlowDiagram.tsx`),
+`pages/district/` (`networkCost.ts`, `QuickWindow.tsx`), `pages/datacenter/` (`DashboardPage.tsx`, `WhatIfCard.tsx`,
+`ResultsCard.tsx`, `useTrainSetup.ts`), `ui/LineChart.tsx`, `lib/` (`matching.ts`, `period.ts`, `i18n.de.ts`),
+`index.css`, `pages/help/guide.ts`, tests beside them; docs `user-guide`, `heat-network`, wiki, `AGENTS.md`.
+Checks: typecheck, lint, vitest (729), build, docs `-W`, e2e on 7614 181 of 181 (`heat.spec.ts` now expects the measured demand), the pages checked in a browser
+(one Operation job, Case 4 0.16 GWh, German texts). Open: Operation's scenario names stay English in German (they are
+typed values); overlapping labels in the P&ID and structure drawings; MAE without units for some variables; the
+heat-lines 404 without a Wärmeatlas import (the route's documented answer).
+
+## 2026-11-25 · owner · Claude · privacy: the testbed example removed
+
+The Site map's second built-in example named a real site and organisation, and the real testbed's dataset folders, in
+committed files (against Hard rule 1). It is gone: the entry in `frankfurtDataCenters.ts`, its German texts, its rows
+in the About and Assistant pages, the tests' names (`dataset.test.ts`, `shell.test.ts`, `frankfurtDataCenters.test.ts`,
+the e2e specs `district` and `assistant`, which now use the simulation example), and the mentions in `.gitignore`,
+`AGENTS.md` and the docs (`user-guide`, `data-and-privacy`, `dashboard`, `causal-graph`, `district-demand`). The
+generic dataset kind `testbed` stays. A real site belongs in the machine-local `_local/map_examples.json`. Still in
+the first commit's history (pushed): rewriting it is the owner's call. Checks: typecheck, lint, vitest (723), docs
+`-W`; e2e `district` and `assistant` on 7614.
+
+## 2026-11-25 · owner · Claude · container: first build and run
 
 `docker compose up --build` built (1.1 GB, without TabPFN/torch/Chronos-2) and ran: 178 of 181 e2e passed on it. Two
 fixes from it. (1) A saved TabPFN model without TabPFN installed was a 500 that broke Evaluate for every model
@@ -17,7 +76,7 @@ pytest (879) and `-m slow` (10), typecheck, lint, vitest (723), build, docs `-W`
 e2e (`operation.spec.ts:161`) fails without `IDT_ML=1`. Not checked: `IDT_ML=1` build, the `data` service. Example
 numbers unchanged (no model or fit changed).
 
-## 2026-11-25 · David · Claude · web tests: CI's first run
+## 2026-11-25 · owner · Claude · web tests: CI's first run
 
 CI's first run failed in `npm test`: `src/lib/staleBuild.test.ts` used the global `sessionStorage`, which Node has
 only from version 25 (local machine), not in CI's Node 22. The test now stubs it with a Map, as `storage.test.ts`

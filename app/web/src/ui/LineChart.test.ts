@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import type uPlot from "uplot";
-import { europeanTime } from "./LineChart";
+import { europeanTime, germanTicks } from "./LineChart";
 
 const opts = (o: Partial<uPlot.Options> = {}): uPlot.Options => ({ width: 100, height: 100, series: [{}, { label: "a" }], axes: [{}, {}], ...o });
 
@@ -19,5 +19,19 @@ describe("europeanTime", () => {
     expect(europeanTime(opts({ series: [{ value: "{DD}.{MM}.{YYYY}" }, {}] })).series[0].value).toBe("{DD}.{MM}.{YYYY}");
     const plain = opts({ scales: { x: { time: false } } });
     expect(europeanTime(plain)).toBe(plain);
+  });
+});
+
+describe("germanTicks", () => {
+  it("formats a value axis as the page's numbers, with the decimals the spacing needs (uPlot gave 12,500 and 0.2)", () => {
+    expect(germanTicks(null, [10_000, 12_500, 15_000])).toEqual(["10.000", "12.500", "15.000"]);
+    expect(germanTicks(null, [0, 0.2, 0.4])).toEqual(["0,0", "0,2", "0,4"]);
+    expect(germanTicks(null, [0.05, 0.1])).toEqual(["0,05", "0,10"]);
+  });
+  it("is the y axes' default; a chart's own values win", () => {
+    const own = () => ["x"];
+    const o = europeanTime({ width: 1, height: 1, series: [{}, {}], axes: [{}, {}, { values: own }] });
+    expect(o.axes![1].values).toBe(germanTicks);
+    expect(o.axes![2].values).toBe(own);
   });
 });

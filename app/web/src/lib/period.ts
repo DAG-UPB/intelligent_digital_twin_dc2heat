@@ -8,6 +8,7 @@ import type { DcDrivers } from "./matching";
 import { stepHoursOf } from "./clock";
 import { MODEL_NAME } from "./modelCatalog";
 import { DRIVER_COLUMNS } from "./sourceMap";
+import { LANG } from "./i18n";
 
 /** At most this many steps are evaluated (a year of hourly data is 8760). */
 export const MAX_STEPS = 20000;
@@ -21,8 +22,8 @@ export function durationLabel(sec: number): string {
   if (sec < 3600) return `${r(sec / 60)} min`;
   if (sec < 2 * 86400) return `${r(sec / 3600)} h`;
   if (sec < 60 * 86400) return `${r(sec / 86400)} d`;
-  if (sec < 360 * 86400) return `${r(sec / (30.44 * 86400))} mo`;
-  return `${r(sec / (365.25 * 86400))} y`;
+  if (sec < 360 * 86400) return `${r(sec / (30.44 * 86400))} ${LANG === "de" ? "Mon." : "mo"}`;
+  return `${r(sec / (365.25 * 86400))} ${LANG === "de" ? "J" : "y"}`; // German "J" for a year (the text swap cannot: one letter; "a" read as English prose)
 }
 
 /**

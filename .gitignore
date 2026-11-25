@@ -1,6 +1,6 @@
 
 # Real data-center data stays on this machine: only the simulations (sim_*) may go to GitHub.
-# Everything else under app/data (MiniDC, demonstrator, the real data sets, the machine-local _local/ folder,
+# Everything else under app/data (the real data sets, the machine-local _local/ folder,
 # and the models, graphs, sites and backups built from them) is never committed.
 # This includes the user's components (app/data/_components/, Heat Distribution › Components): fitted ones carry
 # numbers learned from the user's data.

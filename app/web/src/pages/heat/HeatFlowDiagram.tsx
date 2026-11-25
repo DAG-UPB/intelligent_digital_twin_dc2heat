@@ -288,7 +288,9 @@ export function HeatFlowDiagram({
   // into its drawing at its connection point (Model), else into the block of what the heat distribution delivers
   const intoDistrict: [number, Y] = models.district ? [L(DIST), port] : [L(DIST) + 14, D.met.y];
   const delivered = f.hexOut + f.hpOut + f.tankOut;
-  const dcSub = `${itKw !== undefined ? `IT ${fmt(itKw, 1)} kW · ` : ""}${keys.length} extraction point${keys.length === 1 ? "" : "s"}`;
+  // its parts joined by " · ", each a text of its own for the German (one pattern over all of it put the IT power into the count)
+  const pointsSaid = keys.length === 1 ? "1 extraction point" : `${keys.length} extraction points`;
+  const dcSub = itKw !== undefined ? `IT ${fmt(itKw, 1)} kW · ${pointsSaid}` : pointsSaid;
   const off = "switched off";
   const wx = (v: number | undefined, d: number, unit: string) => (v === undefined ? "–" : `${fmt(v, d)} ${unit}`);
   const weatherText = `Outdoor ${wx(weather.t, 1, "°C")} · Humidity ${wx(weather.hum, 0, "%")} · Solar ${wx(weather.sun, 0, "W/m²")}`;

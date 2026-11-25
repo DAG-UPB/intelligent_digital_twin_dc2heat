@@ -47,7 +47,7 @@ const ABBREVIATIONS: [RegExp, string][] = [
   [/\btestbed\b/gi, ""],
 ];
 
-/** Short label for the narrow closed picker: "MiniDC testbed · experiment 1" → "MiniDC · exp 1", "Plant A (water-cooled) · rack 1" → "Plant A · rack 1". */
+/** Short label for the narrow closed picker: "Lab testbed · experiment 1" → "Lab · exp 1", "Plant A (water-cooled) · rack 1" → "Plant A · rack 1". */
 export function shortName(name: string): string {
   const s = ABBREVIATIONS.reduce((acc, [re, to]) => acc.replace(re, to), name);
   return s.replace(/\s+/g, " ").trim() || name;

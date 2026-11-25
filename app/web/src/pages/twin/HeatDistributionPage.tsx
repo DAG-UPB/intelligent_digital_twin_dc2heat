@@ -395,7 +395,16 @@ export default function HeatDistributionPage() {
     [flows, ds, diagOpts, parts, at, points, keys, drivers, a, b, scale, itRun, mode, loop, cpDc, cpWater, derivedQ, weather.t, weather.hum, weather.sun, heatModel, distModel, dcDrawing, picture],
   );
   // what Operation runs on (matchingSetup.ts): this plant, its inputs as computed here, once they settle
-  const dcFromLabel = mode === "physics" ? "Calculation" : `Trained model · ${STRUCTURES.find((d) => d.name === dcModel)?.label ?? dcModel}`;
+  // what the heat came from: a data center without a trained model runs on its measurement or the Site map's (before, it
+  // was named "Trained model · LR" whether one existed or not)
+  const dcFromLabel =
+    mode === "physics"
+      ? "Calculation"
+      : data.fromModel.length
+        ? `Trained model · ${STRUCTURES.find((d) => d.name === dcModel)?.label ?? dcModel}`
+        : data.siteDc
+          ? "Site map"
+          : "Measured";
   useEffect(() => {
     if (!res || !src || !demand || supply === undefined || !district || fm.busy) return;
     const t = window.setTimeout(() => {

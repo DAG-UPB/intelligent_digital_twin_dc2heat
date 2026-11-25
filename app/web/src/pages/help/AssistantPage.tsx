@@ -40,7 +40,6 @@ const EXAMPLES = [
   "“Open the Physical structure and select the supply temperature.”",
   "“Look at the P&ID and place the temperature sensors on the pipes where they are drawn.”",
   "“On the Site map, add a heat sink at Hanauer Landstraße 100 that needs 300 kW in winter.”",
-  "“Show me the MiniDC example on the map.”",
   "“Which variables drive the condenser heat? Draw that into the causal graph and save it.”",
 ];
 

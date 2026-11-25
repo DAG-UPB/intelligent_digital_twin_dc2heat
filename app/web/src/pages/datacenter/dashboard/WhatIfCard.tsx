@@ -240,7 +240,7 @@ export function WhatIfCard({
             {/* the result is in the KPI tiles on top: the twin with your levers, measured and without beside it */}
             <p className="muted whatif__note" aria-busy={busy}>
               {busy ? "Running the twin…" : !moved.length ? "Move a lever to see how the KPIs change." : "The KPIs on top: the twin with your levers."}{" "}
-              Over the test period{model ? ` (${wholeSteps(model)} steps)` : ""}, with the trained model.
+              Over the test period{model ? ` (${fmt(wholeSteps(model))} steps)` : ""}, with the trained model.
             </p>
           </div>
         </div>

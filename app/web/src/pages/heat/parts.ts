@@ -36,13 +36,14 @@ export function wayOf(w: Way, why: WhyNot): Way {
 
 /** Where the district's Model takes its demand from: the profile of its demand variable, or its measured column (the
  * variable left as data: not modelled, or an input from the data), by how District › Structure and Modelling makes it
- * (`approach`; not moved yet: a profile, as it starts there). */
+ * (`approach`). Not moved yet: its measured column where the data has one, else a profile (before, a profile always: a
+ * district with a measured demand of 0.17 GWh ran on a default profile of 2.4 GWh). */
 export function districtSource(
   approach: Approach | undefined,
   v: string,
   columns: string[],
 ): { from: "profile" } | { from: "measured"; column: string } | { why: string } {
-  const a = approach ?? "profile";
+  const a = approach ?? (columns.includes(v) ? "data" : "profile");
   if (a === "profile") return { from: "profile" };
   if (columns.includes(v) && (a === "off" || a === "data")) return { from: "measured", column: v };
   // ponytail: a district model is not run here yet; simulate its scope's model (api simulateModel with scope "district") when one is trained there

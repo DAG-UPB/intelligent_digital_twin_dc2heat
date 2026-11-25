@@ -4,7 +4,7 @@
  * its sizes, with what each comes from in words. Kept in this browser (localStorage `heat-matching`), one setup: the
  * last one Heat Matching computed. Values rounded to keep it small (a year of hours is a few hundred kB).
  */
-import { carnotCop, type MatchOptions, type MatchResult, type PartSeries } from "../../lib/matching";
+import { carnotCop, COP_MAX, COP_MIN, type MatchOptions, type MatchResult, type PartSeries } from "../../lib/matching";
 import { perMonth } from "../../lib/profile";
 import type { DiagramProps } from "../heat/HeatFlowDiagram";
 
@@ -82,7 +82,8 @@ export function buildSetup(r: MatchingRun): MatchingSetup {
     t: tSrc,
     demand,
     supply: typeof r.supply === "number" ? r.supply : r.supply.slice(0, n),
-    cop: partSeries.hpCop?.slice(0, n) ?? tSrc.map((x, i) => (opts.physics ? carnotCop(x, supAt(i), opts.carnotEff) : opts.fixedCop)),
+    // clamped as matchHeat runs a plant model's COP
+    cop: partSeries.hpCop?.slice(0, n).map((c) => Math.min(COP_MAX, Math.max(COP_MIN, c))) ?? tSrc.map((x, i) => (opts.physics ? carnotCop(x, supAt(i), opts.carnotEff) : opts.fixedCop)),
     opts,
     // the steps its direct HEX ran (the source hot enough): Operation feeds them in directly too
     direct: parts.hex ? res.viaHp.map((v) => !v) : undefined,

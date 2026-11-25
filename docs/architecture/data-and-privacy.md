@@ -163,7 +163,7 @@ The measurements of a real data center, the models learned from them and its P&I
 
 **Outside data: SMARD's electricity market.** Operation's price and CO₂ come from SMARD's CSV downloads (CC BY 4.0) that the user puts into `app/data/_market/elec_price/` and `app/data/_market/elec_generation/` (`config.MARKET_DIR`, env `IDT_MARKET_DATA` for another folder). Git-ignored like all of `app/data/`; nothing is fetched.
 
-**Machine-local material: `app/data/_local/`.** The user's private, machine-local material lives in `app/data/_local/` and is never committed (git-ignored like all of `app/data/`; it holds no parquet file, so it is never listed as a dataset). If it is missing, the app shows only the built-in examples (the simulations and the MiniDC testbed). Today it holds:
+**Machine-local material: `app/data/_local/`.** The user's private, machine-local material lives in `app/data/_local/` and is never committed (git-ignored like all of `app/data/`; it holds no parquet file, so it is never listed as a dataset). If it is missing, the app shows only the built-in example (the simulations). Today it holds:
 
 - `map_examples.json`: further example data centers for the Site map, a JSON array in the shape of the built-in ones (`name`, `address`, `lat`, `lon`, `heatKw`, `basis`, `source`, optional `buildings` and `labelLeft`), served by `GET /api/district/examples` (invalid entries are skipped; a missing, malformed or too large file gives `[]`).
 - `scripts/`: the import scripts of the real data sets. They refuse to write a non-simulation dataset unless git would ignore it (`git check-ignore`).

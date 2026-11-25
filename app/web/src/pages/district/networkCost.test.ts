@@ -431,3 +431,15 @@ test("the network pumps' electricity from the hydraulics: each hour's flow × th
   for (const key of ["pumpHeadBar", "pumpEffPct"] as const) expect(PARAMS.find((d) => d.key === key)!.source.label).toBe("estimate");
   expect(translator(DE)("network pumps' electricity")).toBe("Strom der Netzpumpen");
 });
+
+// review 2026-11-25: the grid connection fee sat under the pipes' 40 years (a resale value at the end), the pumps too
+test("the grid connection fee has no value left at the end; the network pumps their own life, renewed or worn out by then", () => {
+  const { site, net } = street();
+  const e = networkEconomics(site, net, DEFAULT_PARAMS);
+  expect(e.lines.find((l) => l.key === "grid")!.asset).toBe("soft");
+  expect(e.lines.find((l) => l.key === "pumps")!.asset).toBe("pumps");
+  const pipesOnly = (k: string) => networkEconomics(site, net, { ...DEFAULT_PARAMS, [k]: 0 }).flows[DEFAULT_PARAMS.years].residual;
+  // over 20 years the pumps (20 a) leave nothing; the grid fee nothing: the residual without them is the same
+  expect(pipesOnly("pumpsEurPerKw")).toBeCloseTo(e.flows[DEFAULT_PARAMS.years].residual, 6);
+  expect(pipesOnly("gridEurPerKwEl")).toBeCloseTo(e.flows[DEFAULT_PARAMS.years].residual, 6);
+});

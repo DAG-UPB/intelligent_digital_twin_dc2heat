@@ -274,7 +274,7 @@ html:lang(de) body { -webkit-hyphens: auto; hyphens: auto; overflow-wrap: break-
 /* and a button too narrow for its words wraps them and grows (its height a min-height, ui.css), never cuts them off */
 html:lang(de) .btn { white-space: normal; text-align: center; }
 html:lang(de) .topbar .btn { white-space: nowrap; } /* the top bar's few words stay on one line */
-html:lang(de) :is(code, pre, kbd, [translate="no"]) { -webkit-hyphens: manual; hyphens: manual; }
+html:lang(de) :is(code, pre, kbd, [translate="no"], button) { -webkit-hyphens: manual; hyphens: manual; } /* a toggle's word is not split: "Histo-risch" */
 input, select, textarea { background-color: var(--surface-2); color: var(--foreground); }
 
 /* Refined scrollbars */
