@@ -374,3 +374,26 @@ def test_compare_starts_after_the_models_lags_and_refuses_a_negative_start(clien
     assert got["start"] == 3 and got["time"] == at["time"] and got["measured"] == at["measured"]
     assert got["runs"][0]["base"] == at["runs"][0]["base"]
     assert client.post(f"{api}/models/compare", json={**body, "start": -100}).status_code == 422
+
+
+def test_a_model_whose_library_is_missing_is_left_out_of_evaluate_not_a_500(
+    client: TestClient, dataset_dir: Path, api: str, monkeypatch
+) -> None:
+    """Without TabPFN (the container's default build) a saved TabPFN model is skipped with the reason; the rest scores."""
+    import sys
+
+    lin = train(client, api)
+    models = dataset_dir / "models"
+    (models / "tabpfn.json").write_text(json.dumps({**lin, "name": "tabpfn", "kind": "tabpfn"}))
+    (models / "tabpfn.boosters").mkdir()
+    for v in lin["order"]:
+        np.savez(models / "tabpfn.boosters" / f"{v}.npz", X=np.zeros((3, 2)), y=np.zeros(3))
+    monkeypatch.setitem(sys.modules, "torch", None)  # import torch raises ImportError
+
+    r = client.post(f"{api}/models/evaluate", json={"names": ["linear", "tabpfn"], "levers": ["s"], "horizon": 24})
+    assert r.status_code == 200, r.text
+    d = r.json()
+    assert set(d["models"]) == {"linear"} and "TabPFN is not installed" in d["skipped"]["tabpfn"]
+    alone = client.post(f"{api}/models/evaluate", json={"names": ["tabpfn"]})
+    assert alone.status_code == 501 and "TabPFN is not installed" in alone.json()["detail"]
+    assert client.post(f"{api}/models/tabpfn/simulate", json={"start": 0}).status_code == 501

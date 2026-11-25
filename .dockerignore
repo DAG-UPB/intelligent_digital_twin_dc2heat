@@ -6,6 +6,7 @@ app/data/*/.backup
 app/data/*/pid.png
 app/data/*/pid_plant.json
 app/data/*/pid_construct.json
+!app/data/sim_blank/pid_construct.json
 app/data/*/pid_views
 app/data/*/weather_open_meteo.json
 app/data/*/documents

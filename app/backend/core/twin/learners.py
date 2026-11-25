@@ -63,11 +63,19 @@ def fit_tabpfn(X: np.ndarray, y: np.ndarray, tr: np.ndarray, ok: np.ndarray) -> 
 LEARNERS = {"linear": fit_linear, "xgboost": fit_xgboost, "tabpfn": fit_tabpfn}
 
 
+class NotInstalled(ValueError):
+    """A library this model kind needs is not installed (an install without TabPFN, the container without IDT_ML=1):
+    the request cannot be met here, which is not a bug."""
+
+
 def tabpfn_regressor(X: np.ndarray, y: np.ndarray) -> Any:
-    """A fitted TabPFN regressor (v2 weights, no license login, CPU)."""
-    import torch
-    from tabpfn import TabPFNRegressor
-    from tabpfn.constants import ModelVersion
+    """A fitted TabPFN regressor (v2 weights, no license login, CPU); NotInstalled without TabPFN or torch."""
+    try:
+        import torch
+        from tabpfn import TabPFNRegressor
+        from tabpfn.constants import ModelVersion
+    except ImportError:
+        raise NotInstalled("TabPFN is not installed here (uv sync installs it; the container needs IDT_ML=1)") from None
 
     # one thread: with XGBoost's OpenMP already loaded, torch's thread pool deadlocks on macOS
     torch.set_num_threads(1)

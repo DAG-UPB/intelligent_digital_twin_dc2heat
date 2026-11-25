@@ -1,7 +1,11 @@
-import { beforeEach, expect, test } from "vitest";
+import { beforeEach, expect, test, vi } from "vitest";
 import { isStaleBuild, justReloaded, RELOAD_GAP_MS, reloadForNewBuild } from "./staleBuild";
 
-beforeEach(() => sessionStorage.clear());
+// Node before 25 has no sessionStorage (CI runs 22): a Map stands in for it, as storage.test.ts does for localStorage.
+beforeEach(() => {
+  const m = new Map<string, string>();
+  vi.stubGlobal("sessionStorage", { getItem: (k: string) => m.get(k) ?? null, setItem: (k: string, v: string) => void m.set(k, v) });
+});
 
 test("a page file of an older build is told from other errors, in every browser's words", () => {
   expect(isStaleBuild(new TypeError("Failed to fetch dynamically imported module: http://localhost:7600/assets/TrainPage-Bbucgt_t.js"))).toBe(true);

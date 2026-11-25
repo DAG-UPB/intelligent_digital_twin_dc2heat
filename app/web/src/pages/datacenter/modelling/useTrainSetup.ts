@@ -96,6 +96,7 @@ export function useTrainSetup(link: StructureLink) {
       if (seq === evalSeq.current) {
         setEvalRes(res);
         setStored("saved");
+        if (res.skipped) setError(Object.values(res.skipped).join("; ")); // scored without them: say why they are missing
       }
     } catch (e) {
       if (seq === evalSeq.current) setError(errorMessage(e));

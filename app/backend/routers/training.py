@@ -56,12 +56,15 @@ def _timed(what: str):
 
 
 def load_model(meta: DatasetMeta, name: str) -> dict:
-    """A saved model; for XGBoost/TabPFN with its boosters under "_boosters" (in memory only), or 404."""
+    """A saved model; for XGBoost/TabPFN with its boosters under "_boosters" (in memory only), or 404; 501 when its
+    library is not installed here."""
     path = model_file(meta, name)
     try:
         return model_store.load(path, files.booster_dir(meta.file(files.MODELS_DIR), name), name)
     except model_store.ModelMissing as exc:
         raise HTTPException(404, str(exc)) from None
+    except twin.NotInstalled as exc:
+        raise HTTPException(501, f"{name}: {exc}") from None
 
 
 def _fingerprint(meta: DatasetMeta, name: str) -> str | None:
@@ -185,8 +188,18 @@ def train(meta: Structure, registry: Registry, body: TrainRequest):
 @_timed("evaluate")
 def evaluate(meta: Structure, registry: Registry, body: EvaluateRequest):
     """Compare trained models on the test data: free run, and after each setpoint change. With `store` the answer is
-    also saved beside the models (GET .../models/evaluation)."""
-    models = {n: load_model(meta, n) for n in body.names}
+    also saved beside the models (GET .../models/evaluation). A model whose library is not installed here is left out,
+    with the reason under "skipped"; the others are scored."""
+    models, skipped = {}, {}
+    for n in body.names:
+        try:
+            models[n] = load_model(meta, n)
+        except HTTPException as exc:
+            if exc.status_code != 501:
+                raise
+            skipped[n] = exc.detail
+    if not models:
+        raise HTTPException(501, "; ".join(skipped.values()))
     # ponytail: every model is scored on the first model's data file; models of one dataset share it today
     _, df = dataframe(registry, meta, next(iter(models.values()))["file"])
     res = {}
@@ -209,6 +222,7 @@ def evaluate(meta: Structure, registry: Registry, body: EvaluateRequest):
             for n, m in models.items()
         },
         "events": out_events,
+        **({"skipped": skipped} if skipped else {}),
     }
     if body.store:
         _store(meta, body, out)

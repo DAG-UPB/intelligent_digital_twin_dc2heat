@@ -12,10 +12,11 @@ from .estimate import estimate
 from .evaluate import evaluate, nmae, r2, setpoint_changes
 from .fit import fit
 from .graph import all_vs_all, default_drivers, input_name, step_order
-from .learners import predict, tabpfn_regressor
+from .learners import NotInstalled, predict, tabpfn_regressor
 from .simulate import free_run, simulate
 
 __all__ = [
+    "NotInstalled",
     "estimate",
     "all_vs_all",
     "default_drivers",

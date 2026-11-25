@@ -106,6 +106,8 @@ export interface EvaluateResponse {
       kind: string;
     }
   >;
+  // models left out because their library is not installed on this server (TabPFN): name → reason
+  skipped?: Record<string, string>;
   events: {
     lever: string;
     start: number;
