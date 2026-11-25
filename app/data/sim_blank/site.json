@@ -1,0 +1,130 @@
+{
+  "building": null,
+  "source": null,
+  "sinks": [],
+  "pid_layout": {
+    "Cooling_power": {
+      "x": 920.0,
+      "y": 40.0,
+      "tag": "EQ"
+    },
+    "Heat_rejected": {
+      "x": 1040.0,
+      "y": 40.0,
+      "tag": "QT"
+    },
+    "IT_load": {
+      "x": 860.0,
+      "y": 40.0,
+      "tag": "JT"
+    },
+    "IT_power": {
+      "x": 980.0,
+      "y": 40.0,
+      "tag": "EQ"
+    },
+    "Return_temp": {
+      "x": 1140.0,
+      "y": 280.0,
+      "tag": "TT"
+    },
+    "Supply_temp": {
+      "x": 1140.0,
+      "y": 160.0,
+      "tag": "TT"
+    },
+    "T_outdoor": {
+      "x": 600.0,
+      "y": 40.0,
+      "tag": "TT"
+    },
+    "Water_flow": {
+      "x": 1140.0,
+      "y": 340.0,
+      "tag": "FT"
+    },
+    "humidity": {
+      "x": 670.0,
+      "y": 40.0,
+      "tag": "MT"
+    },
+    "solar_radiation": {
+      "x": 750.0,
+      "y": 40.0,
+      "tag": "RT"
+    },
+    "surface:": {
+      "x": 0.0,
+      "y": 640.0,
+      "tag": ""
+    }
+  },
+  "pid_notes": {
+    "IT_load": {
+      "kind": "it_load",
+      "confidence": null,
+      "note": "Input. How busy the servers are, in % of their full load: it drives the IT electricity.",
+      "group": null
+    },
+    "T_outdoor": {
+      "kind": "weather",
+      "confidence": null,
+      "note": "Input. Outdoor temperature, °C: how hard the cooling works, how much it free-cools.",
+      "group": null
+    },
+    "humidity": {
+      "kind": "weather",
+      "confidence": null,
+      "note": "Input. Outdoor relative humidity, %: the cooling tower's wet bulb.",
+      "group": null
+    },
+    "solar_radiation": {
+      "kind": "weather",
+      "confidence": null,
+      "note": "Input. Solar radiation, W/m²: no data here, a variable to make.",
+      "group": null
+    },
+    "IT_power": {
+      "kind": "meter",
+      "confidence": null,
+      "note": "Output. Electricity of the servers, kW: nearly all of it becomes heat.",
+      "group": null
+    },
+    "Cooling_power": {
+      "kind": "meter",
+      "confidence": null,
+      "note": "Output. Electricity of the cooling plant (chiller, fans, pumps), kW.",
+      "group": null
+    },
+    "Supply_temp": {
+      "kind": "sensor",
+      "confidence": null,
+      "note": "Output. Water to the heat distribution at the connection point, °C (the warm supply).",
+      "group": null
+    },
+    "Return_temp": {
+      "kind": "sensor",
+      "confidence": null,
+      "note": "Input. Water back from the heat distribution, °C: the return, set by the heat distribution.",
+      "group": null
+    },
+    "Water_flow": {
+      "kind": "sensor",
+      "confidence": null,
+      "note": "Output. Mass flow of the water to the heat distribution, kg/s.",
+      "group": null
+    },
+    "Heat_rejected": {
+      "kind": "calculated",
+      "confidence": null,
+      "note": "Output. Heat the cooling rejects outdoors, kW: IT + cooling electricity − Heat_recovered.",
+      "group": null
+    }
+  },
+  "pid_views": [],
+  "hex_option": "condenser",
+  "heat_source_map": null,
+  "outdoor": "data",
+  "heat_parts": null,
+  "twin_model": null
+}

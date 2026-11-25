@@ -1,0 +1,15 @@
+{
+  "targets": {
+    "Cooling_power": [],
+    "Heat_rejected": [],
+    "IT_load": [],
+    "IT_power": [],
+    "Return_temp": [],
+    "Supply_temp": [],
+    "T_outdoor": [],
+    "Water_flow": [],
+    "humidity": [],
+    "solar_radiation": []
+  },
+  "link_strengths": []
+}

@@ -1,0 +1,171 @@
+{
+  "building": null,
+  "source": null,
+  "sinks": [],
+  "pid_layout": {
+    "COP": {
+      "x": 370.0,
+      "y": 580.0,
+      "tag": "KI"
+    },
+    "E_tank": {
+      "x": 810.0,
+      "y": 330.0,
+      "tag": "QT"
+    },
+    "HEX_Cond_T_in": {
+      "x": -45.0,
+      "y": 138.0,
+      "tag": "TT"
+    },
+    "HEX_Cond_T_out": {
+      "x": -40.0,
+      "y": 280.0,
+      "tag": "TT"
+    },
+    "HEX_Cond_m": {
+      "x": -45.0,
+      "y": 358.0,
+      "tag": "FT"
+    },
+    "Heat_Demand": {
+      "x": 1145.0,
+      "y": 428.0,
+      "tag": "QT"
+    },
+    "Hour": {
+      "x": 440.0,
+      "y": 40.0,
+      "tag": "KI"
+    },
+    "Out_Hum": {
+      "x": 240.0,
+      "y": 40.0,
+      "tag": "MT"
+    },
+    "Out_Temp": {
+      "x": 140.0,
+      "y": 40.0,
+      "tag": "TT"
+    },
+    "P_el_hp": {
+      "x": 430.0,
+      "y": 350.0,
+      "tag": "EQ"
+    },
+    "Q_dc": {
+      "x": -45.0,
+      "y": 428.0,
+      "tag": "QT"
+    },
+    "Q_hex": {
+      "x": 520.0,
+      "y": 125.0,
+      "tag": "QT"
+    },
+    "Q_hp": {
+      "x": 530.0,
+      "y": 350.0,
+      "tag": "QT"
+    },
+    "T_dh_return": {
+      "x": 1145.0,
+      "y": 288.0,
+      "tag": "TT"
+    },
+    "T_dh_supply": {
+      "x": 1145.0,
+      "y": 138.0,
+      "tag": "TT"
+    },
+    "T_hex_out": {
+      "x": 660.0,
+      "y": 145.0,
+      "tag": "TT"
+    },
+    "T_hp_out": {
+      "x": 605.0,
+      "y": 350.0,
+      "tag": "TT"
+    },
+    "T_tank_bottom": {
+      "x": 810.0,
+      "y": 520.0,
+      "tag": "TT"
+    },
+    "T_tank_top": {
+      "x": 810.0,
+      "y": 150.0,
+      "tag": "TT"
+    },
+    "hp_load": {
+      "x": 340.0,
+      "y": 345.0,
+      "tag": "JIC"
+    },
+    "m_dh": {
+      "x": 1145.0,
+      "y": 358.0,
+      "tag": "FT"
+    },
+    "m_hex": {
+      "x": 590.0,
+      "y": 145.0,
+      "tag": "FT"
+    },
+    "m_hp": {
+      "x": 640.0,
+      "y": 550.0,
+      "tag": "FT"
+    },
+    "solar_radiation": {
+      "x": 340.0,
+      "y": 40.0,
+      "tag": "RT"
+    },
+    "surface:": {
+      "x": 0.0,
+      "y": 640.0,
+      "tag": ""
+    }
+  },
+  "pid_notes": {
+    "Out_Temp": {
+      "kind": "weather",
+      "confidence": null,
+      "note": "Outdoor temperature (exogenous, from the weather)",
+      "group": null
+    },
+    "Out_Hum": {
+      "kind": "weather",
+      "confidence": null,
+      "note": "Relative humidity (exogenous, from the weather)",
+      "group": null
+    },
+    "solar_radiation": {
+      "kind": "weather",
+      "confidence": null,
+      "note": "Solar radiation (exogenous, from the weather)",
+      "group": null
+    },
+    "Hour": {
+      "kind": "time",
+      "confidence": null,
+      "note": "Hour of the day (exogenous, from the clock): daily habits and schedules",
+      "group": null
+    },
+    "hp_load": {
+      "kind": "actuator",
+      "confidence": null,
+      "note": "The heat pump's load in %: 0 = off, 100 = full power",
+      "group": null
+    }
+  },
+  "pid_views": [],
+  "hex_option": "condenser",
+  "district": null,
+  "heat_source_map": null,
+  "outdoor": "data",
+  "heat_parts": null,
+  "heat_components": null
+}

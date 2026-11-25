@@ -1,0 +1,608 @@
+{
+  "targets": {
+    "Cool_Set": [
+      [
+        "Cool_Set",
+        -1
+      ]
+    ],
+    "HVAC_Ener": [
+      [
+        "HVAC_Ener",
+        -5
+      ],
+      [
+        "HVAC_Ener",
+        -4
+      ],
+      [
+        "HVAC_Ener",
+        -3
+      ],
+      [
+        "HVAC_Ener",
+        -2
+      ],
+      [
+        "HVAC_Ener",
+        -1
+      ],
+      [
+        "Hour",
+        -5
+      ],
+      [
+        "In_Hum",
+        -1
+      ]
+    ],
+    "Hour": [
+      [
+        "HVAC_Ener",
+        -4
+      ],
+      [
+        "Hour",
+        -3
+      ],
+      [
+        "Hour",
+        -1
+      ],
+      [
+        "ITE_Ener",
+        -5
+      ],
+      [
+        "IT_Load",
+        -1
+      ],
+      [
+        "Out_Wind",
+        -3
+      ]
+    ],
+    "ITE_Ener": [
+      [
+        "HVAC_Ener",
+        -3
+      ],
+      [
+        "HVAC_Ener",
+        -1
+      ],
+      [
+        "Hour",
+        -2
+      ],
+      [
+        "Hour",
+        -1
+      ],
+      [
+        "IT_Load",
+        -2
+      ],
+      [
+        "IT_Load",
+        -1
+      ]
+    ],
+    "IT_Load": [
+      [
+        "HVAC_Ener",
+        -1
+      ],
+      [
+        "Hour",
+        -1
+      ],
+      [
+        "ITE_Ener",
+        -5
+      ],
+      [
+        "ITE_Ener",
+        -4
+      ],
+      [
+        "IT_Load",
+        -1
+      ]
+    ],
+    "In_Hum": [
+      [
+        "In_Hum",
+        -4
+      ],
+      [
+        "In_Hum",
+        -3
+      ],
+      [
+        "In_Hum",
+        -2
+      ],
+      [
+        "In_Hum",
+        -1
+      ],
+      [
+        "Out_Temp",
+        -1
+      ],
+      [
+        "Out_Wind_Dir",
+        -2
+      ]
+    ],
+    "In_Temp": [
+      [
+        "Cool_Set",
+        -1
+      ],
+      [
+        "ITE_Ener",
+        -4
+      ],
+      [
+        "IT_Load",
+        -2
+      ],
+      [
+        "In_Temp",
+        -2
+      ],
+      [
+        "In_Temp",
+        -1
+      ]
+    ],
+    "Out_Hum": [
+      [
+        "Hour",
+        -5
+      ],
+      [
+        "ITE_Ener",
+        -5
+      ],
+      [
+        "Out_Hum",
+        -4
+      ],
+      [
+        "Out_Hum",
+        -3
+      ],
+      [
+        "Out_Hum",
+        -1
+      ],
+      [
+        "Out_Temp",
+        -5
+      ],
+      [
+        "Out_Wind_Dir",
+        -1
+      ]
+    ],
+    "Out_Temp": [
+      [
+        "Out_Temp",
+        -4
+      ],
+      [
+        "Out_Temp",
+        -3
+      ],
+      [
+        "Out_Temp",
+        -2
+      ],
+      [
+        "Out_Temp",
+        -1
+      ]
+    ],
+    "Out_Wind": [
+      [
+        "Hour",
+        -5
+      ],
+      [
+        "ITE_Ener",
+        -5
+      ],
+      [
+        "Out_Wind",
+        -3
+      ],
+      [
+        "Out_Wind",
+        -2
+      ],
+      [
+        "Out_Wind",
+        -1
+      ]
+    ],
+    "Out_Wind_Dir": [
+      [
+        "Out_Hum",
+        -1
+      ],
+      [
+        "Out_Wind_Dir",
+        -5
+      ],
+      [
+        "Out_Wind_Dir",
+        -4
+      ],
+      [
+        "Out_Wind_Dir",
+        -3
+      ],
+      [
+        "Out_Wind_Dir",
+        -2
+      ],
+      [
+        "Out_Wind_Dir",
+        -1
+      ]
+    ]
+  },
+  "link_strengths": [
+    {
+      "source": "Cool_Set",
+      "target": "Cool_Set",
+      "lag": -1,
+      "value": 0.9985604859074919
+    },
+    {
+      "source": "HVAC_Ener",
+      "target": "HVAC_Ener",
+      "lag": -5,
+      "value": 0.12200003668730999
+    },
+    {
+      "source": "HVAC_Ener",
+      "target": "HVAC_Ener",
+      "lag": -4,
+      "value": 0.08927463819508386
+    },
+    {
+      "source": "HVAC_Ener",
+      "target": "HVAC_Ener",
+      "lag": -3,
+      "value": 0.12230910658800645
+    },
+    {
+      "source": "HVAC_Ener",
+      "target": "HVAC_Ener",
+      "lag": -2,
+      "value": 0.10066742190272701
+    },
+    {
+      "source": "HVAC_Ener",
+      "target": "HVAC_Ener",
+      "lag": -1,
+      "value": 0.26032385521947843
+    },
+    {
+      "source": "Hour",
+      "target": "HVAC_Ener",
+      "lag": -5,
+      "value": -0.007962076061182977
+    },
+    {
+      "source": "In_Hum",
+      "target": "HVAC_Ener",
+      "lag": -1,
+      "value": -0.00870406784227861
+    },
+    {
+      "source": "HVAC_Ener",
+      "target": "Hour",
+      "lag": -4,
+      "value": 0.002261857236143156
+    },
+    {
+      "source": "Hour",
+      "target": "Hour",
+      "lag": -3,
+      "value": -0.04913668340616457
+    },
+    {
+      "source": "Hour",
+      "target": "Hour",
+      "lag": -1,
+      "value": 0.6097258565385809
+    },
+    {
+      "source": "ITE_Ener",
+      "target": "Hour",
+      "lag": -5,
+      "value": -0.011014035866852602
+    },
+    {
+      "source": "IT_Load",
+      "target": "Hour",
+      "lag": -1,
+      "value": 0.7931215680094968
+    },
+    {
+      "source": "Out_Wind",
+      "target": "Hour",
+      "lag": -3,
+      "value": -0.01097291572150665
+    },
+    {
+      "source": "HVAC_Ener",
+      "target": "ITE_Ener",
+      "lag": -3,
+      "value": 0.02215621804329231
+    },
+    {
+      "source": "HVAC_Ener",
+      "target": "ITE_Ener",
+      "lag": -1,
+      "value": 0.02109069076264327
+    },
+    {
+      "source": "Hour",
+      "target": "ITE_Ener",
+      "lag": -2,
+      "value": -0.01395138255506348
+    },
+    {
+      "source": "Hour",
+      "target": "ITE_Ener",
+      "lag": -1,
+      "value": -0.020517610526451558
+    },
+    {
+      "source": "IT_Load",
+      "target": "ITE_Ener",
+      "lag": -2,
+      "value": -0.005980509294826214
+    },
+    {
+      "source": "IT_Load",
+      "target": "ITE_Ener",
+      "lag": -1,
+      "value": 0.00651871076202773
+    },
+    {
+      "source": "HVAC_Ener",
+      "target": "IT_Load",
+      "lag": -1,
+      "value": 0.018125197023820806
+    },
+    {
+      "source": "Hour",
+      "target": "IT_Load",
+      "lag": -1,
+      "value": 0.045422561006164555
+    },
+    {
+      "source": "ITE_Ener",
+      "target": "IT_Load",
+      "lag": -5,
+      "value": -0.015931956562732122
+    },
+    {
+      "source": "ITE_Ener",
+      "target": "IT_Load",
+      "lag": -4,
+      "value": 0.021959742864976175
+    },
+    {
+      "source": "IT_Load",
+      "target": "IT_Load",
+      "lag": -1,
+      "value": 0.1326619367811224
+    },
+    {
+      "source": "In_Hum",
+      "target": "In_Hum",
+      "lag": -4,
+      "value": 0.04162320392457203
+    },
+    {
+      "source": "In_Hum",
+      "target": "In_Hum",
+      "lag": -3,
+      "value": 0.07286778956164344
+    },
+    {
+      "source": "In_Hum",
+      "target": "In_Hum",
+      "lag": -2,
+      "value": 0.26936775033128246
+    },
+    {
+      "source": "In_Hum",
+      "target": "In_Hum",
+      "lag": -1,
+      "value": 0.4612797191832403
+    },
+    {
+      "source": "Out_Temp",
+      "target": "In_Hum",
+      "lag": -1,
+      "value": -0.014596605760960696
+    },
+    {
+      "source": "Out_Wind_Dir",
+      "target": "In_Hum",
+      "lag": -2,
+      "value": 0.0067233123933406
+    },
+    {
+      "source": "Cool_Set",
+      "target": "In_Temp",
+      "lag": -1,
+      "value": -0.009012081745136217
+    },
+    {
+      "source": "ITE_Ener",
+      "target": "In_Temp",
+      "lag": -4,
+      "value": 0.008301332252045334
+    },
+    {
+      "source": "IT_Load",
+      "target": "In_Temp",
+      "lag": -2,
+      "value": -0.005303027118937938
+    },
+    {
+      "source": "In_Temp",
+      "target": "In_Temp",
+      "lag": -2,
+      "value": 0.14079826400794482
+    },
+    {
+      "source": "In_Temp",
+      "target": "In_Temp",
+      "lag": -1,
+      "value": 0.2851792448688037
+    },
+    {
+      "source": "Hour",
+      "target": "Out_Hum",
+      "lag": -5,
+      "value": -0.016251266436363536
+    },
+    {
+      "source": "ITE_Ener",
+      "target": "Out_Hum",
+      "lag": -5,
+      "value": -0.005148218028341967
+    },
+    {
+      "source": "Out_Hum",
+      "target": "Out_Hum",
+      "lag": -4,
+      "value": -0.028000544892391385
+    },
+    {
+      "source": "Out_Hum",
+      "target": "Out_Hum",
+      "lag": -3,
+      "value": -0.026067124195684528
+    },
+    {
+      "source": "Out_Hum",
+      "target": "Out_Hum",
+      "lag": -1,
+      "value": 0.8288125413791758
+    },
+    {
+      "source": "Out_Temp",
+      "target": "Out_Hum",
+      "lag": -5,
+      "value": 0.00994964554386914
+    },
+    {
+      "source": "Out_Wind_Dir",
+      "target": "Out_Hum",
+      "lag": -1,
+      "value": -0.04026591033549237
+    },
+    {
+      "source": "Out_Temp",
+      "target": "Out_Temp",
+      "lag": -4,
+      "value": -0.05381758033904957
+    },
+    {
+      "source": "Out_Temp",
+      "target": "Out_Temp",
+      "lag": -3,
+      "value": -0.05853527192439111
+    },
+    {
+      "source": "Out_Temp",
+      "target": "Out_Temp",
+      "lag": -2,
+      "value": -0.04501128069252146
+    },
+    {
+      "source": "Out_Temp",
+      "target": "Out_Temp",
+      "lag": -1,
+      "value": 0.7728413681425458
+    },
+    {
+      "source": "Hour",
+      "target": "Out_Wind",
+      "lag": -5,
+      "value": -0.006762154495605312
+    },
+    {
+      "source": "ITE_Ener",
+      "target": "Out_Wind",
+      "lag": -5,
+      "value": -0.0012704099947626847
+    },
+    {
+      "source": "Out_Wind",
+      "target": "Out_Wind",
+      "lag": -3,
+      "value": 0.03227950571930085
+    },
+    {
+      "source": "Out_Wind",
+      "target": "Out_Wind",
+      "lag": -2,
+      "value": 0.11427522795885768
+    },
+    {
+      "source": "Out_Wind",
+      "target": "Out_Wind",
+      "lag": -1,
+      "value": 0.6723085485364544
+    },
+    {
+      "source": "Out_Hum",
+      "target": "Out_Wind_Dir",
+      "lag": -1,
+      "value": -0.06623253795620343
+    },
+    {
+      "source": "Out_Wind_Dir",
+      "target": "Out_Wind_Dir",
+      "lag": -5,
+      "value": 0.043577329764353336
+    },
+    {
+      "source": "Out_Wind_Dir",
+      "target": "Out_Wind_Dir",
+      "lag": -4,
+      "value": 0.07320400040393935
+    },
+    {
+      "source": "Out_Wind_Dir",
+      "target": "Out_Wind_Dir",
+      "lag": -3,
+      "value": 0.05420419284945865
+    },
+    {
+      "source": "Out_Wind_Dir",
+      "target": "Out_Wind_Dir",
+      "lag": -2,
+      "value": 0.155925131318498
+    },
+    {
+      "source": "Out_Wind_Dir",
+      "target": "Out_Wind_Dir",
+      "lag": -1,
+      "value": 0.4383130703843666
+    }
+  ]
+}

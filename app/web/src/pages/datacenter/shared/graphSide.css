@@ -1,0 +1,25 @@
+/* The causal graph on the left of a page (GraphSidebar): resizable, closable, the graph growing with the panel. */
+.graph-side { flex: none; width: auto; }
+.graph-side__sticky { position: sticky; top: 16px; display: flex; flex-direction: column; gap: 8px; }
+.graph-side__head { display: flex; align-items: center; justify-content: space-between; gap: 6px; }
+.graph-side__head .caps { color: var(--foreground-tertiary); }
+.graph-side__close { padding: 0 8px; font-size: 16px; line-height: 1; }
+.graph-side__handle { flex: none; align-self: stretch; width: 8px; margin: 0 -4px; z-index: 2; cursor: col-resize; touch-action: none; border-radius: 4px; }
+.graph-side__handle:hover, .graph-side__handle:focus-visible { background: var(--border-strong); outline: none; }
+/* closed: a narrow tab on the left that opens it again */
+.graph-side__open {
+  flex: none;
+  align-self: stretch;
+  width: 28px;
+  padding: 16px 0;
+  border: none;
+  border-right: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--foreground-secondary);
+  cursor: pointer;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 600;
+}
+.graph-side__open span { position: sticky; top: 16px; display: inline-block; writing-mode: vertical-rl; transform: rotate(180deg); }
+.graph-side__open:hover { color: var(--accent); background: var(--accent-light); }

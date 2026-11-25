@@ -1,0 +1,10 @@
+# graphify (knowledge graph of the code): never the data. Real data centers, P&ID drawings and the link to the
+# user's data folder stay out, also the simulation data; the graph is about code and docs only.
+app/data/
+app/data_versions
+app/data_versions/
+app/.data_version
+app/web/node_modules/
+app/web/dist/
+app/web/test-results/
+graphify-out/

@@ -1,0 +1,9 @@
+{
+  "In_Temp": "a*In_Temp[t-1] + b*(Cool_Set[t-1] - In_Temp[t-1]) + c*ITE_Ener[t-1] + d",
+  "HEX_Hall_T_in": "In_Temp[t-1] + dT",
+  "HEX_Hall_m": "ITE_Ener[t-1] / (1.006*dT)",
+  "HEX_Hall_T_out": "(In_Temp[t-1] + dT) - minimum(eps*maximum(0, (In_Temp[t-1] + dT) - 25), Heat_Demand[t-1] / (1.006*(ITE_Ener[t-1] / (1.006*dT))))",
+  "HEX_Cond_m": "maximum((ITE_Ener[t-1] + HVAC_Ener[t-1]), 45) / (4.18*dT)",
+  "HEX_Cond_T_in": "maximum((Out_Temp[t-1]*arctan(0.151977*sqrt(Out_Hum[t-1] + 8.313659)) + arctan(Out_Temp[t-1] + Out_Hum[t-1]) - arctan(Out_Hum[t-1] - 1.676331) + 0.00391838*Out_Hum[t-1]**1.5*arctan(0.023101*Out_Hum[t-1]) - 4.686035) + approach, 27) + (ITE_Ener[t-1] + HVAC_Ener[t-1]) / (4.18*(maximum((ITE_Ener[t-1] + HVAC_Ener[t-1]), 45) / (4.18*dT)))",
+  "HEX_Cond_T_out": "(maximum((Out_Temp[t-1]*arctan(0.151977*sqrt(Out_Hum[t-1] + 8.313659)) + arctan(Out_Temp[t-1] + Out_Hum[t-1]) - arctan(Out_Hum[t-1] - 1.676331) + 0.00391838*Out_Hum[t-1]**1.5*arctan(0.023101*Out_Hum[t-1]) - 4.686035) + approach, 27) + (ITE_Ener[t-1] + HVAC_Ener[t-1]) / (4.18*(maximum((ITE_Ener[t-1] + HVAC_Ener[t-1]), 45) / (4.18*dT)))) - minimum((ITE_Ener[t-1] + HVAC_Ener[t-1]), Heat_Demand[t-1]) / (4.18*(maximum((ITE_Ener[t-1] + HVAC_Ener[t-1]), 45) / (4.18*dT)))"
+}

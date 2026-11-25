@@ -1,0 +1,55 @@
+{
+  "order": [
+    "Heat_Demand"
+  ],
+  "variables": {
+    "Heat_Demand": {
+      "intercept": 140.93242761652928,
+      "inputs": [
+        {
+          "parent": "Heat_Demand",
+          "lag": -1,
+          "coef": 0.9169736189780693,
+          "std": 754.260604125565
+        },
+        {
+          "parent": "Out_Temp",
+          "lag": -1,
+          "coef": -5.260073895107509,
+          "std": 10.635929055439474
+        }
+      ],
+      "sigma": 160.7060532872785,
+      "scale": 612.8283542032359,
+      "nmae_test": 0.1581864210817208,
+      "r2_train": 0.9546086879661382,
+      "r2_test": 0.951022664774319,
+      "min": 52.0889107884189,
+      "max": 4990.137281370183,
+      "mean": 612.8395132036871
+    }
+  },
+  "drivers": [
+    "Out_Temp"
+  ],
+  "max_lag": 1,
+  "split_index": 8736,
+  "split_time": "2024-01-01 00:00:00",
+  "rows": 17472,
+  "kind": "linear",
+  "name": "linear",
+  "file": "df_sim_district_heat",
+  "graph_file": "causal_graph.json",
+  "requested_drivers": [
+    "Hour",
+    "Out_Temp"
+  ],
+  "structure": "graph",
+  "max_lag_setting": 5,
+  "variables_used": [
+    "Hour",
+    "Out_Temp",
+    "Heat_Demand"
+  ],
+  "model_type": "linear"
+}

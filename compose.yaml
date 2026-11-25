@@ -1,0 +1,43 @@
+# The app in a container (Dockerfile), reachable from this computer only (127.0.0.1): it has no login of its own.
+#
+#   docker compose up --build                                   the examples only: http://localhost:7612
+#   IDT_DATA=/path/to/data docker compose up --build data       your data folder (one sub-folder per version,
+#                                                               version_1, ...; laid out like app/data): http://localhost:7600
+#
+# PORT changes the port; IDT_ALLOWED_HOSTS the host names the app answers to (another name than localhost, e.g. the
+# machine's name on a network you trust: add it, and publish the port on that interface instead of 127.0.0.1);
+# IDT_ML=1 builds with TabPFN, torch and Chronos-2 (several GB). SMARD's market CSVs go into <data folder>/_market/.
+name: intelligent-digital-twin
+
+x-app: &app
+  build:
+    context: .
+    args:
+      ML: ${IDT_ML:-0}
+  image: intelligent-digital-twin
+  mem_limit: 2g # the app's memory budget (app/scripts/guard.sh outside a container)
+
+services:
+  examples:
+    <<: *app
+    environment:
+      PORT: ${PORT:-7612}
+      IDT_ALLOWED_HOSTS: ${IDT_ALLOWED_HOSTS:-localhost,127.0.0.1,[::1]}
+    ports:
+      - "127.0.0.1:${PORT:-7612}:${PORT:-7612}"
+
+  data:
+    <<: *app
+    profiles: [data] # started only when named: docker compose up data
+    environment:
+      IDT_MODE: data
+      PORT: ${PORT:-7600}
+      IDT_ALLOWED_HOSTS: ${IDT_ALLOWED_HOSTS:-localhost,127.0.0.1,[::1]}
+      IDT_MARKET_DATA: /data/_market
+    ports:
+      - "127.0.0.1:${PORT:-7600}:${PORT:-7600}"
+    volumes:
+      - ${IDT_DATA:-idt-data}:/data # without IDT_DATA: a Docker volume of its own
+
+volumes:
+  idt-data:

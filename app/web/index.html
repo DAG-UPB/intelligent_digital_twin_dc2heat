@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Intelligent Digital Twin</title>
+    <link rel="icon" type="image/svg+xml" href="/twin-mark.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <script>
+      // saved theme and palette before the first paint (no light flash); same keys as src/app/theme.ts
+      try {
+        if (localStorage.getItem("theme") === "dark") document.documentElement.dataset.theme = "dark";
+        document.documentElement.dataset.palette = localStorage.getItem("palette") || "aurora";
+      } catch {}
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

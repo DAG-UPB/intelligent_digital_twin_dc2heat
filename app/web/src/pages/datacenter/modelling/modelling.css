@@ -1,0 +1,260 @@
+/* AI modelling page (TrainPage and its cards). Shared looks (.card, .field, .btn, .caps, .muted) come from src/ui/ui.css. */
+.train { --phys: #14b8a6; } /* page frame: .page in ui.css */
+
+/* Two columns: the causal graph's (.causal-aside: the graph, the equations, the connection points, the KPI variables)
+   beside the main one (the modelling window's button, the window, the results) */
+.train-layout { display: flex; width: 100%; }
+.train-layout > .page { flex: 1; min-width: 0; }
+/* the graph's column scrolls on its own, as tall as the window at most: never a long empty main column beside it */
+.train-layout .graph-side__sticky { max-height: calc(100vh / var(--fit, 1) - 32px); overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; }
+
+/* The bar on top: Model… (the window), where the results stand on the right */
+.train-bar { display: flex; align-items: center; flex-wrap: wrap; gap: 8px 12px; font-size: 13px; padding-top: 10px; padding-bottom: 10px; }
+.train-bar__about { font-size: 12px; }
+.train-bar__status { margin-left: auto; display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
+/* the modelling window above the results (hidden: its display would win over the attribute) */
+.train-window { display: flex; flex-direction: column; gap: var(--space-4); }
+.train-window[hidden] { display: none; }
+
+.train-hidden { visibility: hidden; }
+.train-ok { color: var(--ok); }
+.train-bad { color: var(--danger); }
+
+/* Card captions and text */
+.train-card__title { margin-bottom: 4px; }
+.train-card__text { margin: 0 0 10px; }
+.train-card__text--tall { line-height: 1.6; }
+.train-card__foot { margin: 8px 0 0; }
+
+/* Settings */
+.train-settings { display: flex; gap: 20px; flex-wrap: wrap; align-items: flex-end; }
+.train-checks { display: flex; gap: 12px; height: 32px; align-items: center; font-size: 13px; }
+.train-checks label { display: flex; gap: 6px; align-items: center; }
+.train .train-settings__lag { width: 90px; }
+.train-settings__split { width: 200px; }
+.train .train-settings__train { padding: 0 20px; }
+
+/* Variables */
+.train-vars__head { display: flex; align-items: center; gap: 12px; margin-bottom: 6px; flex-wrap: wrap; }
+.train-vars__add { display: flex; gap: 6px; align-items: center; margin-left: auto; }
+.train-vars__note { font-size: 12px; margin: 0 0 8px; }
+.train-vars { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 6px; }
+.train-var { display: flex; align-items: center; gap: 8px; font-size: 13px; padding: 4px 10px; border-radius: 8px; border: 1px solid var(--border); }
+.train-var--off { opacity: 0.5; }
+.train-var--picked { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent-light); opacity: 1; }
+.train-var__use { display: flex; gap: 5px; align-items: center; flex: 1; font-weight: 600; }
+.train-var__data { display: flex; gap: 4px; align-items: center; font-size: 11px; color: var(--foreground-secondary); }
+
+/* Physics equations */
+.train-eq { display: grid; grid-template-columns: 170px auto minmax(0, 1fr) auto; gap: 8px; align-items: center; margin-bottom: 6px; }
+.train-eq__eq { font-size: 13px; }
+.train-eq__body { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.train-eq__tools { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+.train-eq__check { font-size: 11px; }
+
+/* Equation library and the equation being placed */
+.train-lib { margin-top: 14px; }
+.train-lib summary { cursor: pointer; margin-bottom: 6px; }
+.train-lib__group { margin-bottom: 8px; }
+.train-lib__group-name { font-size: 12px; font-weight: 600; margin-bottom: 4px; }
+.train-lib__grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 6px; }
+.train-lib__item { display: flex; flex-direction: column; align-items: flex-start; text-align: left; padding: 8px 10px; border-radius: 8px; cursor: pointer; color: var(--foreground); background: var(--surface-2); border: 1px solid var(--border); }
+.train-lib__item--on { background: color-mix(in srgb, var(--phys) 18%, transparent); border-color: var(--phys); }
+.train-lib__name { font-size: 12px; font-weight: 600; }
+.train-lib__expr { font-size: 11px; color: color-mix(in srgb, var(--phys) 75%, var(--foreground)); word-break: break-word; }
+.train-placing { margin-top: 10px; padding: 12px; border-radius: 8px; background: color-mix(in srgb, var(--phys) 8%, transparent); border: 1px solid color-mix(in srgb, var(--phys) 35%, transparent); }
+.train-placing__name { font-size: 13px; font-weight: 600; }
+.train-placing__about { margin: 2px 0 10px; }
+.train-placing__slots { display: flex; gap: 12px; flex-wrap: wrap; align-items: flex-end; }
+.train-placing__caption { margin: 12px 0 4px; }
+.train-placing__coefs { display: grid; grid-template-columns: auto minmax(0, 1fr) auto auto; gap: 4px 10px; align-items: center; font-size: 12px; }
+.train-placing__coef { font-weight: 700; }
+.train .train-placing__value { width: 90px; }
+.train-placing__preview { display: block; font-size: 12px; margin: 10px 0; }
+.train-placing__actions { display: flex; gap: 8px; }
+.train .btn.train-btn-phys { background: #0d9488; color: white; border-color: transparent; }
+.train .btn.train-btn-phys:hover:not(:disabled) { background: #0f766e; }
+
+/* Evaluation in progress */
+.train-progress { display: flex; align-items: center; gap: 10px; font-size: 13px; }
+.train-spinner { width: 14px; height: 14px; border-radius: 50%; border: 2px solid var(--border-strong); border-top-color: var(--accent); animation: train-spin 0.8s linear infinite; flex-shrink: 0; }
+@keyframes train-spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .train-spinner { animation-duration: 3s; } }
+
+/* Results: the table, the rolling comparison and the setpoint events, one under the other (faded while evaluating) */
+.train-results { display: flex; flex-direction: column; gap: var(--space-4); min-width: 0; transition: opacity 0.2s; }
+.train-results:empty { display: none; }
+.train-results--stale { opacity: 0.6; }
+
+.train-table { width: 100%; border-collapse: collapse; }
+.train-table th { padding: 6px 8px; text-align: left; font-weight: 600; color: var(--foreground-secondary); font-size: 12px; }
+.train-table td, .train-table tbody th { padding: 5px 8px; font-size: 13px; font-variant-numeric: tabular-nums; }
+.train-table tbody th { color: var(--foreground); }
+.train-table tbody tr { border-top: 1px solid var(--border); }
+.train-table .train-table__group { border-left: 1px solid var(--border); }
+.train-table__none { color: var(--foreground-tertiary); }
+/* the results table's rows pick their variable: a hover, the picked one in the accent */
+.train-table--pick tbody tr { cursor: pointer; }
+.train-table--pick tbody tr:hover { background: var(--surface-2); }
+.train-table--pick tbody tr.train-table__picked { background: var(--accent-light); }
+.train-table__picked .train-approach-results__name { color: var(--accent); }
+.train-tag { font-size: 11px; font-weight: 700; padding: 1px 6px; border-radius: 4px; }
+
+/* Results of the variable picked (under Variables) and of a column's variables (under its settings: VariableResults) */
+.train-picked__head { display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; margin-bottom: 4px; }
+.train-picked__about { font-size: 12px; }
+.train-picked__best th, .train-picked__best td { font-weight: 700; }
+.train-picked__mark { margin-left: 6px; font-size: 11px; font-weight: 700; color: var(--ok); }
+.train-results-note { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; font-size: 12px; margin: 6px 0 0; }
+.train-approach-results { margin-top: 14px; padding-top: 10px; border-top: 1px solid var(--border); }
+.train-approach-results__name { background: none; border: 0; padding: 0; font: inherit; font-weight: 600; color: var(--foreground); cursor: pointer; }
+.train-approach-results__name:hover { color: var(--accent); text-decoration: underline; }
+
+.train-event__head { display: flex; gap: 12px; align-items: flex-end; flex-wrap: wrap; margin-bottom: 8px; }
+.train-event__score { padding-bottom: 8px; }
+
+/* Structural equations (in the graph's column): a small box, its list scrolling inside, the picked variable marked */
+.graph-side .train-struct { padding: 10px; }
+.train-struct > .train-card__title { cursor: help; }
+.train-struct__list { position: relative; max-height: 300px; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; }
+.train-struct__var { border-top: 1px solid var(--border); padding: 8px 6px; }
+.train-struct__var--picked { background: var(--accent-light); box-shadow: inset 3px 0 0 var(--accent); }
+.train-struct__head { font-size: 12px; display: flex; gap: 6px; align-items: baseline; flex-wrap: wrap; }
+.train-struct__free { color: var(--foreground-secondary); }
+.train-struct__eq { display: block; font-size: 11px; line-height: 1.6; margin-top: 4px; white-space: pre-wrap; word-break: break-word; color: var(--foreground); }
+.train-struct__eq--alt { margin-top: 0; color: inherit; }
+/* a long equation (a plant written out in full) is cut to about six lines, scrolling in itself, so the list stays short;
+   the picked one is shown whole: it reads in the box's one scroll */
+.train-struct__eq { max-height: calc(6 * 1.6em); overflow-y: auto; scrollbar-width: thin; }
+.train-struct__var--picked .train-struct__eq { max-height: none; }
+.train-struct__alt { font-size: 11px; margin-top: 6px; font-weight: 600; }
+.train-struct__learned { font-size: 11px; color: var(--foreground-secondary); margin-top: 2px; }
+
+/* the training-time estimate under Train */
+.train-settings__estimate { margin: 0; font-size: 12px; color: var(--foreground-secondary); display: flex; flex-wrap: wrap; gap: 4px 8px; align-items: baseline; }
+.train-settings__problem { color: var(--danger); }
+
+/* Variables in four columns, one per approach (approaches.ts), as wrapping pills */
+.train-ways { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 8px; margin-bottom: 8px; }
+.train-way { --way: var(--way-data); border: 1px solid var(--border); border-top: 3px solid var(--way); border-radius: 8px; padding: 6px 8px; transition: background 0.15s; }
+.train-way--physics { --way: var(--way-physics); }
+.train-way--profile { --way: var(--way-profile); }
+.train-way--off { --way: var(--way-off); }
+.train-way--no { opacity: 0.6; }
+.train-way__no { font-size: 11px; margin: 0 0 6px; color: var(--danger); }
+.train-way--drop { background: color-mix(in srgb, var(--way) 10%, transparent); border-style: dashed; }
+.train-way__title { font-size: 12px; font-weight: 600; margin-bottom: 6px; cursor: help; }
+button.train-way__title { background: none; border: 0; padding: 0; font: inherit; font-size: 12px; font-weight: 600; color: inherit; text-align: left; cursor: pointer; }
+.train-way:has(> button.train-way__title) { cursor: pointer; }
+.train-way .train-vars { display: flex; flex-wrap: wrap; gap: 4px; min-height: 26px; }
+.train-way .train-var { gap: 2px; font-size: 12px; padding: 0 2px 0 8px; height: 26px; border-radius: 999px; background: var(--surface); }
+.train-way .train-var__use { font-weight: 500; }
+.train-way .train-var__data { font-size: 10px; padding-right: 6px; }
+.train-var[draggable="true"] { cursor: grab; }
+.train-var--nodata { border-style: dashed; } /* no data: its title says so */
+/* the approach select: only its arrow (the column says the approach), its list readable when open */
+.train-way .train-var select { height: 20px; width: 20px; font-size: 11px; padding: 0; border: none; background-color: transparent; color: transparent; cursor: pointer; }
+.train-way .train-var select option { color: var(--foreground); background: var(--surface); }
+
+/* the open column and its settings under the columns (VariablesCard panels) */
+.train-way { display: flex; flex-direction: column; }
+.train-way--open { background: color-mix(in srgb, var(--way) 7%, transparent); border-bottom-left-radius: 0; border-bottom-right-radius: 0; }
+.train-panel { --way: var(--way-data); border: 1px solid var(--border); border-top: 3px solid var(--way); border-radius: 8px; padding: 12px; margin-top: 0; }
+.train-panel.train-way--physics { --way: var(--way-physics); }
+.train-panel.train-way--profile { --way: var(--way-profile); }
+.train-way .train-var { cursor: pointer; }
+
+/* Connection points (PortsCard): one row per point, a box per role coloured by how it is delivered */
+.ports__point { padding: 6px 0; border-top: 1px solid var(--border); }
+/* a point's title: its name the whole width, its status beside it while both fit (else under it), what it is about
+   under them in small text, two lines at most; the chevron in the margin on the left */
+.ports__title { position: relative; display: flex; flex-wrap: wrap; align-items: center; gap: 3px 8px; padding-left: 14px; font-size: 13px; font-weight: 600; cursor: pointer; list-style: none; }
+.ports__title::-webkit-details-marker { display: none; }
+/* a point folds on its title (open when something is missing): the chevron says which way */
+.ports__title::before { content: "▸"; position: absolute; left: 0; top: 2px; color: var(--foreground-tertiary); font-size: 10px; transition: transform 0.15s; }
+details[open] > .ports__title::before { transform: rotate(90deg); }
+details[open] > .ports__title { margin-bottom: 6px; }
+.ports__name { flex: 1 1 auto; min-width: 0; overflow-wrap: anywhere; }
+.ports__title > .pill { max-width: 100%; white-space: normal; }
+.ports__about { flex: 1 0 100%; font-size: 11px; font-weight: 400; line-height: 1.35; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-clamp: 2; overflow: hidden; }
+.ports__ok { --pill: var(--ok); }
+.ports__bad { --pill: var(--danger); }
+.ports__opt { --pill: var(--foreground-tertiary); } /* optional: neither done nor missing */
+.ports__roles { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 6px; }
+/* in the causal graph's column, under the graph: two boxes a row, the long explanation left out (its title says it) */
+.graph-side .ports { padding: 10px; }
+.graph-side .ports__roles { grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); }
+.graph-side .ports > .train-vars__note { display: none; }
+.graph-side .ports__role { padding: 4px 8px; gap: 0; }
+.graph-side .ports__title { font-size: 12px; }
+.ports__role {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--surface-2);
+  color: var(--foreground);
+  text-align: left;
+  font: inherit;
+  cursor: pointer;
+}
+.ports__role:disabled { cursor: default; }
+.ports__label { font-size: 11px; }
+.ports__var { font-size: 12px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ports__how { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; color: var(--foreground); }
+.ports__role--measured .ports__how,
+.ports__role--calculated .ports__how,
+.ports__role--setting .ports__how,
+.ports__role--optional .ports__how { color: var(--foreground-secondary); }
+.ports__role--missing { border-color: var(--danger); background: var(--danger-bg); }
+.ports__role--missing .ports__how { color: var(--danger); }
+.ports__role--optional { opacity: 0.6; }
+.ports__more { margin-top: 8px; font-size: 12px; }
+.ports__more > summary { cursor: pointer; color: var(--accent); }
+.ports__plants { display: grid; gap: 6px; padding-top: 8px; border-top: 1px solid var(--border); margin-top: 4px; }
+.ports__plant { display: grid; grid-template-columns: 130px minmax(160px, 260px) 1fr; align-items: center; gap: 10px; font-size: 12px; }
+.ports__equations { grid-column: 1 / -1; font-size: 11.5px; }
+/* in a narrow column one field under the other: the select and the equations get the whole width */
+.ports__plants { container-type: inline-size; }
+@container (max-width: 460px) { .ports__plant { grid-template-columns: minmax(0, 1fr); gap: 4px; } }
+.ports__equations > summary { cursor: pointer; color: var(--accent); font-weight: 600; width: max-content; }
+.ports__equations table { border-collapse: collapse; margin-top: 4px; }
+.ports__equations th { text-align: left; font-weight: 600; padding: 2px 10px 2px 0; white-space: nowrap; vertical-align: top; }
+.ports__equations td { padding: 2px 0; }
+.ports__equations code { white-space: pre-wrap; overflow-wrap: anywhere; }
+.ports__equations table { table-layout: fixed; width: 100%; }
+.ports__equations th { width: 72px; }
+.ports__equations p { margin: 4px 0 0; }
+.ports__error { color: var(--danger); font-size: 12px; }
+/* KPI variables (KpiCard, data center only): under the Connection points, folded with what PUE uses on its title;
+   open, one select a row for the narrow column */
+.kpi-vars__fold > .ports__title > .caps { flex: 1 1 100%; }
+.kpi-vars__line { flex: 1 0 100%; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 11px; font-weight: 400; color: var(--foreground-secondary); }
+.kpi-vars__fold[open] .kpi-vars__line { display: none; } /* open: the formulas say it */
+.kpi-vars__body { display: grid; gap: 6px; }
+.kpi-vars .field-label { gap: 2px; }
+.kpi-vars select { width: 100%; min-width: 0; }
+.kpi-vars__heat { display: grid; gap: 4px; }
+.kpi-vars__formulas { list-style: none; margin: 4px 0 0; padding: 6px 0 0; border-top: 1px solid var(--border); display: grid; gap: 3px; font-size: 12px; }
+.kpi-vars__formulas .mono { overflow-wrap: anywhere; }
+.kpi-vars__missing { color: var(--danger); }
+.kpi-vars__actions { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+
+/* Rolling comparison (RollingCard.tsx): the controls in a row, the models as ticks, a compact table */
+.rolling-note { font-size: 11px; color: var(--foreground-tertiary); margin: 8px 0 0; line-height: 1.45; }
+.rolling-controls { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 12px 16px; margin-top: 12px; }
+.rolling-iv { display: inline-flex; gap: 6px; }
+.rolling-controls .segmented button { white-space: nowrap; }
+.rolling-models { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 16px; margin: 12px 0 0; padding: 0; border: none; font-size: 13px; }
+.rolling-models legend { font-size: 11px; margin-bottom: 4px; }
+.rolling-models .btn { margin-left: auto; }
+.rolling-h3 { font-size: 13px; font-weight: 600; margin: 16px 0 6px; }
+.rolling-table { width: auto; min-width: 640px; max-width: 100%; border-collapse: collapse; margin-top: 12px; }
+.rolling-table th { padding: 6px 8px; text-align: left; font-weight: 600; color: var(--foreground-secondary); font-size: 12px; }
+.rolling-table td, .rolling-table tbody th { padding: 5px 8px; font-size: 13px; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.rolling-table td { text-align: right; }
+.rolling-table td.rolling-note { text-align: left; white-space: normal; }
+.rolling-table tbody th { color: var(--foreground); }
+.rolling-table tbody tr { border-top: 1px solid var(--border); }

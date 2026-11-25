@@ -1,0 +1,622 @@
+{
+  "order": [
+    "ITE_Ener",
+    "In_Temp",
+    "Loop_T_warm",
+    "HEX_Hall_T_in",
+    "HEX_Hall_T_out",
+    "HEX_Hall_m",
+    "HEX_Cond_T_in",
+    "HEX_Cond_T_out",
+    "HEX_Cond_m",
+    "Loop_T_warm_Cond",
+    "HVAC_Ener",
+    "Elec_Loss_Ener",
+    "Building_Ener",
+    "Heat_rejected"
+  ],
+  "variables": {
+    "ITE_Ener": {
+      "intercept": 0.0,
+      "inputs": [
+        {
+          "parent": "IT_Load",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 0.23167379332927962
+        },
+        {
+          "parent": "In_Temp",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 1.1923502540986401
+        }
+      ],
+      "equation": "((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24)))",
+      "params": {},
+      "sigma": 0.0,
+      "scale": 3567.553078899907,
+      "nmae_test": 0.0,
+      "r2_train": 1.0,
+      "r2_test": 1.0,
+      "min": 2204.8696932918265,
+      "max": 5019.243763084916,
+      "mean": 3567.449276165826
+    },
+    "In_Temp": {
+      "intercept": 0.0,
+      "inputs": [
+        {
+          "parent": "In_Temp",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 1.1923502540986401
+        },
+        {
+          "parent": "Cool_Set",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 0.9739698746620374
+        },
+        {
+          "parent": "ITE_Ener",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 704.480305868091
+        }
+      ],
+      "equation": "In_Temp[t-1] + b*(Cool_Set[t-1] - In_Temp[t-1]) + r*ITE_Ener[t-1]/1000 + d",
+      "params": {
+        "b": 0.3468539344602384,
+        "r": 0.2389534567312488,
+        "d": -0.7970976408365522
+      },
+      "sigma": 0.04975433141463203,
+      "scale": 24.115489313709045,
+      "nmae_test": 0.0016490923021443508,
+      "r2_train": 0.9982588031054606,
+      "r2_test": 0.9981550420940298,
+      "min": 21.199916788942268,
+      "max": 26.165660804782636,
+      "mean": 24.115361624913977
+    },
+    "Loop_T_warm": {
+      "intercept": 0.0,
+      "inputs": [
+        {
+          "parent": "Loop_T_cold",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 5.448748419097371
+        },
+        {
+          "parent": "IT_Load",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 0.23167379332927962
+        },
+        {
+          "parent": "In_Temp",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 1.1923502540986401
+        }
+      ],
+      "equation": "Loop_T_cold[t-1] + minimum(minimum(4333.33, (((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24))) + (300*maximum(0.3, ((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24)))/5000)**2.3))), 0.8*((((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24))) + (300*maximum(0.3, ((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24)))/5000)**2.3)) / ((In_Temp[t-1] + dT) - 18))*maximum(0, (In_Temp[t-1] + dT) - Loop_T_cold[t-1]))/722.222",
+      "params": {
+        "dT": 5.999988786339043
+      },
+      "sigma": 1.3489954899390353e-06,
+      "scale": 18.471255812052494,
+      "nmae_test": 7.625087350763888e-08,
+      "r2_train": 0.9999999999999105,
+      "r2_test": 0.9999999999998778,
+      "min": 9.116079482259957,
+      "max": 24.953874426537116,
+      "mean": 18.470609084608014
+    },
+    "HEX_Hall_T_in": {
+      "intercept": 0.0,
+      "inputs": [
+        {
+          "parent": "In_Temp",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 1.1923502540986401
+        }
+      ],
+      "equation": "(In_Temp[t-1] + dT)",
+      "params": {
+        "dT": 5.999999999999999
+      },
+      "sigma": 2.561701223382666e-15,
+      "scale": 30.1153947141483,
+      "nmae_test": 5.862040422982729e-17,
+      "r2_train": 1.0,
+      "r2_test": 1.0,
+      "min": 27.199916788942268,
+      "max": 32.16566080478263,
+      "mean": 30.11526703618194
+    },
+    "HEX_Hall_T_out": {
+      "intercept": 0.0,
+      "inputs": [
+        {
+          "parent": "In_Temp",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 1.1923502540986401
+        },
+        {
+          "parent": "IT_Load",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 0.23167379332927962
+        },
+        {
+          "parent": "Loop_T_cold",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 5.448748419097371
+        }
+      ],
+      "equation": "((In_Temp[t-1] + dT) - minimum(minimum(4333.33, (((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24))) + (300*maximum(0.3, ((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24)))/5000)**2.3))), 0.8*((((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24))) + (300*maximum(0.3, ((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24)))/5000)**2.3)) / ((In_Temp[t-1] + dT) - 18))*maximum(0, (In_Temp[t-1] + dT) - Loop_T_cold[t-1])) / ((((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24))) + (300*maximum(0.3, ((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24)))/5000)**2.3)) / ((In_Temp[t-1] + dT) - 18)))",
+      "params": {
+        "dT": 5.999995683176536
+      },
+      "sigma": 2.8797820481389808e-06,
+      "scale": 19.806639912613583,
+      "nmae_test": 1.0571630927107956e-07,
+      "r2_train": 0.9999999999974237,
+      "r2_test": 0.9999999999949332,
+      "min": 17.999999999999996,
+      "max": 23.21472994569436,
+      "mean": 19.806433108594284
+    },
+    "HEX_Hall_m": {
+      "intercept": 0.0,
+      "inputs": [
+        {
+          "parent": "IT_Load",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 0.23167379332927962
+        },
+        {
+          "parent": "In_Temp",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 1.1923502540986401
+        }
+      ],
+      "equation": "((((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24))) + (300*maximum(0.3, ((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24)))/5000)**2.3)) / ((In_Temp[t-1] + dT) - 18)) / 4.18",
+      "params": {
+        "dT": 6.0
+      },
+      "sigma": 1.7080074439006213e-14,
+      "scale": 73.108969735809,
+      "nmae_test": 1.5412819696425387e-16,
+      "r2_train": 1.0,
+      "r2_test": 1.0,
+      "min": 40.78964759877508,
+      "max": 106.69318176429013,
+      "mean": 73.10740005365699
+    },
+    "HEX_Cond_T_in": {
+      "intercept": 0.0,
+      "inputs": [
+        {
+          "parent": "Out_Temp",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 7.781080959315769
+        },
+        {
+          "parent": "Out_Hum",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 17.28504233963125
+        },
+        {
+          "parent": "IT_Load",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 0.23167379332927962
+        },
+        {
+          "parent": "In_Temp",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 1.1923502540986401
+        }
+      ],
+      "equation": "(maximum((Out_Temp[t-1]*arctan(0.151977*sqrt(Out_Hum[t-1] + 8.313659)) + arctan(Out_Temp[t-1] + Out_Hum[t-1]) - arctan(Out_Hum[t-1] - 1.676331) + 0.00391838*Out_Hum[t-1]**1.5*arctan(0.023101*Out_Hum[t-1]) - 4.686035) + 4, 27) + ((((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24))) + (300*maximum(0.3, ((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24)))/5000)**2.3))*(1 + 1/minimum(8, 145.575/maximum(maximum((Out_Temp[t-1]*arctan(0.151977*sqrt(Out_Hum[t-1] + 8.313659)) + arctan(Out_Temp[t-1] + Out_Hum[t-1]) - arctan(Out_Hum[t-1] - 1.676331) + 0.00391838*Out_Hum[t-1]**1.5*arctan(0.023101*Out_Hum[t-1]) - 4.686035) + 4, 27) + 7.5 - 18, 5))))/((maximum(((((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24))) + (300*maximum(0.3, ((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24)))/5000)**2.3))*(1 + 1/minimum(8, 145.575/maximum(maximum((Out_Temp[t-1]*arctan(0.151977*sqrt(Out_Hum[t-1] + 8.313659)) + arctan(Out_Temp[t-1] + Out_Hum[t-1]) - arctan(Out_Hum[t-1] - 1.676331) + 0.00391838*Out_Hum[t-1]**1.5*arctan(0.023101*Out_Hum[t-1]) - 4.686035) + 4, 27) + 7.5 - 18, 5)))), 3180)/22.99)*4.18))",
+      "params": {},
+      "sigma": 0.0,
+      "scale": 32.43295071355515,
+      "nmae_test": 0.0,
+      "r2_train": 1.0,
+      "r2_test": 1.0,
+      "min": 31.37892458690226,
+      "max": 34.070963284601916,
+      "mean": 32.432937089507
+    },
+    "HEX_Cond_T_out": {
+      "intercept": 0.0,
+      "inputs": [
+        {
+          "parent": "Out_Temp",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 7.781080959315769
+        },
+        {
+          "parent": "Out_Hum",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 17.28504233963125
+        },
+        {
+          "parent": "IT_Load",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 0.23167379332927962
+        },
+        {
+          "parent": "In_Temp",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 1.1923502540986401
+        },
+        {
+          "parent": "Loop_T_cold",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 5.448748419097371
+        }
+      ],
+      "equation": "(maximum((Out_Temp[t-1]*arctan(0.151977*sqrt(Out_Hum[t-1] + 8.313659)) + arctan(Out_Temp[t-1] + Out_Hum[t-1]) - arctan(Out_Hum[t-1] - 1.676331) + 0.00391838*Out_Hum[t-1]**1.5*arctan(0.023101*Out_Hum[t-1]) - 4.686035) + 4, 27) + ((((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24))) + (300*maximum(0.3, ((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24)))/5000)**2.3))*(1 + 1/minimum(8, 145.575/maximum(maximum((Out_Temp[t-1]*arctan(0.151977*sqrt(Out_Hum[t-1] + 8.313659)) + arctan(Out_Temp[t-1] + Out_Hum[t-1]) - arctan(Out_Hum[t-1] - 1.676331) + 0.00391838*Out_Hum[t-1]**1.5*arctan(0.023101*Out_Hum[t-1]) - 4.686035) + 4, 27) + 7.5 - 18, 5))))/((maximum(((((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24))) + (300*maximum(0.3, ((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24)))/5000)**2.3))*(1 + 1/minimum(8, 145.575/maximum(maximum((Out_Temp[t-1]*arctan(0.151977*sqrt(Out_Hum[t-1] + 8.313659)) + arctan(Out_Temp[t-1] + Out_Hum[t-1]) - arctan(Out_Hum[t-1] - 1.676331) + 0.00391838*Out_Hum[t-1]**1.5*arctan(0.023101*Out_Hum[t-1]) - 4.686035) + 4, 27) + 7.5 - 18, 5)))), 3180)/22.99)*4.18)) - minimum(minimum(4333.33, ((((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24))) + (300*maximum(0.3, ((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24)))/5000)**2.3))*(1 + 1/minimum(8, 145.575/maximum(maximum((Out_Temp[t-1]*arctan(0.151977*sqrt(Out_Hum[t-1] + 8.313659)) + arctan(Out_Temp[t-1] + Out_Hum[t-1]) - arctan(Out_Hum[t-1] - 1.676331) + 0.00391838*Out_Hum[t-1]**1.5*arctan(0.023101*Out_Hum[t-1]) - 4.686035) + 4, 27) + 7.5 - 18, 5))))), 0.8*(maximum(((((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24))) + (300*maximum(0.3, ((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24)))/5000)**2.3))*(1 + 1/minimum(8, 145.575/maximum(maximum((Out_Temp[t-1]*arctan(0.151977*sqrt(Out_Hum[t-1] + 8.313659)) + arctan(Out_Temp[t-1] + Out_Hum[t-1]) - arctan(Out_Hum[t-1] - 1.676331) + 0.00391838*Out_Hum[t-1]**1.5*arctan(0.023101*Out_Hum[t-1]) - 4.686035) + 4, 27) + 7.5 - 18, 5)))), 3180)/22.99)*4.18*maximum(0, (maximum((Out_Temp[t-1]*arctan(0.151977*sqrt(Out_Hum[t-1] + 8.313659)) + arctan(Out_Temp[t-1] + Out_Hum[t-1]) - arctan(Out_Hum[t-1] - 1.676331) + 0.00391838*Out_Hum[t-1]**1.5*arctan(0.023101*Out_Hum[t-1]) - 4.686035) + 4, 27) + ((((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24))) + (300*maximum(0.3, ((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24)))/5000)**2.3))*(1 + 1/minimum(8, 145.575/maximum(maximum((Out_Temp[t-1]*arctan(0.151977*sqrt(Out_Hum[t-1] + 8.313659)) + arctan(Out_Temp[t-1] + Out_Hum[t-1]) - arctan(Out_Hum[t-1] - 1.676331) + 0.00391838*Out_Hum[t-1]**1.5*arctan(0.023101*Out_Hum[t-1]) - 4.686035) + 4, 27) + 7.5 - 18, 5))))/((maximum(((((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24))) + (300*maximum(0.3, ((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24)))/5000)**2.3))*(1 + 1/minimum(8, 145.575/maximum(maximum((Out_Temp[t-1]*arctan(0.151977*sqrt(Out_Hum[t-1] + 8.313659)) + arctan(Out_Temp[t-1] + Out_Hum[t-1]) - arctan(Out_Hum[t-1] - 1.676331) + 0.00391838*Out_Hum[t-1]**1.5*arctan(0.023101*Out_Hum[t-1]) - 4.686035) + 4, 27) + 7.5 - 18, 5)))), 3180)/22.99)*4.18)) - Loop_T_cold[t-1]))/((maximum(((((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24))) + (300*maximum(0.3, ((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24)))/5000)**2.3))*(1 + 1/minimum(8, 145.575/maximum(maximum((Out_Temp[t-1]*arctan(0.151977*sqrt(Out_Hum[t-1] + 8.313659)) + arctan(Out_Temp[t-1] + Out_Hum[t-1]) - arctan(Out_Hum[t-1] - 1.676331) + 0.00391838*Out_Hum[t-1]**1.5*arctan(0.023101*Out_Hum[t-1]) - 4.686035) + 4, 27) + 7.5 - 18, 5)))), 3180)/22.99)*4.18)",
+      "params": {},
+      "sigma": 1.8308447492403578e-06,
+      "scale": 27.315527715243498,
+      "nmae_test": 6.613441773385477e-08,
+      "r2_train": 0.9999999999699405,
+      "r2_test": 0.9999999999702857,
+      "min": 26.999999999999996,
+      "max": 28.598561206583366,
+      "mean": 27.31549159714422
+    },
+    "HEX_Cond_m": {
+      "intercept": 0.0,
+      "inputs": [
+        {
+          "parent": "IT_Load",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 0.23167379332927962
+        },
+        {
+          "parent": "In_Temp",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 1.1923502540986401
+        },
+        {
+          "parent": "Out_Temp",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 7.781080959315769
+        },
+        {
+          "parent": "Out_Hum",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 17.28504233963125
+        }
+      ],
+      "equation": "(maximum(((((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24))) + (300*maximum(0.3, ((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24)))/5000)**2.3))*(1 + 1/minimum(8, 145.575/maximum(maximum((Out_Temp[t-1]*arctan(0.151977*sqrt(Out_Hum[t-1] + 8.313659)) + arctan(Out_Temp[t-1] + Out_Hum[t-1]) - arctan(Out_Hum[t-1] - 1.676331) + 0.00391838*Out_Hum[t-1]**1.5*arctan(0.023101*Out_Hum[t-1]) - 4.686035) + 4, 27) + 7.5 - 18, 5)))), 3180)/22.99)",
+      "params": {},
+      "sigma": 0.0,
+      "scale": 183.42843784392448,
+      "nmae_test": 0.0,
+      "r2_train": 1.0,
+      "r2_test": 1.0,
+      "min": 138.32100913440627,
+      "max": 260.4238496997083,
+      "mean": 183.423274447781
+    },
+    "Loop_T_warm_Cond": {
+      "intercept": 0.0,
+      "inputs": [
+        {
+          "parent": "Loop_T_cold",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 5.448748419097371
+        },
+        {
+          "parent": "IT_Load",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 0.23167379332927962
+        },
+        {
+          "parent": "In_Temp",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 1.1923502540986401
+        },
+        {
+          "parent": "Out_Temp",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 7.781080959315769
+        },
+        {
+          "parent": "Out_Hum",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 17.28504233963125
+        }
+      ],
+      "equation": "Loop_T_cold[t-1] + minimum(minimum(4333.33, ((((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24))) + (300*maximum(0.3, ((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24)))/5000)**2.3))*(1 + 1/minimum(8, 145.575/maximum(maximum((Out_Temp[t-1]*arctan(0.151977*sqrt(Out_Hum[t-1] + 8.313659)) + arctan(Out_Temp[t-1] + Out_Hum[t-1]) - arctan(Out_Hum[t-1] - 1.676331) + 0.00391838*Out_Hum[t-1]**1.5*arctan(0.023101*Out_Hum[t-1]) - 4.686035) + 4, 27) + 7.5 - 18, 5))))), 0.8*(maximum(((((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24))) + (300*maximum(0.3, ((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24)))/5000)**2.3))*(1 + 1/minimum(8, 145.575/maximum(maximum((Out_Temp[t-1]*arctan(0.151977*sqrt(Out_Hum[t-1] + 8.313659)) + arctan(Out_Temp[t-1] + Out_Hum[t-1]) - arctan(Out_Hum[t-1] - 1.676331) + 0.00391838*Out_Hum[t-1]**1.5*arctan(0.023101*Out_Hum[t-1]) - 4.686035) + 4, 27) + 7.5 - 18, 5)))), 3180)/22.99)*4.18*maximum(0, (maximum((Out_Temp[t-1]*arctan(0.151977*sqrt(Out_Hum[t-1] + 8.313659)) + arctan(Out_Temp[t-1] + Out_Hum[t-1]) - arctan(Out_Hum[t-1] - 1.676331) + 0.00391838*Out_Hum[t-1]**1.5*arctan(0.023101*Out_Hum[t-1]) - 4.686035) + 4, 27) + ((((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24))) + (300*maximum(0.3, ((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24)))/5000)**2.3))*(1 + 1/minimum(8, 145.575/maximum(maximum((Out_Temp[t-1]*arctan(0.151977*sqrt(Out_Hum[t-1] + 8.313659)) + arctan(Out_Temp[t-1] + Out_Hum[t-1]) - arctan(Out_Hum[t-1] - 1.676331) + 0.00391838*Out_Hum[t-1]**1.5*arctan(0.023101*Out_Hum[t-1]) - 4.686035) + 4, 27) + 7.5 - 18, 5))))/((maximum(((((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24))) + (300*maximum(0.3, ((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24)))/5000)**2.3))*(1 + 1/minimum(8, 145.575/maximum(maximum((Out_Temp[t-1]*arctan(0.151977*sqrt(Out_Hum[t-1] + 8.313659)) + arctan(Out_Temp[t-1] + Out_Hum[t-1]) - arctan(Out_Hum[t-1] - 1.676331) + 0.00391838*Out_Hum[t-1]**1.5*arctan(0.023101*Out_Hum[t-1]) - 4.686035) + 4, 27) + 7.5 - 18, 5)))), 3180)/22.99)*4.18)) - Loop_T_cold[t-1]))/722.222",
+      "params": {},
+      "sigma": 2.1228115496946556e-06,
+      "scale": 19.484410482980508,
+      "nmae_test": 1.0945633964476006e-07,
+      "r2_train": 0.9999999999998525,
+      "r2_test": 0.9999999999998186,
+      "min": 9.505589417542453,
+      "max": 27.144496127948706,
+      "mean": 19.4837018879843
+    },
+    "HVAC_Ener": {
+      "intercept": 0.0,
+      "inputs": [
+        {
+          "parent": "IT_Load",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 0.23167379332927962
+        },
+        {
+          "parent": "In_Temp",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 1.1923502540986401
+        },
+        {
+          "parent": "Loop_T_cold",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 5.448748419097371
+        },
+        {
+          "parent": "Out_Temp",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 7.781080959315769
+        },
+        {
+          "parent": "Out_Hum",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 17.28504233963125
+        }
+      ],
+      "equation": "k*((300*maximum(0.3, ((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24)))/5000)**2.3) + (60*(((((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24))) + (300*maximum(0.3, ((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24)))/5000)**2.3)) / ((In_Temp[t-1] + dT) - 18))/441.667)**2)) + c*(1 - minimum(1, maximum(0, (((In_Temp[t-1] + dT) - minimum(minimum(4333.33, (((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24))) + (300*maximum(0.3, ((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24)))/5000)**2.3))), 0.8*((((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24))) + (300*maximum(0.3, ((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24)))/5000)**2.3)) / ((In_Temp[t-1] + dT) - 18))*maximum(0, (In_Temp[t-1] + dT) - Loop_T_cold[t-1])) / ((((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24))) + (300*maximum(0.3, ((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24)))/5000)**2.3)) / ((In_Temp[t-1] + dT) - 18))) - 2 - (Out_Temp[t-1]*arctan(0.151977*sqrt(Out_Hum[t-1] + 8.313659)) + arctan(Out_Temp[t-1] + Out_Hum[t-1]) - arctan(Out_Hum[t-1] - 1.676331) + 0.00391838*Out_Hum[t-1]**1.5*arctan(0.023101*Out_Hum[t-1]) - 4.686035) - a) / maximum(((In_Temp[t-1] + dT) - minimum(minimum(4333.33, (((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24))) + (300*maximum(0.3, ((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24)))/5000)**2.3))), 0.8*((((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24))) + (300*maximum(0.3, ((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24)))/5000)**2.3)) / ((In_Temp[t-1] + dT) - 18))*maximum(0, (In_Temp[t-1] + dT) - Loop_T_cold[t-1])) / ((((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24))) + (300*maximum(0.3, ((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24)))/5000)**2.3)) / ((In_Temp[t-1] + dT) - 18))) - 18, 0.01))))*((((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24))) + (300*maximum(0.3, ((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24)))/5000)**2.3)) - minimum(minimum(4333.33, (((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24))) + (300*maximum(0.3, ((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24)))/5000)**2.3))), 0.8*((((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24))) + (300*maximum(0.3, ((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24)))/5000)**2.3)) / ((In_Temp[t-1] + dT) - 18))*maximum(0, (In_Temp[t-1] + dT) - Loop_T_cold[t-1]))) + f*((((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24))) + (300*maximum(0.3, ((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24)))/5000)**2.3)) - minimum(minimum(4333.33, (((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24))) + (300*maximum(0.3, ((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24)))/5000)**2.3))), 0.8*((((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24))) + (300*maximum(0.3, ((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24)))/5000)**2.3)) / ((In_Temp[t-1] + dT) - 18))*maximum(0, (In_Temp[t-1] + dT) - Loop_T_cold[t-1]))) + g*(10000*(0.015 + 0.02*(((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24)))/10000) + 0.01*(((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24)))/10000)**2) + 0.03*((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24))))/clip(12 - 0.25*Out_Temp[t-1], 3, 12)",
+      "params": {
+        "k": 0.9999997302156504,
+        "dT": 5.999996470624421,
+        "c": 0.1293749559115228,
+        "a": 3.9999999006525817,
+        "f": 0.035000020925614335,
+        "g": 1.0000011822233579
+      },
+      "sigma": 6.0094007976597814e-05,
+      "scale": 273.83723069172225,
+      "nmae_test": 1.0375024529900942e-07,
+      "r2_train": 0.9999999999997479,
+      "r2_test": 0.9999999999999216,
+      "min": 79.22108170173091,
+      "max": 651.4563365851704,
+      "mean": 273.81971271597024
+    },
+    "Elec_Loss_Ener": {
+      "intercept": 0.0,
+      "inputs": [
+        {
+          "parent": "IT_Load",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 0.23167379332927962
+        },
+        {
+          "parent": "In_Temp",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 1.1923502540986401
+        }
+      ],
+      "equation": "(u0 + u1*(((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24)))/5000) + u2*(((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24)))/5000)**2)",
+      "params": {
+        "u0": 150.00000000000003,
+        "u1": 249.99999999999994,
+        "u2": 25.000000000000043
+      },
+      "sigma": 3.827371869991115e-14,
+      "scale": 341.6013441031959,
+      "nmae_test": 8.371569248047823e-17,
+      "r2_train": 1.0,
+      "r2_test": 1.0,
+      "min": 265.1049350289881,
+      "max": 426.1549961075126,
+      "mean": 341.59545064766337
+    },
+    "Building_Ener": {
+      "intercept": 0.0,
+      "inputs": [
+        {
+          "parent": "Hour",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 6.922186552431729
+        },
+        {
+          "parent": "Out_Temp",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 7.781080959315769
+        }
+      ],
+      "equation": "b0 + b1*(clip(Hour[t-1] - 6, 0, 1)*clip(19 - Hour[t-1], 0, 1)) + b2*maximum(0, 15 - Out_Temp[t-1]) + b3*maximum(0, Out_Temp[t-1] - 22)",
+      "params": {
+        "b0": 100.0,
+        "b1": 30.000000000000004,
+        "b2": 2.5,
+        "b3": 1.5000000000000002
+      },
+      "sigma": 0.0,
+      "scale": 127.90653119633659,
+      "nmae_test": 0.0,
+      "r2_train": 1.0,
+      "r2_test": 1.0,
+      "min": 100.0,
+      "max": 183.25,
+      "mean": 127.90442422161173
+    },
+    "Heat_rejected": {
+      "intercept": 0.0,
+      "inputs": [
+        {
+          "parent": "IT_Load",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 0.23167379332927962
+        },
+        {
+          "parent": "In_Temp",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 1.1923502540986401
+        },
+        {
+          "parent": "Loop_T_cold",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 5.448748419097371
+        },
+        {
+          "parent": "Out_Temp",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 7.781080959315769
+        },
+        {
+          "parent": "Out_Hum",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 17.28504233963125
+        },
+        {
+          "parent": "Hour",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 6.922186552431729
+        }
+      ],
+      "equation": "((((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24))) + (300*maximum(0.3, ((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24)))/5000)**2.3)) - minimum(minimum(4333.33, (((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24))) + (300*maximum(0.3, ((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24)))/5000)**2.3))), 0.8*((((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24))) + (300*maximum(0.3, ((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24)))/5000)**2.3)) / ((In_Temp[t-1] + dT) - 18))*maximum(0, (In_Temp[t-1] + dT) - Loop_T_cold[t-1])))*(1 + c*(1 - minimum(1, maximum(0, (((In_Temp[t-1] + dT) - minimum(minimum(4333.33, (((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24))) + (300*maximum(0.3, ((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24)))/5000)**2.3))), 0.8*((((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24))) + (300*maximum(0.3, ((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24)))/5000)**2.3)) / ((In_Temp[t-1] + dT) - 18))*maximum(0, (In_Temp[t-1] + dT) - Loop_T_cold[t-1])) / ((((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24))) + (300*maximum(0.3, ((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24)))/5000)**2.3)) / ((In_Temp[t-1] + dT) - 18))) - 2 - (Out_Temp[t-1]*arctan(0.151977*sqrt(Out_Hum[t-1] + 8.313659)) + arctan(Out_Temp[t-1] + Out_Hum[t-1]) - arctan(Out_Hum[t-1] - 1.676331) + 0.00391838*Out_Hum[t-1]**1.5*arctan(0.023101*Out_Hum[t-1]) - 4.686035) - a) / maximum(((In_Temp[t-1] + dT) - minimum(minimum(4333.33, (((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24))) + (300*maximum(0.3, ((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24)))/5000)**2.3))), 0.8*((((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24))) + (300*maximum(0.3, ((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24)))/5000)**2.3)) / ((In_Temp[t-1] + dT) - 18))*maximum(0, (In_Temp[t-1] + dT) - Loop_T_cold[t-1])) / ((((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24))) + (300*maximum(0.3, ((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24)))/5000)**2.3)) / ((In_Temp[t-1] + dT) - 18))) - 18, 0.01)))) + f) + k*(60*(((((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24))) + (300*maximum(0.3, ((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24)))/5000)**2.3)) / ((In_Temp[t-1] + dT) - 18))/441.667)**2) + (10000*(0.015 + 0.02*(((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24)))/10000) + 0.01*(((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24)))/10000)**2) + 0.03*((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24))))*(1 + g/clip(12 - 0.25*Out_Temp[t-1], 3, 12)) + b0 + b1*(clip(Hour[t-1] - 6, 0, 1)*clip(19 - Hour[t-1], 0, 1)) + b2*maximum(0, 15 - Out_Temp[t-1]) + b3*maximum(0, Out_Temp[t-1] - 22)",
+      "params": {
+        "dT": 6.0000000678581396,
+        "c": 0.1293752779031194,
+        "a": 4.000005114724536,
+        "f": 0.03500039324891538,
+        "k": 0.9999352448874615,
+        "g": 0.9999863176677825,
+        "b0": 100.00173374061963,
+        "b1": 30.000023951919772,
+        "b2": 2.500001681333989,
+        "b3": 1.5000295508327337
+      },
+      "sigma": 0.0008787755565245515,
+      "scale": 1164.8763104748598,
+      "nmae_test": 6.714021264528353e-07,
+      "r2_train": 0.999999999998177,
+      "r2_test": 0.9999999999971085,
+      "min": 425.91882136865655,
+      "max": 2573.5978828263374,
+      "mean": 1164.7944920112775
+    }
+  },
+  "drivers": [
+    "Cool_Set",
+    "Hour",
+    "IT_Load",
+    "Loop_T_cold",
+    "Out_Hum",
+    "Out_Temp"
+  ],
+  "max_lag": 1,
+  "split_index": 8736,
+  "split_time": "2024-01-01 00:00:00",
+  "rows": 17472,
+  "kind": "physics",
+  "name": "phys",
+  "file": "df_sim_recovery_air",
+  "graph_file": "causal_graph.json",
+  "requested_drivers": [
+    "Hour",
+    "Is_Weekend",
+    "Out_Temp",
+    "Out_Hum",
+    "Loop_T_cold",
+    "Cool_Set",
+    "IT_Load",
+    "Heat_Demand"
+  ],
+  "structure": "graph",
+  "max_lag_setting": 5,
+  "variables_used": [
+    "Hour",
+    "Out_Temp",
+    "Out_Hum",
+    "Is_Weekend",
+    "Cool_Set",
+    "IT_Load",
+    "Heat_Demand",
+    "ITE_Ener",
+    "In_Temp",
+    "Loop_T_cold",
+    "Loop_T_warm",
+    "HEX_Hall_T_in",
+    "HEX_Hall_T_out",
+    "HEX_Hall_m",
+    "HEX_Cond_T_in",
+    "HEX_Cond_T_out",
+    "HEX_Cond_m",
+    "Loop_T_warm_Cond",
+    "HVAC_Ener",
+    "Elec_Loss_Ener",
+    "Building_Ener",
+    "Heat_rejected"
+  ],
+  "model_type": "physics",
+  "equations": {
+    "Loop_T_cold": "Loop_T_cold[t-1] + a*(b + g*Out_Temp[t-1] - Loop_T_cold[t-1]) + k*(minimum(minimum(4333.33, (((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24))) + (300*maximum(0.3, ((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24)))/5000)**2.3))), 0.8*((((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24))) + (300*maximum(0.3, ((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24)))/5000)**2.3)) / ((In_Temp[t-1] + dT) - 18))*maximum(0, (In_Temp[t-1] + dT) - Loop_T_cold[t-1])) - u*Heat_Demand[t-1])/1000",
+    "IT_Load": "IT_Load[t-1] + k*(c + s1*exp(-0.5*((Hour[t-1] - 14)/4)**2)*(1 - f*Is_Weekend[t-1]) + s2*exp(-0.5*((Hour[t-1] - 21)/2)**2) - IT_Load[t-1])",
+    "ITE_Ener": "((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24)))",
+    "In_Temp": "In_Temp[t-1] + b*(Cool_Set[t-1] - In_Temp[t-1]) + r*ITE_Ener[t-1]/1000 + d",
+    "HEX_Hall_T_in": "(In_Temp[t-1] + dT)",
+    "HEX_Hall_m": "((((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24))) + (300*maximum(0.3, ((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24)))/5000)**2.3)) / ((In_Temp[t-1] + dT) - 18)) / 4.18",
+    "HEX_Hall_T_out": "((In_Temp[t-1] + dT) - minimum(minimum(4333.33, (((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24))) + (300*maximum(0.3, ((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24)))/5000)**2.3))), 0.8*((((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24))) + (300*maximum(0.3, ((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24)))/5000)**2.3)) / ((In_Temp[t-1] + dT) - 18))*maximum(0, (In_Temp[t-1] + dT) - Loop_T_cold[t-1])) / ((((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24))) + (300*maximum(0.3, ((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24)))/5000)**2.3)) / ((In_Temp[t-1] + dT) - 18)))",
+    "Loop_T_warm": "Loop_T_cold[t-1] + minimum(minimum(4333.33, (((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24))) + (300*maximum(0.3, ((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24)))/5000)**2.3))), 0.8*((((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24))) + (300*maximum(0.3, ((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24)))/5000)**2.3)) / ((In_Temp[t-1] + dT) - 18))*maximum(0, (In_Temp[t-1] + dT) - Loop_T_cold[t-1]))/722.222",
+    "HEX_Cond_T_in": "(maximum((Out_Temp[t-1]*arctan(0.151977*sqrt(Out_Hum[t-1] + 8.313659)) + arctan(Out_Temp[t-1] + Out_Hum[t-1]) - arctan(Out_Hum[t-1] - 1.676331) + 0.00391838*Out_Hum[t-1]**1.5*arctan(0.023101*Out_Hum[t-1]) - 4.686035) + 4, 27) + ((((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24))) + (300*maximum(0.3, ((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24)))/5000)**2.3))*(1 + 1/minimum(8, 145.575/maximum(maximum((Out_Temp[t-1]*arctan(0.151977*sqrt(Out_Hum[t-1] + 8.313659)) + arctan(Out_Temp[t-1] + Out_Hum[t-1]) - arctan(Out_Hum[t-1] - 1.676331) + 0.00391838*Out_Hum[t-1]**1.5*arctan(0.023101*Out_Hum[t-1]) - 4.686035) + 4, 27) + 7.5 - 18, 5))))/((maximum(((((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24))) + (300*maximum(0.3, ((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24)))/5000)**2.3))*(1 + 1/minimum(8, 145.575/maximum(maximum((Out_Temp[t-1]*arctan(0.151977*sqrt(Out_Hum[t-1] + 8.313659)) + arctan(Out_Temp[t-1] + Out_Hum[t-1]) - arctan(Out_Hum[t-1] - 1.676331) + 0.00391838*Out_Hum[t-1]**1.5*arctan(0.023101*Out_Hum[t-1]) - 4.686035) + 4, 27) + 7.5 - 18, 5)))), 3180)/22.99)*4.18))",
+    "HEX_Cond_m": "(maximum(((((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24))) + (300*maximum(0.3, ((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24)))/5000)**2.3))*(1 + 1/minimum(8, 145.575/maximum(maximum((Out_Temp[t-1]*arctan(0.151977*sqrt(Out_Hum[t-1] + 8.313659)) + arctan(Out_Temp[t-1] + Out_Hum[t-1]) - arctan(Out_Hum[t-1] - 1.676331) + 0.00391838*Out_Hum[t-1]**1.5*arctan(0.023101*Out_Hum[t-1]) - 4.686035) + 4, 27) + 7.5 - 18, 5)))), 3180)/22.99)",
+    "HEX_Cond_T_out": "(maximum((Out_Temp[t-1]*arctan(0.151977*sqrt(Out_Hum[t-1] + 8.313659)) + arctan(Out_Temp[t-1] + Out_Hum[t-1]) - arctan(Out_Hum[t-1] - 1.676331) + 0.00391838*Out_Hum[t-1]**1.5*arctan(0.023101*Out_Hum[t-1]) - 4.686035) + 4, 27) + ((((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24))) + (300*maximum(0.3, ((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24)))/5000)**2.3))*(1 + 1/minimum(8, 145.575/maximum(maximum((Out_Temp[t-1]*arctan(0.151977*sqrt(Out_Hum[t-1] + 8.313659)) + arctan(Out_Temp[t-1] + Out_Hum[t-1]) - arctan(Out_Hum[t-1] - 1.676331) + 0.00391838*Out_Hum[t-1]**1.5*arctan(0.023101*Out_Hum[t-1]) - 4.686035) + 4, 27) + 7.5 - 18, 5))))/((maximum(((((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24))) + (300*maximum(0.3, ((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24)))/5000)**2.3))*(1 + 1/minimum(8, 145.575/maximum(maximum((Out_Temp[t-1]*arctan(0.151977*sqrt(Out_Hum[t-1] + 8.313659)) + arctan(Out_Temp[t-1] + Out_Hum[t-1]) - arctan(Out_Hum[t-1] - 1.676331) + 0.00391838*Out_Hum[t-1]**1.5*arctan(0.023101*Out_Hum[t-1]) - 4.686035) + 4, 27) + 7.5 - 18, 5)))), 3180)/22.99)*4.18)) - minimum(minimum(4333.33, ((((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24))) + (300*maximum(0.3, ((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24)))/5000)**2.3))*(1 + 1/minimum(8, 145.575/maximum(maximum((Out_Temp[t-1]*arctan(0.151977*sqrt(Out_Hum[t-1] + 8.313659)) + arctan(Out_Temp[t-1] + Out_Hum[t-1]) - arctan(Out_Hum[t-1] - 1.676331) + 0.00391838*Out_Hum[t-1]**1.5*arctan(0.023101*Out_Hum[t-1]) - 4.686035) + 4, 27) + 7.5 - 18, 5))))), 0.8*(maximum(((((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24))) + (300*maximum(0.3, ((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24)))/5000)**2.3))*(1 + 1/minimum(8, 145.575/maximum(maximum((Out_Temp[t-1]*arctan(0.151977*sqrt(Out_Hum[t-1] + 8.313659)) + arctan(Out_Temp[t-1] + Out_Hum[t-1]) - arctan(Out_Hum[t-1] - 1.676331) + 0.00391838*Out_Hum[t-1]**1.5*arctan(0.023101*Out_Hum[t-1]) - 4.686035) + 4, 27) + 7.5 - 18, 5)))), 3180)/22.99)*4.18*maximum(0, (maximum((Out_Temp[t-1]*arctan(0.151977*sqrt(Out_Hum[t-1] + 8.313659)) + arctan(Out_Temp[t-1] + Out_Hum[t-1]) - arctan(Out_Hum[t-1] - 1.676331) + 0.00391838*Out_Hum[t-1]**1.5*arctan(0.023101*Out_Hum[t-1]) - 4.686035) + 4, 27) + ((((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24))) + (300*maximum(0.3, ((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24)))/5000)**2.3))*(1 + 1/minimum(8, 145.575/maximum(maximum((Out_Temp[t-1]*arctan(0.151977*sqrt(Out_Hum[t-1] + 8.313659)) + arctan(Out_Temp[t-1] + Out_Hum[t-1]) - arctan(Out_Hum[t-1] - 1.676331) + 0.00391838*Out_Hum[t-1]**1.5*arctan(0.023101*Out_Hum[t-1]) - 4.686035) + 4, 27) + 7.5 - 18, 5))))/((maximum(((((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24))) + (300*maximum(0.3, ((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24)))/5000)**2.3))*(1 + 1/minimum(8, 145.575/maximum(maximum((Out_Temp[t-1]*arctan(0.151977*sqrt(Out_Hum[t-1] + 8.313659)) + arctan(Out_Temp[t-1] + Out_Hum[t-1]) - arctan(Out_Hum[t-1] - 1.676331) + 0.00391838*Out_Hum[t-1]**1.5*arctan(0.023101*Out_Hum[t-1]) - 4.686035) + 4, 27) + 7.5 - 18, 5)))), 3180)/22.99)*4.18)) - Loop_T_cold[t-1]))/((maximum(((((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24))) + (300*maximum(0.3, ((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24)))/5000)**2.3))*(1 + 1/minimum(8, 145.575/maximum(maximum((Out_Temp[t-1]*arctan(0.151977*sqrt(Out_Hum[t-1] + 8.313659)) + arctan(Out_Temp[t-1] + Out_Hum[t-1]) - arctan(Out_Hum[t-1] - 1.676331) + 0.00391838*Out_Hum[t-1]**1.5*arctan(0.023101*Out_Hum[t-1]) - 4.686035) + 4, 27) + 7.5 - 18, 5)))), 3180)/22.99)*4.18)",
+    "Loop_T_warm_Cond": "Loop_T_cold[t-1] + minimum(minimum(4333.33, ((((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24))) + (300*maximum(0.3, ((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24)))/5000)**2.3))*(1 + 1/minimum(8, 145.575/maximum(maximum((Out_Temp[t-1]*arctan(0.151977*sqrt(Out_Hum[t-1] + 8.313659)) + arctan(Out_Temp[t-1] + Out_Hum[t-1]) - arctan(Out_Hum[t-1] - 1.676331) + 0.00391838*Out_Hum[t-1]**1.5*arctan(0.023101*Out_Hum[t-1]) - 4.686035) + 4, 27) + 7.5 - 18, 5))))), 0.8*(maximum(((((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24))) + (300*maximum(0.3, ((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24)))/5000)**2.3))*(1 + 1/minimum(8, 145.575/maximum(maximum((Out_Temp[t-1]*arctan(0.151977*sqrt(Out_Hum[t-1] + 8.313659)) + arctan(Out_Temp[t-1] + Out_Hum[t-1]) - arctan(Out_Hum[t-1] - 1.676331) + 0.00391838*Out_Hum[t-1]**1.5*arctan(0.023101*Out_Hum[t-1]) - 4.686035) + 4, 27) + 7.5 - 18, 5)))), 3180)/22.99)*4.18*maximum(0, (maximum((Out_Temp[t-1]*arctan(0.151977*sqrt(Out_Hum[t-1] + 8.313659)) + arctan(Out_Temp[t-1] + Out_Hum[t-1]) - arctan(Out_Hum[t-1] - 1.676331) + 0.00391838*Out_Hum[t-1]**1.5*arctan(0.023101*Out_Hum[t-1]) - 4.686035) + 4, 27) + ((((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24))) + (300*maximum(0.3, ((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24)))/5000)**2.3))*(1 + 1/minimum(8, 145.575/maximum(maximum((Out_Temp[t-1]*arctan(0.151977*sqrt(Out_Hum[t-1] + 8.313659)) + arctan(Out_Temp[t-1] + Out_Hum[t-1]) - arctan(Out_Hum[t-1] - 1.676331) + 0.00391838*Out_Hum[t-1]**1.5*arctan(0.023101*Out_Hum[t-1]) - 4.686035) + 4, 27) + 7.5 - 18, 5))))/((maximum(((((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24))) + (300*maximum(0.3, ((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24)))/5000)**2.3))*(1 + 1/minimum(8, 145.575/maximum(maximum((Out_Temp[t-1]*arctan(0.151977*sqrt(Out_Hum[t-1] + 8.313659)) + arctan(Out_Temp[t-1] + Out_Hum[t-1]) - arctan(Out_Hum[t-1] - 1.676331) + 0.00391838*Out_Hum[t-1]**1.5*arctan(0.023101*Out_Hum[t-1]) - 4.686035) + 4, 27) + 7.5 - 18, 5)))), 3180)/22.99)*4.18)) - Loop_T_cold[t-1]))/722.222",
+    "HVAC_Ener": "k*((300*maximum(0.3, ((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24)))/5000)**2.3) + (60*(((((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24))) + (300*maximum(0.3, ((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24)))/5000)**2.3)) / ((In_Temp[t-1] + dT) - 18))/441.667)**2)) + c*(1 - minimum(1, maximum(0, (((In_Temp[t-1] + dT) - minimum(minimum(4333.33, (((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24))) + (300*maximum(0.3, ((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24)))/5000)**2.3))), 0.8*((((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24))) + (300*maximum(0.3, ((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24)))/5000)**2.3)) / ((In_Temp[t-1] + dT) - 18))*maximum(0, (In_Temp[t-1] + dT) - Loop_T_cold[t-1])) / ((((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24))) + (300*maximum(0.3, ((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24)))/5000)**2.3)) / ((In_Temp[t-1] + dT) - 18))) - 2 - (Out_Temp[t-1]*arctan(0.151977*sqrt(Out_Hum[t-1] + 8.313659)) + arctan(Out_Temp[t-1] + Out_Hum[t-1]) - arctan(Out_Hum[t-1] - 1.676331) + 0.00391838*Out_Hum[t-1]**1.5*arctan(0.023101*Out_Hum[t-1]) - 4.686035) - a) / maximum(((In_Temp[t-1] + dT) - minimum(minimum(4333.33, (((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24))) + (300*maximum(0.3, ((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24)))/5000)**2.3))), 0.8*((((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24))) + (300*maximum(0.3, ((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24)))/5000)**2.3)) / ((In_Temp[t-1] + dT) - 18))*maximum(0, (In_Temp[t-1] + dT) - Loop_T_cold[t-1])) / ((((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24))) + (300*maximum(0.3, ((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24)))/5000)**2.3)) / ((In_Temp[t-1] + dT) - 18))) - 18, 0.01))))*((((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24))) + (300*maximum(0.3, ((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24)))/5000)**2.3)) - minimum(minimum(4333.33, (((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24))) + (300*maximum(0.3, ((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24)))/5000)**2.3))), 0.8*((((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24))) + (300*maximum(0.3, ((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24)))/5000)**2.3)) / ((In_Temp[t-1] + dT) - 18))*maximum(0, (In_Temp[t-1] + dT) - Loop_T_cold[t-1]))) + f*((((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24))) + (300*maximum(0.3, ((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24)))/5000)**2.3)) - minimum(minimum(4333.33, (((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24))) + (300*maximum(0.3, ((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24)))/5000)**2.3))), 0.8*((((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24))) + (300*maximum(0.3, ((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24)))/5000)**2.3)) / ((In_Temp[t-1] + dT) - 18))*maximum(0, (In_Temp[t-1] + dT) - Loop_T_cold[t-1]))) + g*(10000*(0.015 + 0.02*(((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24)))/10000) + 0.01*(((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24)))/10000)**2) + 0.03*((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24))))/clip(12 - 0.25*Out_Temp[t-1], 3, 12)",
+    "Elec_Loss_Ener": "(u0 + u1*(((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24)))/5000) + u2*(((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24)))/5000)**2)",
+    "Building_Ener": "b0 + b1*(clip(Hour[t-1] - 6, 0, 1)*clip(19 - Hour[t-1], 0, 1)) + b2*maximum(0, 15 - Out_Temp[t-1]) + b3*maximum(0, Out_Temp[t-1] - 22)",
+    "Heat_rejected": "((((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24))) + (300*maximum(0.3, ((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24)))/5000)**2.3)) - minimum(minimum(4333.33, (((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24))) + (300*maximum(0.3, ((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24)))/5000)**2.3))), 0.8*((((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24))) + (300*maximum(0.3, ((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24)))/5000)**2.3)) / ((In_Temp[t-1] + dT) - 18))*maximum(0, (In_Temp[t-1] + dT) - Loop_T_cold[t-1])))*(1 + c*(1 - minimum(1, maximum(0, (((In_Temp[t-1] + dT) - minimum(minimum(4333.33, (((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24))) + (300*maximum(0.3, ((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24)))/5000)**2.3))), 0.8*((((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24))) + (300*maximum(0.3, ((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24)))/5000)**2.3)) / ((In_Temp[t-1] + dT) - 18))*maximum(0, (In_Temp[t-1] + dT) - Loop_T_cold[t-1])) / ((((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24))) + (300*maximum(0.3, ((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24)))/5000)**2.3)) / ((In_Temp[t-1] + dT) - 18))) - 2 - (Out_Temp[t-1]*arctan(0.151977*sqrt(Out_Hum[t-1] + 8.313659)) + arctan(Out_Temp[t-1] + Out_Hum[t-1]) - arctan(Out_Hum[t-1] - 1.676331) + 0.00391838*Out_Hum[t-1]**1.5*arctan(0.023101*Out_Hum[t-1]) - 4.686035) - a) / maximum(((In_Temp[t-1] + dT) - minimum(minimum(4333.33, (((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24))) + (300*maximum(0.3, ((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24)))/5000)**2.3))), 0.8*((((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24))) + (300*maximum(0.3, ((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24)))/5000)**2.3)) / ((In_Temp[t-1] + dT) - 18))*maximum(0, (In_Temp[t-1] + dT) - Loop_T_cold[t-1])) / ((((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24))) + (300*maximum(0.3, ((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24)))/5000)**2.3)) / ((In_Temp[t-1] + dT) - 18))) - 18, 0.01)))) + f) + k*(60*(((((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24))) + (300*maximum(0.3, ((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24)))/5000)**2.3)) / ((In_Temp[t-1] + dT) - 18))/441.667)**2) + (10000*(0.015 + 0.02*(((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24)))/10000) + 0.01*(((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24)))/10000)**2) + 0.03*((2000 + 3000*IT_Load[t-1])*(1 + 0.006*maximum(0, In_Temp[t-1] - 24))))*(1 + g/clip(12 - 0.25*Out_Temp[t-1], 3, 12)) + b0 + b1*(clip(Hour[t-1] - 6, 0, 1)*clip(19 - Hour[t-1], 0, 1)) + b2*maximum(0, 15 - Out_Temp[t-1]) + b3*maximum(0, Out_Temp[t-1] - 22)"
+  }
+}

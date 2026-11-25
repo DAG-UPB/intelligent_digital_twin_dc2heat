@@ -1,0 +1,8 @@
+{
+  "name": "Simulation 1",
+  "kind": "simulation",
+  "actuators": ["Cool_Set", "IT_Load"],
+  "heat": [],
+  "levers": ["Cool_Set"],
+  "pid_image": null
+}

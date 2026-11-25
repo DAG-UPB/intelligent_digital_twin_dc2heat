@@ -1,0 +1,63 @@
+/* Causal mini map (Scenarios, AI modelling) and the left column that holds it. */
+.causal-aside {
+  width: 292px;
+  flex-shrink: 0;
+  padding: 16px;
+  border-right: 1px solid var(--border);
+  background: var(--surface);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.causal-aside .caps {
+  color: var(--foreground-tertiary);
+}
+
+/* Causal mini map */
+.minimap {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.minimap svg {
+  max-width: 100%;
+}
+.minimap__node {
+  cursor: pointer;
+}
+.minimap__node:focus {
+  outline: none;
+}
+.minimap__node:focus-visible circle {
+  stroke: var(--accent);
+  stroke-width: 3;
+}
+.minimap__info {
+  font-size: 11px;
+  color: var(--foreground-tertiary);
+  min-height: 30px;
+  line-height: 1.4;
+}
+.minimap__info b {
+  color: var(--foreground);
+}
+.minimap__legend {
+  display: flex;
+  gap: 10px;
+  font-size: 10px;
+  color: var(--foreground-tertiary);
+}
+.minimap__legend > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.minimap__legend i {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+.minimap__empty {
+  font-size: 12px;
+  color: var(--foreground-tertiary);
+}

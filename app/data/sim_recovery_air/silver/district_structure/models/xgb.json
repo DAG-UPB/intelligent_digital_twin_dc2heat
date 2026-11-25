@@ -1,0 +1,119 @@
+{
+  "order": [
+    "Heat_Demand"
+  ],
+  "variables": {
+    "Heat_Demand": {
+      "intercept": 0.0,
+      "inputs": [
+        {
+          "parent": "Out_Temp",
+          "lag": 0,
+          "coef": 0.0,
+          "std": 7.781080959315769
+        },
+        {
+          "parent": "Out_Temp_mean24",
+          "lag": 0,
+          "coef": 0.0,
+          "std": 7.198134116920657
+        },
+        {
+          "parent": "Out_Temp_mean72",
+          "lag": 0,
+          "coef": 0.0,
+          "std": 7.037735950945088
+        },
+        {
+          "parent": "Is_Weekend",
+          "lag": 0,
+          "coef": 0.0,
+          "std": 0.4517539514526256
+        },
+        {
+          "parent": "Hour",
+          "lag": 0,
+          "coef": 0.0,
+          "std": 6.922186552431729
+        }
+      ],
+      "sigma": 135.95215936426,
+      "scale": 3418.1331560607377,
+      "nmae_test": 0.03527765348980766,
+      "r2_train": 0.9977374635755625,
+      "r2_test": 0.9951227038853275,
+      "min": 203.44346360135523,
+      "max": 13345.957241341008,
+      "mean": 3418.1331560607377
+    }
+  },
+  "drivers": [
+    "Hour",
+    "Is_Weekend",
+    "Out_Temp",
+    "Out_Temp_mean24",
+    "Out_Temp_mean72"
+  ],
+  "max_lag": 0,
+  "split_index": 8736,
+  "split_time": "2024-01-01 00:00:00",
+  "rows": 17472,
+  "kind": "xgboost",
+  "name": "xgb",
+  "file": "df_sim_recovery_air",
+  "graph_file": "causal_graph.json",
+  "requested_drivers": [
+    "Hour",
+    "Out_Temp",
+    "Out_Hum",
+    "Is_Weekend",
+    "Cool_Set",
+    "IT_Load",
+    "ITE_Ener",
+    "In_Temp",
+    "Loop_T_cold",
+    "Loop_T_warm",
+    "HEX_Hall_T_in",
+    "HEX_Hall_T_out",
+    "HEX_Hall_m",
+    "HEX_Cond_T_in",
+    "HEX_Cond_T_out",
+    "HEX_Cond_m",
+    "Loop_T_warm_Cond",
+    "HVAC_Ener",
+    "Elec_Loss_Ener",
+    "Building_Ener",
+    "Heat_rejected",
+    "Out_Temp_mean24",
+    "Out_Temp_mean72"
+  ],
+  "structure": "graph",
+  "max_lag_setting": 5,
+  "variables_used": [
+    "Hour",
+    "Out_Temp",
+    "Out_Hum",
+    "Is_Weekend",
+    "Cool_Set",
+    "IT_Load",
+    "Heat_Demand",
+    "ITE_Ener",
+    "In_Temp",
+    "Loop_T_cold",
+    "Loop_T_warm",
+    "HEX_Hall_T_in",
+    "HEX_Hall_T_out",
+    "HEX_Hall_m",
+    "HEX_Cond_T_in",
+    "HEX_Cond_T_out",
+    "HEX_Cond_m",
+    "Loop_T_warm_Cond",
+    "HVAC_Ener",
+    "Elec_Loss_Ener",
+    "Building_Ener",
+    "Heat_rejected",
+    "Out_Temp_mean24",
+    "Out_Temp_mean72"
+  ],
+  "model_type": "xgboost"
+}

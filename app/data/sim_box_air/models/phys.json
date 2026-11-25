@@ -1,0 +1,440 @@
+{
+  "order": [
+    "In_Temp",
+    "ITE_Ener",
+    "Heat_Demand",
+    "FC_Share",
+    "HVAC_Ener",
+    "HEX_Hall_T_in",
+    "HEX_Hall_m",
+    "HEX_Hall_T_out",
+    "HEX_Cond_T_in",
+    "HEX_Cond_m",
+    "HEX_Cond_T_out"
+  ],
+  "variables": {
+    "In_Temp": {
+      "intercept": 0.0,
+      "inputs": [
+        {
+          "parent": "In_Temp",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 1.866832661742446
+        },
+        {
+          "parent": "Cool_Set",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 2.0533116143922183
+        },
+        {
+          "parent": "ITE_Ener",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 12.10285158697849
+        }
+      ],
+      "equation": "a*In_Temp[t-1] + b*(Cool_Set[t-1] - In_Temp[t-1]) + c*ITE_Ener[t-1] + d",
+      "params": {
+        "a": 0.9386553722201958,
+        "b": 0.42441840381410495,
+        "c": 0.002627545608777855,
+        "d": 1.5631138257097
+      },
+      "sigma": 0.3870833058340008,
+      "scale": 25.633087568288495,
+      "nmae_test": 0.009680502327784507,
+      "r2_train": 0.9570021136517292,
+      "r2_test": 0.9626375066715545,
+      "min": 19.764574,
+      "max": 28.443504,
+      "mean": 25.63278643154762
+    },
+    "ITE_Ener": {
+      "intercept": -13.972315981142545,
+      "inputs": [
+        {
+          "parent": "IT_Load",
+          "lag": -1,
+          "coef": 27.74819202675938,
+          "std": 0.2831380364600297
+        },
+        {
+          "parent": "ITE_Ener",
+          "lag": -1,
+          "coef": 0.17676454157695298,
+          "std": 12.10285158697849
+        },
+        {
+          "parent": "In_Temp",
+          "lag": -1,
+          "coef": 1.210685510893757,
+          "std": 1.866832661742446
+        }
+      ],
+      "sigma": 6.9326347412572495,
+      "scale": 38.183914220791195,
+      "nmae_test": 0.14990103256070267,
+      "r2_train": 0.6718292257730443,
+      "r2_test": 0.5984051810436805,
+      "min": 1.2788883333333334,
+      "max": 62.28070833333334,
+      "mean": 38.18168780827101
+    },
+    "Heat_Demand": {
+      "intercept": 3.873680519146797,
+      "inputs": [
+        {
+          "parent": "Out_Temp",
+          "lag": -1,
+          "coef": -0.09643673768584277,
+          "std": 11.980068960788378
+        },
+        {
+          "parent": "Hour",
+          "lag": -1,
+          "coef": -0.091045066565578,
+          "std": 6.922186552431729
+        },
+        {
+          "parent": "Heat_Demand",
+          "lag": -1,
+          "coef": 0.9451354351626692,
+          "std": 25.238103491386276
+        }
+      ],
+      "sigma": 5.312092374937702,
+      "scale": 19.62169049278772,
+      "nmae_test": 0.1538738204792992,
+      "r2_train": 0.9556917531811593,
+      "r2_test": 0.95868072839232,
+      "min": 2.000217615087358,
+      "max": 146.0717604645881,
+      "mean": 19.626112582653256
+    },
+    "FC_Share": {
+      "intercept": 0.0,
+      "inputs": [
+        {
+          "parent": "Out_Temp",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 11.980068960788378
+        },
+        {
+          "parent": "Out_Hum",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 20.76715284215292
+        }
+      ],
+      "equation": "minimum(1, maximum(0, (22 - (Out_Temp[t-1]*arctan(0.151977*sqrt(Out_Hum[t-1] + 8.313659)) + arctan(Out_Temp[t-1] + Out_Hum[t-1]) - arctan(Out_Hum[t-1] - 1.676331) + 0.00391838*Out_Hum[t-1]**1.5*arctan(0.023101*Out_Hum[t-1]) - 4.686035) - a) / 6))",
+      "params": {
+        "a": 4.0
+      },
+      "sigma": 0.0,
+      "scale": 0.5145364296054791,
+      "nmae_test": 0.0,
+      "r2_train": 1.0,
+      "r2_test": 1.0,
+      "min": 0.0,
+      "max": 1.0,
+      "mean": 0.5145920000691231
+    },
+    "HVAC_Ener": {
+      "intercept": 0.0,
+      "inputs": [
+        {
+          "parent": "Out_Temp",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 11.980068960788378
+        },
+        {
+          "parent": "Out_Hum",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 20.76715284215292
+        },
+        {
+          "parent": "ITE_Ener",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 12.10285158697849
+        }
+      ],
+      "equation": "c*(1 - minimum(1, maximum(0, (22 - (Out_Temp[t-1]*arctan(0.151977*sqrt(Out_Hum[t-1] + 8.313659)) + arctan(Out_Temp[t-1] + Out_Hum[t-1]) - arctan(Out_Hum[t-1] - 1.676331) + 0.00391838*Out_Hum[t-1]**1.5*arctan(0.023101*Out_Hum[t-1]) - 4.686035) - a) / 6)))*ITE_Ener[t-1] + d*ITE_Ener[t-1]",
+      "params": {
+        "c": 0.1426057070258317,
+        "a": 3.493381493420732,
+        "d": 0.020638575805283336
+      },
+      "sigma": 0.6517000958738159,
+      "scale": 3.3826480933080356,
+      "nmae_test": 0.08276692855960789,
+      "r2_train": 0.9527576989804724,
+      "r2_test": 0.9734368307275704,
+      "min": 0.10039364722222223,
+      "max": 13.469953611968748,
+      "mean": 3.3823037745575295
+    },
+    "HEX_Hall_T_in": {
+      "intercept": 0.0,
+      "inputs": [
+        {
+          "parent": "In_Temp",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 1.866832661742446
+        }
+      ],
+      "equation": "In_Temp[t-1] + dT",
+      "params": {
+        "dT": 12.0
+      },
+      "sigma": 0.0,
+      "scale": 37.63248106823126,
+      "nmae_test": 0.0,
+      "r2_train": 1.0,
+      "r2_test": 1.0,
+      "min": 31.764574,
+      "max": 40.443504000000004,
+      "mean": 37.632180000915746
+    },
+    "HEX_Hall_m": {
+      "intercept": 0.0,
+      "inputs": [
+        {
+          "parent": "ITE_Ener",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 12.10285158697849
+        }
+      ],
+      "equation": "ITE_Ener[t-1] / (1.006*dT)",
+      "params": {
+        "dT": 11.999999999999998
+      },
+      "sigma": 2.660915762434141e-16,
+      "scale": 3.162603316729086,
+      "nmae_test": 1.4874097915739661e-16,
+      "r2_train": 1.0,
+      "r2_test": 1.0,
+      "min": 0.10593839739341729,
+      "max": 5.159104401369561,
+      "mean": 3.1624189360170676
+    },
+    "HEX_Hall_T_out": {
+      "intercept": 0.0,
+      "inputs": [
+        {
+          "parent": "In_Temp",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 1.866832661742446
+        },
+        {
+          "parent": "Heat_Demand",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 25.238103491386276
+        },
+        {
+          "parent": "ITE_Ener",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 12.10285158697849
+        }
+      ],
+      "equation": "(In_Temp[t-1] + dT) - minimum(eps*maximum(0, (In_Temp[t-1] + dT) - 25), Heat_Demand[t-1] / (1.006*(ITE_Ener[t-1] / (1.006*dT))))",
+      "params": {
+        "dT": 12.0,
+        "eps": 0.6
+      },
+      "sigma": 7.080364068353458e-16,
+      "scale": 34.07705918450285,
+      "nmae_test": 3.735337189666136e-18,
+      "r2_train": 1.0,
+      "r2_test": 1.0,
+      "min": 27.7058296,
+      "max": 40.00606799878245,
+      "mean": 34.076478127224405
+    },
+    "HEX_Cond_T_in": {
+      "intercept": 0.0,
+      "inputs": [
+        {
+          "parent": "Out_Temp",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 11.980068960788378
+        },
+        {
+          "parent": "Out_Hum",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 20.76715284215292
+        },
+        {
+          "parent": "ITE_Ener",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 12.10285158697849
+        }
+      ],
+      "equation": "maximum((Out_Temp[t-1]*arctan(0.151977*sqrt(Out_Hum[t-1] + 8.313659)) + arctan(Out_Temp[t-1] + Out_Hum[t-1]) - arctan(Out_Hum[t-1] - 1.676331) + 0.00391838*Out_Hum[t-1]**1.5*arctan(0.023101*Out_Hum[t-1]) - 4.686035) + a, 27) + ((1 - minimum(1, maximum(0, (22 - (Out_Temp[t-1]*arctan(0.151977*sqrt(Out_Hum[t-1] + 8.313659)) + arctan(Out_Temp[t-1] + Out_Hum[t-1]) - arctan(Out_Hum[t-1] - 1.676331) + 0.00391838*Out_Hum[t-1]**1.5*arctan(0.023101*Out_Hum[t-1]) - 4.686035) - a) / 6)))*ITE_Ener[t-1]*(1 + e)) / (4.18*(maximum(((1 - minimum(1, maximum(0, (22 - (Out_Temp[t-1]*arctan(0.151977*sqrt(Out_Hum[t-1] + 8.313659)) + arctan(Out_Temp[t-1] + Out_Hum[t-1]) - arctan(Out_Hum[t-1] - 1.676331) + 0.00391838*Out_Hum[t-1]**1.5*arctan(0.023101*Out_Hum[t-1]) - 4.686035) - a) / 6)))*ITE_Ener[t-1]*(1 + e)), 45) / (4.18*dT)))",
+      "params": {
+        "a": 4.021092110463804,
+        "e": 0.13622203433792798,
+        "dT": 5.486380932497639
+      },
+      "sigma": 0.03745391624974276,
+      "scale": 30.840535948195924,
+      "nmae_test": 0.00047484506870437677,
+      "r2_train": 0.9999414580693692,
+      "r2_test": 0.9999503936569603,
+      "min": 27.0,
+      "max": 47.973041616356156,
+      "mean": 30.840096326406986
+    },
+    "HEX_Cond_m": {
+      "intercept": 0.0,
+      "inputs": [
+        {
+          "parent": "Out_Temp",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 11.980068960788378
+        },
+        {
+          "parent": "Out_Hum",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 20.76715284215292
+        },
+        {
+          "parent": "ITE_Ener",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 12.10285158697849
+        }
+      ],
+      "equation": "maximum(((1 - minimum(1, maximum(0, (22 - (Out_Temp[t-1]*arctan(0.151977*sqrt(Out_Hum[t-1] + 8.313659)) + arctan(Out_Temp[t-1] + Out_Hum[t-1]) - arctan(Out_Hum[t-1] - 1.676331) + 0.00391838*Out_Hum[t-1]**1.5*arctan(0.023101*Out_Hum[t-1]) - 4.686035) - a) / 6)))*ITE_Ener[t-1]*(1 + e)), 45) / (4.18*dT)",
+      "params": {
+        "a": 3.910140305813962,
+        "e": 0.14325705995312232,
+        "dT": 5.499506311593995
+      },
+      "sigma": 0.025045113817152912,
+      "scale": 2.0526385177923676,
+      "nmae_test": 0.003630818500166588,
+      "r2_train": 0.9860787452136552,
+      "r2_test": 0.9933160933233378,
+      "min": 1.9573727707699,
+      "max": 3.219236612158598,
+      "mean": 2.052627612830483
+    },
+    "HEX_Cond_T_out": {
+      "intercept": 0.0,
+      "inputs": [
+        {
+          "parent": "Out_Temp",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 11.980068960788378
+        },
+        {
+          "parent": "Out_Hum",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 20.76715284215292
+        },
+        {
+          "parent": "ITE_Ener",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 12.10285158697849
+        },
+        {
+          "parent": "Heat_Demand",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 25.238103491386276
+        }
+      ],
+      "equation": "(maximum((Out_Temp[t-1]*arctan(0.151977*sqrt(Out_Hum[t-1] + 8.313659)) + arctan(Out_Temp[t-1] + Out_Hum[t-1]) - arctan(Out_Hum[t-1] - 1.676331) + 0.00391838*Out_Hum[t-1]**1.5*arctan(0.023101*Out_Hum[t-1]) - 4.686035) + a, 27) + ((1 - minimum(1, maximum(0, (22 - (Out_Temp[t-1]*arctan(0.151977*sqrt(Out_Hum[t-1] + 8.313659)) + arctan(Out_Temp[t-1] + Out_Hum[t-1]) - arctan(Out_Hum[t-1] - 1.676331) + 0.00391838*Out_Hum[t-1]**1.5*arctan(0.023101*Out_Hum[t-1]) - 4.686035) - a) / 6)))*ITE_Ener[t-1]*(1 + 0.14)) / (4.18*(maximum(((1 - minimum(1, maximum(0, (22 - (Out_Temp[t-1]*arctan(0.151977*sqrt(Out_Hum[t-1] + 8.313659)) + arctan(Out_Temp[t-1] + Out_Hum[t-1]) - arctan(Out_Hum[t-1] - 1.676331) + 0.00391838*Out_Hum[t-1]**1.5*arctan(0.023101*Out_Hum[t-1]) - 4.686035) - a) / 6)))*ITE_Ener[t-1]*(1 + 0.14)), 45) / (4.18*5.5)))) - minimum(((1 - minimum(1, maximum(0, (22 - (Out_Temp[t-1]*arctan(0.151977*sqrt(Out_Hum[t-1] + 8.313659)) + arctan(Out_Temp[t-1] + Out_Hum[t-1]) - arctan(Out_Hum[t-1] - 1.676331) + 0.00391838*Out_Hum[t-1]**1.5*arctan(0.023101*Out_Hum[t-1]) - 4.686035) - a) / 6)))*ITE_Ener[t-1]*(1 + 0.14)), Heat_Demand[t-1]) / (4.18*(maximum(((1 - minimum(1, maximum(0, (22 - (Out_Temp[t-1]*arctan(0.151977*sqrt(Out_Hum[t-1] + 8.313659)) + arctan(Out_Temp[t-1] + Out_Hum[t-1]) - arctan(Out_Hum[t-1] - 1.676331) + 0.00391838*Out_Hum[t-1]**1.5*arctan(0.023101*Out_Hum[t-1]) - 4.686035) - a) / 6)))*ITE_Ener[t-1]*(1 + 0.14)), 45) / (4.18*5.5)))",
+      "params": {
+        "a": 4.006768428318684
+      },
+      "sigma": 0.038366875239071244,
+      "scale": 30.594465934326873,
+      "nmae_test": 0.0005087321008505816,
+      "r2_train": 0.9999342063243742,
+      "r2_test": 0.9999301048527058,
+      "min": 27.0,
+      "max": 47.79576043685479,
+      "mean": 30.594054479893
+    }
+  },
+  "drivers": [
+    "Cool_Set",
+    "Hour",
+    "IT_Load",
+    "Out_Hum",
+    "Out_Temp"
+  ],
+  "max_lag": 1,
+  "split_index": 8736,
+  "split_time": "2024-01-01 00:00:00",
+  "rows": 17472,
+  "kind": "physics",
+  "name": "phys",
+  "file": "df_sim_box_air",
+  "graph_file": "causal_graph.json",
+  "requested_drivers": [
+    "In_Hum",
+    "Hour",
+    "Out_Temp",
+    "Out_Hum",
+    "Out_Wind",
+    "Out_Wind_Dir",
+    "Cool_Set",
+    "IT_Load"
+  ],
+  "structure": "graph",
+  "max_lag_setting": 5,
+  "variables_used": [
+    "In_Temp",
+    "In_Hum",
+    "HVAC_Ener",
+    "ITE_Ener",
+    "Hour",
+    "Out_Temp",
+    "Out_Hum",
+    "Out_Wind",
+    "Out_Wind_Dir",
+    "Cool_Set",
+    "IT_Load",
+    "Heat_Demand",
+    "FC_Share",
+    "HEX_Cond_T_in",
+    "HEX_Cond_T_out",
+    "HEX_Cond_m",
+    "HEX_Hall_T_in",
+    "HEX_Hall_T_out",
+    "HEX_Hall_m"
+  ],
+  "model_type": "physics",
+  "equations": {
+    "In_Temp": "a*In_Temp[t-1] + b*(Cool_Set[t-1] - In_Temp[t-1]) + c*ITE_Ener[t-1] + d",
+    "FC_Share": "minimum(1, maximum(0, (22 - (Out_Temp[t-1]*arctan(0.151977*sqrt(Out_Hum[t-1] + 8.313659)) + arctan(Out_Temp[t-1] + Out_Hum[t-1]) - arctan(Out_Hum[t-1] - 1.676331) + 0.00391838*Out_Hum[t-1]**1.5*arctan(0.023101*Out_Hum[t-1]) - 4.686035) - a) / 6))",
+    "HVAC_Ener": "c*(1 - minimum(1, maximum(0, (22 - (Out_Temp[t-1]*arctan(0.151977*sqrt(Out_Hum[t-1] + 8.313659)) + arctan(Out_Temp[t-1] + Out_Hum[t-1]) - arctan(Out_Hum[t-1] - 1.676331) + 0.00391838*Out_Hum[t-1]**1.5*arctan(0.023101*Out_Hum[t-1]) - 4.686035) - a) / 6)))*ITE_Ener[t-1] + d*ITE_Ener[t-1]",
+    "HEX_Hall_T_in": "In_Temp[t-1] + dT",
+    "HEX_Hall_m": "ITE_Ener[t-1] / (1.006*dT)",
+    "HEX_Hall_T_out": "(In_Temp[t-1] + dT) - minimum(eps*maximum(0, (In_Temp[t-1] + dT) - 25), Heat_Demand[t-1] / (1.006*(ITE_Ener[t-1] / (1.006*dT))))",
+    "HEX_Cond_m": "maximum(((1 - minimum(1, maximum(0, (22 - (Out_Temp[t-1]*arctan(0.151977*sqrt(Out_Hum[t-1] + 8.313659)) + arctan(Out_Temp[t-1] + Out_Hum[t-1]) - arctan(Out_Hum[t-1] - 1.676331) + 0.00391838*Out_Hum[t-1]**1.5*arctan(0.023101*Out_Hum[t-1]) - 4.686035) - a) / 6)))*ITE_Ener[t-1]*(1 + e)), 45) / (4.18*dT)",
+    "HEX_Cond_T_in": "maximum((Out_Temp[t-1]*arctan(0.151977*sqrt(Out_Hum[t-1] + 8.313659)) + arctan(Out_Temp[t-1] + Out_Hum[t-1]) - arctan(Out_Hum[t-1] - 1.676331) + 0.00391838*Out_Hum[t-1]**1.5*arctan(0.023101*Out_Hum[t-1]) - 4.686035) + a, 27) + ((1 - minimum(1, maximum(0, (22 - (Out_Temp[t-1]*arctan(0.151977*sqrt(Out_Hum[t-1] + 8.313659)) + arctan(Out_Temp[t-1] + Out_Hum[t-1]) - arctan(Out_Hum[t-1] - 1.676331) + 0.00391838*Out_Hum[t-1]**1.5*arctan(0.023101*Out_Hum[t-1]) - 4.686035) - a) / 6)))*ITE_Ener[t-1]*(1 + e)) / (4.18*(maximum(((1 - minimum(1, maximum(0, (22 - (Out_Temp[t-1]*arctan(0.151977*sqrt(Out_Hum[t-1] + 8.313659)) + arctan(Out_Temp[t-1] + Out_Hum[t-1]) - arctan(Out_Hum[t-1] - 1.676331) + 0.00391838*Out_Hum[t-1]**1.5*arctan(0.023101*Out_Hum[t-1]) - 4.686035) - a) / 6)))*ITE_Ener[t-1]*(1 + e)), 45) / (4.18*dT)))",
+    "HEX_Cond_T_out": "(maximum((Out_Temp[t-1]*arctan(0.151977*sqrt(Out_Hum[t-1] + 8.313659)) + arctan(Out_Temp[t-1] + Out_Hum[t-1]) - arctan(Out_Hum[t-1] - 1.676331) + 0.00391838*Out_Hum[t-1]**1.5*arctan(0.023101*Out_Hum[t-1]) - 4.686035) + a, 27) + ((1 - minimum(1, maximum(0, (22 - (Out_Temp[t-1]*arctan(0.151977*sqrt(Out_Hum[t-1] + 8.313659)) + arctan(Out_Temp[t-1] + Out_Hum[t-1]) - arctan(Out_Hum[t-1] - 1.676331) + 0.00391838*Out_Hum[t-1]**1.5*arctan(0.023101*Out_Hum[t-1]) - 4.686035) - a) / 6)))*ITE_Ener[t-1]*(1 + 0.14)) / (4.18*(maximum(((1 - minimum(1, maximum(0, (22 - (Out_Temp[t-1]*arctan(0.151977*sqrt(Out_Hum[t-1] + 8.313659)) + arctan(Out_Temp[t-1] + Out_Hum[t-1]) - arctan(Out_Hum[t-1] - 1.676331) + 0.00391838*Out_Hum[t-1]**1.5*arctan(0.023101*Out_Hum[t-1]) - 4.686035) - a) / 6)))*ITE_Ener[t-1]*(1 + 0.14)), 45) / (4.18*5.5)))) - minimum(((1 - minimum(1, maximum(0, (22 - (Out_Temp[t-1]*arctan(0.151977*sqrt(Out_Hum[t-1] + 8.313659)) + arctan(Out_Temp[t-1] + Out_Hum[t-1]) - arctan(Out_Hum[t-1] - 1.676331) + 0.00391838*Out_Hum[t-1]**1.5*arctan(0.023101*Out_Hum[t-1]) - 4.686035) - a) / 6)))*ITE_Ener[t-1]*(1 + 0.14)), Heat_Demand[t-1]) / (4.18*(maximum(((1 - minimum(1, maximum(0, (22 - (Out_Temp[t-1]*arctan(0.151977*sqrt(Out_Hum[t-1] + 8.313659)) + arctan(Out_Temp[t-1] + Out_Hum[t-1]) - arctan(Out_Hum[t-1] - 1.676331) + 0.00391838*Out_Hum[t-1]**1.5*arctan(0.023101*Out_Hum[t-1]) - 4.686035) - a) / 6)))*ITE_Ener[t-1]*(1 + 0.14)), 45) / (4.18*5.5)))"
+  }
+}

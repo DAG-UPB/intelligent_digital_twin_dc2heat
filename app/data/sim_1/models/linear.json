@@ -1,0 +1,197 @@
+{
+  "order": [
+    "HVAC_Ener",
+    "ITE_Ener",
+    "In_Hum",
+    "In_Temp"
+  ],
+  "variables": {
+    "HVAC_Ener": {
+      "intercept": 0.26481430084911134,
+      "inputs": [
+        {
+          "parent": "HVAC_Ener",
+          "lag": -5,
+          "coef": 0.12780983850674765
+        },
+        {
+          "parent": "HVAC_Ener",
+          "lag": -4,
+          "coef": 0.09519011982278652
+        },
+        {
+          "parent": "HVAC_Ener",
+          "lag": -3,
+          "coef": 0.13441288172503194
+        },
+        {
+          "parent": "HVAC_Ener",
+          "lag": -2,
+          "coef": 0.09700934142438716
+        },
+        {
+          "parent": "HVAC_Ener",
+          "lag": -1,
+          "coef": 0.25781918813785787
+        },
+        {
+          "parent": "Hour",
+          "lag": -5,
+          "coef": -0.07177439394682932
+        },
+        {
+          "parent": "In_Hum",
+          "lag": -1,
+          "coef": 0.046699129666471675
+        }
+      ],
+      "sigma": 4.299452529013059,
+      "r2_train": 0.3875068674160931,
+      "r2_test": 0.3886296994915259,
+      "min": 0.060450330555555556,
+      "max": 32.414229166666665,
+      "mean": 3.815048001350463
+    },
+    "ITE_Ener": {
+      "intercept": 16.928621265950046,
+      "inputs": [
+        {
+          "parent": "HVAC_Ener",
+          "lag": -3,
+          "coef": 0.03995058746302731
+        },
+        {
+          "parent": "HVAC_Ener",
+          "lag": -1,
+          "coef": 0.08242781069019225
+        },
+        {
+          "parent": "Hour",
+          "lag": -2,
+          "coef": -0.08096235718786347
+        },
+        {
+          "parent": "Hour",
+          "lag": -1,
+          "coef": 0.03257382979575338
+        },
+        {
+          "parent": "IT_Load",
+          "lag": -2,
+          "coef": 24.660340998466246
+        },
+        {
+          "parent": "IT_Load",
+          "lag": -1,
+          "coef": 16.548198963943527
+        }
+      ],
+      "sigma": 5.889810769351287,
+      "r2_train": 0.7629561738803339,
+      "r2_test": 0.7919734556259146,
+      "min": 1.2788883333333334,
+      "max": 62.28070833333334,
+      "mean": 38.18168780827101
+    },
+    "In_Hum": {
+      "intercept": 1.4398469436448869,
+      "inputs": [
+        {
+          "parent": "In_Hum",
+          "lag": -4,
+          "coef": 0.07902374565386192
+        },
+        {
+          "parent": "In_Hum",
+          "lag": -3,
+          "coef": 0.13161309208114677
+        },
+        {
+          "parent": "In_Hum",
+          "lag": -2,
+          "coef": 0.31312260360593835
+        },
+        {
+          "parent": "In_Hum",
+          "lag": -1,
+          "coef": 0.4389841930914646
+        },
+        {
+          "parent": "Out_Temp",
+          "lag": -1,
+          "coef": 0.029864453983997098
+        },
+        {
+          "parent": "Out_Wind_Dir",
+          "lag": -2,
+          "coef": -0.0035225913251671005
+        }
+      ],
+      "sigma": 3.5786864150013113,
+      "r2_train": 0.9486210369943485,
+      "r2_test": 0.9327219157772256,
+      "min": 3.6435544,
+      "max": 83.82779,
+      "mean": 35.50520172920101
+    },
+    "In_Temp": {
+      "intercept": 1.4708362919914937,
+      "inputs": [
+        {
+          "parent": "Cool_Set",
+          "lag": -1,
+          "coef": 0.49438990464588023
+        },
+        {
+          "parent": "ITE_Ener",
+          "lag": -4,
+          "coef": -0.0042399793266838185
+        },
+        {
+          "parent": "IT_Load",
+          "lag": -2,
+          "coef": 0.6765666523751476
+        },
+        {
+          "parent": "In_Temp",
+          "lag": -2,
+          "coef": 0.20021174050088683
+        },
+        {
+          "parent": "In_Temp",
+          "lag": -1,
+          "coef": 0.24479669253033384
+        }
+      ],
+      "sigma": 0.34276568654408723,
+      "r2_train": 0.9662689930010688,
+      "r2_test": 0.9711683193713859,
+      "min": 19.764574,
+      "max": 28.443504,
+      "mean": 25.63278643154762
+    }
+  },
+  "drivers": [
+    "Cool_Set",
+    "Hour",
+    "IT_Load",
+    "Out_Temp",
+    "Out_Wind_Dir"
+  ],
+  "max_lag": 5,
+  "split_index": 8736,
+  "split_time": "2024-01-01 00:00:00",
+  "rows": 17472,
+  "name": "linear",
+  "file": "df_sim_1",
+  "graph_file": "causal_graph.json",
+  "requested_drivers": [
+    "Hour",
+    "Out_Temp",
+    "Out_Hum",
+    "Out_Wind",
+    "Out_Wind_Dir",
+    "Cool_Set",
+    "IT_Load"
+  ]
+}

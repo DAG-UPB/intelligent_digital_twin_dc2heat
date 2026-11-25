@@ -1,0 +1,109 @@
+/* Operation: the option cards, the comparison table and the operation KPIs. */
+.plan-variants {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 12px;
+  margin-bottom: 12px;
+}
+.plan-variant {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: flex-start;
+}
+.plan-scroll {
+  overflow-x: auto;
+}
+.plan-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.plan-table th {
+  padding: 6px 8px;
+  text-align: left;
+  font-weight: 600;
+  color: var(--foreground-secondary);
+  font-size: 12px;
+}
+.plan-table td,
+.plan-table tbody th {
+  padding: 5px 8px;
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+}
+.plan-table td {
+  text-align: right;
+}
+.plan-table tbody th {
+  color: var(--foreground);
+}
+.plan-table tbody tr {
+  border-top: 1px solid var(--border);
+}
+.plan-table__best {
+  background: var(--accent-light);
+}
+.plan-badge {
+  margin-left: 8px;
+  font-size: 11px;
+  color: var(--accent);
+}
+.plan-note {
+  font-size: 11px;
+  color: var(--foreground-tertiary);
+  margin: 8px 0 0;
+  line-height: 1.45;
+}
+.plan-pick {
+  max-width: 280px;
+}
+.plan-kpis {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 12px;
+  margin-top: 12px;
+}
+/* the numbers' headings over the numbers: right-aligned like them */
+.plan-table thead th:not(:first-child) {
+  text-align: right;
+}
+
+/* Heat pump operation (HeatPumpOperation.tsx): its numbers in a grid, the week to show */
+.plan-op-controls { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 10px 14px; align-items: end; margin: 8px 0 14px; }
+.plan-op-week { display: flex; align-items: end; gap: 14px; margin: 14px 0 6px; }
+.plan-h3 { font-size: 13px; font-weight: 600; margin: 16px 0 6px; }
+.plan-scenarios td, .plan-scenarios tbody th { white-space: nowrap; }
+.plan-scenarios tbody tr { cursor: pointer; }
+.plan-num { width: 90px; }
+.plan-mpc { font-weight: 600; color: var(--accent); }
+.plan-warn { padding: 8px 12px; border-left: 3px solid var(--warn); background: var(--warn-bg); color: var(--foreground-secondary); }
+.plan-bars-head { display: flex; align-items: end; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-top: 10px; }
+
+/* The page's top: the plant it runs on, small (PlantSketch), beside the title */
+.plan-top { display: flex; gap: 20px; align-items: flex-start; flex-wrap: wrap; }
+.plan-top > :last-child { flex: 1 1 360px; min-width: 0; }
+.plan-plant { width: 360px; flex-shrink: 0; display: flex; flex-direction: column; gap: 8px; padding: 12px; }
+/* Heat Matching's diagram, small: a picture of the plant here, its clicks belong to Heat Matching */
+.plan-plant__diagram { pointer-events: none; border-radius: 8px; overflow: hidden; }
+.plan-plant .caps { color: var(--foreground-tertiary); }
+.plant-sketch { width: 100%; height: auto; display: block; }
+.plant-sketch__box { stroke-width: 1.5; fill: var(--surface); }
+.plant-sketch__box--heat { stroke: var(--heat); }
+.plant-sketch__box--accent { stroke: var(--accent); }
+.plant-sketch__box--ok { stroke: var(--ok); }
+.plant-sketch__box--cool { stroke: var(--cool); }
+.plant-sketch__title { font-size: 10px; font-weight: 600; text-anchor: middle; fill: var(--foreground); }
+.plant-sketch__sub { font: 9px var(--font-mono, monospace); text-anchor: middle; fill: var(--foreground-secondary); }
+.plant-sketch__line { fill: none; stroke: var(--foreground-tertiary); stroke-width: 1.5; }
+.plant-sketch__head { fill: var(--foreground-tertiary); }
+.plant-sketch__off { opacity: 0.3; }
+.plan-plant__from { font-size: 11px; line-height: 1.45; color: var(--foreground-secondary); margin: 0; }
+
+/* the heat pump's settings, beside the key figures (HeatPumpOperation renders them here) */
+.plan-settings:not(:empty) { margin-top: 14px; padding: 12px 14px 4px; border: 1px solid var(--border); border-radius: 10px; background: var(--surface); }
+.plan-settings .plan-op-controls { margin: 0 0 8px; }
+/* the design options, folded away under one line */
+.plan-designs { display: flex; flex-direction: column; gap: 16px; }
+.plan-designs > summary { cursor: pointer; padding: 12px 16px; border: 1px solid var(--border); border-radius: 10px; background: var(--surface); font-size: 13px; font-weight: 600; color: var(--foreground-secondary); }
+.plan-designs[open] > summary { color: var(--foreground); }
+.plan-how > summary { cursor: pointer; font-size: 12px; color: var(--foreground-secondary); margin: 2px 0 6px; }

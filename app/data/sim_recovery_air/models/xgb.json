@@ -1,0 +1,933 @@
+{
+  "order": [
+    "ITE_Ener",
+    "In_Temp",
+    "Loop_T_warm",
+    "HEX_Hall_T_in",
+    "HEX_Hall_T_out",
+    "HEX_Hall_m",
+    "HEX_Cond_T_in",
+    "HEX_Cond_T_out",
+    "HEX_Cond_m",
+    "Loop_T_warm_Cond",
+    "HVAC_Ener",
+    "Elec_Loss_Ener",
+    "Building_Ener",
+    "Heat_rejected"
+  ],
+  "variables": {
+    "ITE_Ener": {
+      "intercept": 0.0,
+      "inputs": [
+        {
+          "parent": "IT_Load",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 0.23167379332927962
+        },
+        {
+          "parent": "IT_Load",
+          "lag": -2,
+          "coef": 0.0,
+          "std": 0.23167379332927962
+        },
+        {
+          "parent": "IT_Load",
+          "lag": -3,
+          "coef": 0.0,
+          "std": 0.23167379332927962
+        },
+        {
+          "parent": "IT_Load",
+          "lag": -4,
+          "coef": 0.0,
+          "std": 0.23167379332927962
+        },
+        {
+          "parent": "IT_Load",
+          "lag": -5,
+          "coef": 0.0,
+          "std": 0.23167379332927962
+        },
+        {
+          "parent": "In_Temp",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 1.1923502540986401
+        }
+      ],
+      "sigma": 7.7052772924192325,
+      "scale": 3568.0671535340907,
+      "nmae_test": 0.002945088036491664,
+      "r2_train": 0.9998803184681256,
+      "r2_test": 0.9995601841787232,
+      "min": 2204.8696932918265,
+      "max": 5019.243763084916,
+      "mean": 3567.449276165826
+    },
+    "In_Temp": {
+      "intercept": 0.0,
+      "inputs": [
+        {
+          "parent": "In_Temp",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 1.1923502540986401
+        },
+        {
+          "parent": "Cool_Set",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 0.9739698746620374
+        },
+        {
+          "parent": "ITE_Ener",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 704.480305868091
+        }
+      ],
+      "sigma": 0.048640866594910355,
+      "scale": 24.11629089929497,
+      "nmae_test": 0.0041063502645082685,
+      "r2_train": 0.9983354972114216,
+      "r2_test": 0.9685997123204891,
+      "min": 21.199916788942268,
+      "max": 26.165660804782636,
+      "mean": 24.115361624913977
+    },
+    "Loop_T_warm": {
+      "intercept": 0.0,
+      "inputs": [
+        {
+          "parent": "IT_Load",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 0.23167379332927962
+        },
+        {
+          "parent": "IT_Load",
+          "lag": -2,
+          "coef": 0.0,
+          "std": 0.23167379332927962
+        },
+        {
+          "parent": "IT_Load",
+          "lag": -3,
+          "coef": 0.0,
+          "std": 0.23167379332927962
+        },
+        {
+          "parent": "IT_Load",
+          "lag": -4,
+          "coef": 0.0,
+          "std": 0.23167379332927962
+        },
+        {
+          "parent": "IT_Load",
+          "lag": -5,
+          "coef": 0.0,
+          "std": 0.23167379332927962
+        },
+        {
+          "parent": "IT_Load",
+          "lag": -6,
+          "coef": 0.0,
+          "std": 0.23167379332927962
+        },
+        {
+          "parent": "In_Temp",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 1.1923502540986401
+        },
+        {
+          "parent": "Loop_T_cold",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 5.448748419097371
+        },
+        {
+          "parent": "Loop_T_cold",
+          "lag": -2,
+          "coef": 0.0,
+          "std": 5.448748419097371
+        }
+      ],
+      "sigma": 0.05918433433893481,
+      "scale": 18.47451086878457,
+      "nmae_test": 0.009601049384215993,
+      "r2_train": 0.9998584479576539,
+      "r2_test": 0.9971520099468276,
+      "min": 9.116079482259957,
+      "max": 24.953874426537116,
+      "mean": 18.470609084608014
+    },
+    "HEX_Hall_T_in": {
+      "intercept": 0.0,
+      "inputs": [
+        {
+          "parent": "In_Temp",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 1.1923502540986401
+        }
+      ],
+      "sigma": 0.011010115618307592,
+      "scale": 30.116153656318918,
+      "nmae_test": 0.0016093974840085778,
+      "r2_train": 0.9999147309325341,
+      "r2_test": 0.9778724345253788,
+      "min": 27.199916788942268,
+      "max": 32.16566080478263,
+      "mean": 30.11526703618194
+    },
+    "HEX_Hall_T_out": {
+      "intercept": 0.0,
+      "inputs": [
+        {
+          "parent": "IT_Load",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 0.23167379332927962
+        },
+        {
+          "parent": "IT_Load",
+          "lag": -2,
+          "coef": 0.0,
+          "std": 0.23167379332927962
+        },
+        {
+          "parent": "IT_Load",
+          "lag": -3,
+          "coef": 0.0,
+          "std": 0.23167379332927962
+        },
+        {
+          "parent": "IT_Load",
+          "lag": -4,
+          "coef": 0.0,
+          "std": 0.23167379332927962
+        },
+        {
+          "parent": "IT_Load",
+          "lag": -5,
+          "coef": 0.0,
+          "std": 0.23167379332927962
+        },
+        {
+          "parent": "IT_Load",
+          "lag": -6,
+          "coef": 0.0,
+          "std": 0.23167379332927962
+        },
+        {
+          "parent": "In_Temp",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 1.1923502540986401
+        },
+        {
+          "parent": "Loop_T_cold",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 5.448748419097371
+        }
+      ],
+      "sigma": 0.029615324267852267,
+      "scale": 19.80767464337682,
+      "nmae_test": 0.004669562243596279,
+      "r2_train": 0.9997366335717578,
+      "r2_test": 0.9947094772593543,
+      "min": 17.999999999999996,
+      "max": 23.21472994569436,
+      "mean": 19.806433108594284
+    },
+    "HEX_Hall_m": {
+      "intercept": 0.0,
+      "inputs": [
+        {
+          "parent": "IT_Load",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 0.23167379332927962
+        },
+        {
+          "parent": "IT_Load",
+          "lag": -2,
+          "coef": 0.0,
+          "std": 0.23167379332927962
+        },
+        {
+          "parent": "IT_Load",
+          "lag": -3,
+          "coef": 0.0,
+          "std": 0.23167379332927962
+        },
+        {
+          "parent": "IT_Load",
+          "lag": -4,
+          "coef": 0.0,
+          "std": 0.23167379332927962
+        },
+        {
+          "parent": "IT_Load",
+          "lag": -5,
+          "coef": 0.0,
+          "std": 0.23167379332927962
+        },
+        {
+          "parent": "IT_Load",
+          "lag": -6,
+          "coef": 0.0,
+          "std": 0.23167379332927962
+        },
+        {
+          "parent": "In_Temp",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 1.1923502540986401
+        },
+        {
+          "parent": "In_Temp",
+          "lag": -2,
+          "coef": 0.0,
+          "std": 1.1923502540986401
+        },
+        {
+          "parent": "In_Temp",
+          "lag": -3,
+          "coef": 0.0,
+          "std": 1.1923502540986401
+        },
+        {
+          "parent": "In_Temp",
+          "lag": -4,
+          "coef": 0.0,
+          "std": 1.1923502540986401
+        },
+        {
+          "parent": "In_Temp",
+          "lag": -5,
+          "coef": 0.0,
+          "std": 1.1923502540986401
+        }
+      ],
+      "sigma": 0.41199864937927394,
+      "scale": 73.11603197008297,
+      "nmae_test": 0.010737449741509579,
+      "r2_train": 0.9988119646138957,
+      "r2_test": 0.9900095691457308,
+      "min": 40.78964759877508,
+      "max": 106.69318176429013,
+      "mean": 73.10740005365699
+    },
+    "HEX_Cond_T_in": {
+      "intercept": 0.0,
+      "inputs": [
+        {
+          "parent": "IT_Load",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 0.23167379332927962
+        },
+        {
+          "parent": "IT_Load",
+          "lag": -2,
+          "coef": 0.0,
+          "std": 0.23167379332927962
+        },
+        {
+          "parent": "In_Temp",
+          "lag": -2,
+          "coef": 0.0,
+          "std": 1.1923502540986401
+        },
+        {
+          "parent": "Out_Temp",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 7.781080959315769
+        },
+        {
+          "parent": "Out_Hum",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 17.28504233963125
+        },
+        {
+          "parent": "Out_Hum",
+          "lag": -2,
+          "coef": 0.0,
+          "std": 17.28504233963125
+        }
+      ],
+      "sigma": 0.006104061418159386,
+      "scale": 32.433007942991644,
+      "nmae_test": 0.00015822961739412751,
+      "r2_train": 0.9989454545648597,
+      "r2_test": 0.966527757668046,
+      "min": 31.37892458690226,
+      "max": 34.070963284601916,
+      "mean": 32.432937089507
+    },
+    "HEX_Cond_T_out": {
+      "intercept": 0.0,
+      "inputs": [
+        {
+          "parent": "IT_Load",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 0.23167379332927962
+        },
+        {
+          "parent": "IT_Load",
+          "lag": -2,
+          "coef": 0.0,
+          "std": 0.23167379332927962
+        },
+        {
+          "parent": "IT_Load",
+          "lag": -3,
+          "coef": 0.0,
+          "std": 0.23167379332927962
+        },
+        {
+          "parent": "IT_Load",
+          "lag": -5,
+          "coef": 0.0,
+          "std": 0.23167379332927962
+        },
+        {
+          "parent": "In_Temp",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 1.1923502540986401
+        },
+        {
+          "parent": "Out_Temp",
+          "lag": -2,
+          "coef": 0.0,
+          "std": 7.781080959315769
+        },
+        {
+          "parent": "Out_Hum",
+          "lag": -2,
+          "coef": 0.0,
+          "std": 17.28504233963125
+        },
+        {
+          "parent": "Loop_T_cold",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 5.448748419097371
+        }
+      ],
+      "sigma": 0.006978535256986092,
+      "scale": 27.31570842985704,
+      "nmae_test": 0.00027370840221180656,
+      "r2_train": 0.9997515227075283,
+      "r2_test": 0.9973251153604566,
+      "min": 26.999999999999996,
+      "max": 28.598561206583366,
+      "mean": 27.31549159714422
+    },
+    "HEX_Cond_m": {
+      "intercept": 0.0,
+      "inputs": [
+        {
+          "parent": "IT_Load",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 0.23167379332927962
+        },
+        {
+          "parent": "IT_Load",
+          "lag": -2,
+          "coef": 0.0,
+          "std": 0.23167379332927962
+        },
+        {
+          "parent": "IT_Load",
+          "lag": -3,
+          "coef": 0.0,
+          "std": 0.23167379332927962
+        },
+        {
+          "parent": "IT_Load",
+          "lag": -4,
+          "coef": 0.0,
+          "std": 0.23167379332927962
+        },
+        {
+          "parent": "IT_Load",
+          "lag": -5,
+          "coef": 0.0,
+          "std": 0.23167379332927962
+        },
+        {
+          "parent": "IT_Load",
+          "lag": -6,
+          "coef": 0.0,
+          "std": 0.23167379332927962
+        },
+        {
+          "parent": "In_Temp",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 1.1923502540986401
+        },
+        {
+          "parent": "Out_Temp",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 7.781080959315769
+        },
+        {
+          "parent": "Out_Hum",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 17.28504233963125
+        }
+      ],
+      "sigma": 0.2707939505709751,
+      "scale": 183.45427256827128,
+      "nmae_test": 0.0023172973205712764,
+      "r2_train": 0.9999406482936977,
+      "r2_test": 0.9996567378423538,
+      "min": 138.32100913440627,
+      "max": 260.4238496997083,
+      "mean": 183.423274447781
+    },
+    "Loop_T_warm_Cond": {
+      "intercept": 0.0,
+      "inputs": [
+        {
+          "parent": "IT_Load",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 0.23167379332927962
+        },
+        {
+          "parent": "IT_Load",
+          "lag": -2,
+          "coef": 0.0,
+          "std": 0.23167379332927962
+        },
+        {
+          "parent": "IT_Load",
+          "lag": -3,
+          "coef": 0.0,
+          "std": 0.23167379332927962
+        },
+        {
+          "parent": "IT_Load",
+          "lag": -4,
+          "coef": 0.0,
+          "std": 0.23167379332927962
+        },
+        {
+          "parent": "IT_Load",
+          "lag": -5,
+          "coef": 0.0,
+          "std": 0.23167379332927962
+        },
+        {
+          "parent": "IT_Load",
+          "lag": -6,
+          "coef": 0.0,
+          "std": 0.23167379332927962
+        },
+        {
+          "parent": "In_Temp",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 1.1923502540986401
+        },
+        {
+          "parent": "Out_Temp",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 7.781080959315769
+        },
+        {
+          "parent": "Out_Hum",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 17.28504233963125
+        },
+        {
+          "parent": "Loop_T_cold",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 5.448748419097371
+        },
+        {
+          "parent": "Loop_T_cold",
+          "lag": -2,
+          "coef": 0.0,
+          "std": 5.448748419097371
+        },
+        {
+          "parent": "Loop_T_cold",
+          "lag": -3,
+          "coef": 0.0,
+          "std": 5.448748419097371
+        },
+        {
+          "parent": "Loop_T_cold",
+          "lag": -4,
+          "coef": 0.0,
+          "std": 5.448748419097371
+        },
+        {
+          "parent": "Loop_T_cold",
+          "lag": -5,
+          "coef": 0.0,
+          "std": 5.448748419097371
+        },
+        {
+          "parent": "Loop_T_cold",
+          "lag": -6,
+          "coef": 0.0,
+          "std": 5.448748419097371
+        }
+      ],
+      "sigma": 0.05639118857677138,
+      "scale": 19.487974117161496,
+      "nmae_test": 0.00665348583973125,
+      "r2_train": 0.9998986003294265,
+      "r2_test": 0.9986489495966182,
+      "min": 9.505589417542453,
+      "max": 27.144496127948706,
+      "mean": 19.4837018879843
+    },
+    "HVAC_Ener": {
+      "intercept": 0.0,
+      "inputs": [
+        {
+          "parent": "IT_Load",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 0.23167379332927962
+        },
+        {
+          "parent": "IT_Load",
+          "lag": -2,
+          "coef": 0.0,
+          "std": 0.23167379332927962
+        },
+        {
+          "parent": "IT_Load",
+          "lag": -3,
+          "coef": 0.0,
+          "std": 0.23167379332927962
+        },
+        {
+          "parent": "IT_Load",
+          "lag": -4,
+          "coef": 0.0,
+          "std": 0.23167379332927962
+        },
+        {
+          "parent": "IT_Load",
+          "lag": -5,
+          "coef": 0.0,
+          "std": 0.23167379332927962
+        },
+        {
+          "parent": "IT_Load",
+          "lag": -6,
+          "coef": 0.0,
+          "std": 0.23167379332927962
+        },
+        {
+          "parent": "In_Temp",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 1.1923502540986401
+        },
+        {
+          "parent": "Out_Temp",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 7.781080959315769
+        },
+        {
+          "parent": "Out_Temp",
+          "lag": -2,
+          "coef": 0.0,
+          "std": 7.781080959315769
+        },
+        {
+          "parent": "Out_Hum",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 17.28504233963125
+        },
+        {
+          "parent": "Loop_T_cold",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 5.448748419097371
+        }
+      ],
+      "sigma": 7.417610470204276,
+      "scale": 273.92435459395676,
+      "nmae_test": 0.04194918519719837,
+      "r2_train": 0.9961640004423489,
+      "r2_test": 0.9792258654924207,
+      "min": 79.22108170173091,
+      "max": 651.4563365851704,
+      "mean": 273.81971271597024
+    },
+    "Elec_Loss_Ener": {
+      "intercept": 0.0,
+      "inputs": [
+        {
+          "parent": "IT_Load",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 0.23167379332927962
+        },
+        {
+          "parent": "IT_Load",
+          "lag": -2,
+          "coef": 0.0,
+          "std": 0.23167379332927962
+        },
+        {
+          "parent": "IT_Load",
+          "lag": -3,
+          "coef": 0.0,
+          "std": 0.23167379332927962
+        },
+        {
+          "parent": "IT_Load",
+          "lag": -4,
+          "coef": 0.0,
+          "std": 0.23167379332927962
+        },
+        {
+          "parent": "IT_Load",
+          "lag": -5,
+          "coef": 0.0,
+          "std": 0.23167379332927962
+        },
+        {
+          "parent": "IT_Load",
+          "lag": -6,
+          "coef": 0.0,
+          "std": 0.23167379332927962
+        },
+        {
+          "parent": "In_Temp",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 1.1923502540986401
+        }
+      ],
+      "sigma": 0.5095844528154865,
+      "scale": 341.6305384170058,
+      "nmae_test": 0.0019027858038405097,
+      "r2_train": 0.9998398301025488,
+      "r2_test": 0.9995084902082977,
+      "min": 265.1049350289881,
+      "max": 426.1549961075126,
+      "mean": 341.59545064766337
+    },
+    "Building_Ener": {
+      "intercept": 0.0,
+      "inputs": [
+        {
+          "parent": "Hour",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 6.922186552431729
+        },
+        {
+          "parent": "Hour",
+          "lag": -4,
+          "coef": 0.0,
+          "std": 6.922186552431729
+        },
+        {
+          "parent": "Hour",
+          "lag": -6,
+          "coef": 0.0,
+          "std": 6.922186552431729
+        },
+        {
+          "parent": "Out_Temp",
+          "lag": -5,
+          "coef": 0.0,
+          "std": 7.781080959315769
+        }
+      ],
+      "sigma": 3.1263154526995924,
+      "scale": 127.91604238258878,
+      "nmae_test": 0.01954774805282161,
+      "r2_train": 0.9721661955703621,
+      "r2_test": 0.9652503116684706,
+      "min": 100.0,
+      "max": 183.25,
+      "mean": 127.90442422161173
+    },
+    "Heat_rejected": {
+      "intercept": 0.0,
+      "inputs": [
+        {
+          "parent": "IT_Load",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 0.23167379332927962
+        },
+        {
+          "parent": "IT_Load",
+          "lag": -2,
+          "coef": 0.0,
+          "std": 0.23167379332927962
+        },
+        {
+          "parent": "IT_Load",
+          "lag": -3,
+          "coef": 0.0,
+          "std": 0.23167379332927962
+        },
+        {
+          "parent": "IT_Load",
+          "lag": -4,
+          "coef": 0.0,
+          "std": 0.23167379332927962
+        },
+        {
+          "parent": "IT_Load",
+          "lag": -5,
+          "coef": 0.0,
+          "std": 0.23167379332927962
+        },
+        {
+          "parent": "IT_Load",
+          "lag": -6,
+          "coef": 0.0,
+          "std": 0.23167379332927962
+        },
+        {
+          "parent": "In_Temp",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 1.1923502540986401
+        },
+        {
+          "parent": "Out_Temp",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 7.781080959315769
+        },
+        {
+          "parent": "Out_Temp",
+          "lag": -6,
+          "coef": 0.0,
+          "std": 7.781080959315769
+        },
+        {
+          "parent": "Out_Hum",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 17.28504233963125
+        },
+        {
+          "parent": "Out_Hum",
+          "lag": -2,
+          "coef": 0.0,
+          "std": 17.28504233963125
+        },
+        {
+          "parent": "Out_Hum",
+          "lag": -3,
+          "coef": 0.0,
+          "std": 17.28504233963125
+        },
+        {
+          "parent": "Loop_T_cold",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 5.448748419097371
+        },
+        {
+          "parent": "Loop_T_cold",
+          "lag": -2,
+          "coef": 0.0,
+          "std": 5.448748419097371
+        },
+        {
+          "parent": "Hour",
+          "lag": -6,
+          "coef": 0.0,
+          "std": 6.922186552431729
+        }
+      ],
+      "sigma": 18.117650948744057,
+      "scale": 1165.2841591643307,
+      "nmae_test": 0.04425916746633839,
+      "r2_train": 0.9992250564597976,
+      "r2_test": 0.9836973391481869,
+      "min": 425.91882136865655,
+      "max": 2573.5978828263374,
+      "mean": 1164.7944920112775
+    }
+  },
+  "drivers": [
+    "Cool_Set",
+    "Hour",
+    "IT_Load",
+    "Loop_T_cold",
+    "Out_Hum",
+    "Out_Temp"
+  ],
+  "max_lag": 6,
+  "split_index": 8736,
+  "split_time": "2024-01-01 00:00:00",
+  "rows": 17472,
+  "kind": "xgboost",
+  "name": "xgb",
+  "file": "df_sim_recovery_air",
+  "graph_file": "causal_graph.json",
+  "requested_drivers": [
+    "Hour",
+    "Is_Weekend",
+    "Out_Temp",
+    "Out_Hum",
+    "Loop_T_cold",
+    "Cool_Set",
+    "IT_Load",
+    "Heat_Demand"
+  ],
+  "structure": "graph",
+  "max_lag_setting": 5,
+  "variables_used": [
+    "Hour",
+    "Out_Temp",
+    "Out_Hum",
+    "Is_Weekend",
+    "Cool_Set",
+    "IT_Load",
+    "Heat_Demand",
+    "ITE_Ener",
+    "In_Temp",
+    "Loop_T_cold",
+    "Loop_T_warm",
+    "HEX_Hall_T_in",
+    "HEX_Hall_T_out",
+    "HEX_Hall_m",
+    "HEX_Cond_T_in",
+    "HEX_Cond_T_out",
+    "HEX_Cond_m",
+    "Loop_T_warm_Cond",
+    "HVAC_Ener",
+    "Elec_Loss_Ener",
+    "Building_Ener",
+    "Heat_rejected"
+  ],
+  "model_type": "xgboost"
+}

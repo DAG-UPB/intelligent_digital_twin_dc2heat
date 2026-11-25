@@ -1,0 +1,211 @@
+{
+  "targets": {
+    "COP": [
+      [
+        "HEX_Cond_T_in",
+        -1
+      ],
+      [
+        "T_hp_out",
+        -1
+      ]
+    ],
+    "E_tank": [
+      [
+        "E_tank",
+        -1
+      ],
+      [
+        "Q_hex",
+        -1
+      ],
+      [
+        "Q_hp",
+        -1
+      ],
+      [
+        "Heat_Demand",
+        -1
+      ]
+    ],
+    "HEX_Cond_T_in": [
+      [
+        "Q_dc",
+        -1
+      ],
+      [
+        "HEX_Cond_m",
+        -1
+      ],
+      [
+        "HEX_Cond_T_out",
+        -1
+      ]
+    ],
+    "HEX_Cond_T_out": [
+      [
+        "HEX_Cond_T_in",
+        -1
+      ],
+      [
+        "Q_hex",
+        -1
+      ],
+      [
+        "Q_hp",
+        -1
+      ]
+    ],
+    "HEX_Cond_m": [],
+    "Heat_Demand": [
+      [
+        "Out_Temp",
+        -1
+      ],
+      [
+        "solar_radiation",
+        -1
+      ],
+      [
+        "Hour",
+        -1
+      ]
+    ],
+    "Hour": [],
+    "Out_Hum": [],
+    "Out_Temp": [],
+    "P_el_hp": [
+      [
+        "Q_hp",
+        -1
+      ],
+      [
+        "COP",
+        -1
+      ]
+    ],
+    "Q_dc": [],
+    "Q_hex": [
+      [
+        "HEX_Cond_T_in",
+        -1
+      ],
+      [
+        "T_dh_return",
+        -1
+      ],
+      [
+        "m_hex",
+        -1
+      ]
+    ],
+    "Q_hp": [
+      [
+        "hp_load",
+        -1
+      ]
+    ],
+    "T_dh_return": [
+      [
+        "T_dh_supply",
+        -1
+      ],
+      [
+        "Heat_Demand",
+        -1
+      ],
+      [
+        "m_dh",
+        -1
+      ]
+    ],
+    "T_dh_supply": [
+      [
+        "T_tank_top",
+        -1
+      ]
+    ],
+    "T_hex_out": [
+      [
+        "Q_hex",
+        -1
+      ],
+      [
+        "m_hex",
+        -1
+      ],
+      [
+        "T_dh_return",
+        -1
+      ]
+    ],
+    "T_hp_out": [
+      [
+        "Q_hp",
+        -1
+      ],
+      [
+        "m_hp",
+        -1
+      ],
+      [
+        "T_dh_return",
+        -1
+      ]
+    ],
+    "T_tank_bottom": [
+      [
+        "E_tank",
+        -1
+      ],
+      [
+        "T_dh_return",
+        -1
+      ]
+    ],
+    "T_tank_top": [
+      [
+        "E_tank",
+        -1
+      ],
+      [
+        "T_hex_out",
+        -1
+      ],
+      [
+        "T_hp_out",
+        -1
+      ]
+    ],
+    "hp_load": [
+      [
+        "Heat_Demand",
+        -1
+      ],
+      [
+        "Q_hex",
+        -1
+      ]
+    ],
+    "m_dh": [
+      [
+        "Heat_Demand",
+        -1
+      ]
+    ],
+    "m_hex": [
+      [
+        "Heat_Demand",
+        -1
+      ]
+    ],
+    "m_hp": [
+      [
+        "Heat_Demand",
+        -1
+      ]
+    ],
+    "solar_radiation": []
+  },
+  "link_strengths": []
+}

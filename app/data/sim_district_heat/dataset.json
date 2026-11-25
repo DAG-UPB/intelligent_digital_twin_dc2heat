@@ -1,0 +1,14 @@
+{
+  "name": "District · heat demand",
+  "kind": "simulation",
+  "actuators": [],
+  "heat": [
+    "Heat_Demand"
+  ],
+  "levers": [],
+  "pid_image": null,
+  "kpi": {
+    "heat_demand": "Heat_Demand",
+    "power_unit": "kW"
+  }
+}

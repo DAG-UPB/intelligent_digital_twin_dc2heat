@@ -1,0 +1,599 @@
+{
+ "colorCoded": true,
+ "colorConnections": [
+  {
+   "hops": 4,
+   "kind": "connection",
+   "source": "H1007",
+   "target": "P4711"
+  },
+  {
+   "hops": 2,
+   "kind": "connection",
+   "source": "H1007",
+   "target": "WT 4a"
+  },
+  {
+   "hops": 4,
+   "kind": "connection",
+   "source": "P4711",
+   "target": "WT 4a"
+  }
+ ],
+ "colorEdges": [
+  {
+   "color": "#0000ff",
+   "kind": "pipe",
+   "length": 180.0,
+   "route": [
+    [
+     240.0,
+     100.0
+    ],
+    [
+     240.0,
+     200.0
+    ],
+    [
+     240.0,
+     200.0
+    ],
+    [
+     320.0,
+     200.0
+    ]
+   ],
+   "source": "terminal-1",
+   "target": "H1007"
+  },
+  {
+   "color": "#ff0000",
+   "kind": "pipe",
+   "length": 62.0,
+   "route": [
+    [
+     178.0,
+     100.0
+    ],
+    [
+     240.0,
+     100.0
+    ]
+   ],
+   "source": "terminal-2",
+   "target": "terminal-1"
+  },
+  {
+   "color": "#ff0000",
+   "kind": "pipe",
+   "length": 60.0,
+   "route": [
+    [
+     240.0,
+     100.0
+    ],
+    [
+     300.0,
+     100.0
+    ]
+   ],
+   "source": "terminal-1",
+   "target": "WT 4a"
+  },
+  {
+   "color": "#ff0000",
+   "kind": "pipe",
+   "length": 112.0,
+   "route": [
+    [
+     50.0,
+     100.0
+    ],
+    [
+     162.0,
+     100.0
+    ]
+   ],
+   "source": "P4711",
+   "target": "terminal-3"
+  },
+  {
+   "color": "#ff0000",
+   "kind": "pipe",
+   "length": 0.0,
+   "route": [
+    [
+     178.0,
+     100.0
+    ],
+    [
+     170.0,
+     100.0
+    ]
+   ],
+   "source": "terminal-2",
+   "target": "terminal-3"
+  },
+  {
+   "color": "#ff0000",
+   "kind": "pipe",
+   "length": 0.0,
+   "route": [
+    [
+     162.0,
+     100.0
+    ],
+    [
+     170.0,
+     100.0
+    ]
+   ],
+   "source": "terminal-3",
+   "target": "terminal-2"
+  }
+ ],
+ "colorNodes": [
+  {
+   "id": "P4711",
+   "kind": "pump",
+   "label_x": 44.0,
+   "label_y": 92.0,
+   "occurrences": 1,
+   "source": "tag",
+   "tag": "P4711",
+   "x": 50.0,
+   "y": 100.0
+  },
+  {
+   "id": "WT 4a",
+   "kind": "exchanger",
+   "label_x": 304.0,
+   "label_y": 92.0,
+   "occurrences": 1,
+   "source": "tag",
+   "tag": "WT 4a",
+   "x": 300.0,
+   "y": 100.0
+  },
+  {
+   "id": "H1007",
+   "kind": "exchanger",
+   "label_x": 326.0,
+   "label_y": 204.0,
+   "occurrences": 1,
+   "source": "tag",
+   "tag": "H1007",
+   "x": 320.0,
+   "y": 200.0
+  },
+  {
+   "id": "M1.1",
+   "kind": "pump",
+   "occurrences": 1,
+   "source": "tag",
+   "tag": "M1.1",
+   "x": 160.0,
+   "y": 84.0
+  },
+  {
+   "id": "terminal-1",
+   "kind": "terminal",
+   "source": "run-end",
+   "tag": null,
+   "x": 240.0,
+   "y": 100.0
+  },
+  {
+   "id": "terminal-2",
+   "kind": "terminal",
+   "source": "run-end",
+   "tag": null,
+   "x": 178.0,
+   "y": 100.0
+  },
+  {
+   "id": "terminal-3",
+   "kind": "terminal",
+   "source": "run-end",
+   "tag": null,
+   "x": 162.0,
+   "y": 100.0
+  }
+ ],
+ "colorRuns": [
+  {
+   "color": "#0000ff",
+   "length": 180.0,
+   "points": [
+    [
+     240.0,
+     100.0
+    ],
+    [
+     240.0,
+     200.0
+    ],
+    [
+     240.0,
+     200.0
+    ],
+    [
+     320.0,
+     200.0
+    ]
+   ]
+  },
+  {
+   "color": "#ff0000",
+   "length": 122.0,
+   "points": [
+    [
+     178.0,
+     100.0
+    ],
+    [
+     300.0,
+     100.0
+    ]
+   ]
+  },
+  {
+   "color": "#ff0000",
+   "length": 112.0,
+   "points": [
+    [
+     50.0,
+     100.0
+    ],
+    [
+     162.0,
+     100.0
+    ]
+   ]
+  }
+ ],
+ "coloredFraction": 0.444,
+ "components": [
+  {
+   "id": "P4711",
+   "label": "P4711",
+   "x": 50.0,
+   "y": 100.0
+  },
+  {
+   "id": "WT 4a",
+   "label": "WT 4a",
+   "x": 300.0,
+   "y": 100.0
+  },
+  {
+   "id": "H1007",
+   "label": "H1007",
+   "x": 320.0,
+   "y": 200.0
+  },
+  {
+   "id": "M1.1",
+   "label": "M1.1",
+   "x": 160.0,
+   "y": 84.0
+  }
+ ],
+ "edges": [],
+ "instruments": [],
+ "lines": [
+  {
+   "color": "#808080",
+   "points": [
+    [
+     5.0,
+     5.0
+    ],
+    [
+     395.0,
+     5.0
+    ],
+    [
+     395.0,
+     295.0
+    ],
+    [
+     5.0,
+     295.0
+    ],
+    [
+     5.0,
+     5.0
+    ]
+   ],
+   "width": 1.0
+  },
+  {
+   "color": "#ff0000",
+   "points": [
+    [
+     50.0,
+     100.0
+    ],
+    [
+     162.0,
+     100.0
+    ]
+   ],
+   "width": 2.0
+  },
+  {
+   "color": "#000000",
+   "points": [
+    [
+     178.0,
+     100.0
+    ],
+    [
+     177.73,
+     102.07
+    ],
+    [
+     176.93,
+     104.0
+    ],
+    [
+     175.66,
+     105.66
+    ],
+    [
+     174.0,
+     106.93
+    ],
+    [
+     172.07,
+     107.73
+    ],
+    [
+     170.0,
+     108.0
+    ],
+    [
+     167.93,
+     107.73
+    ],
+    [
+     166.0,
+     106.93
+    ],
+    [
+     164.34,
+     105.66
+    ],
+    [
+     163.07,
+     104.0
+    ],
+    [
+     162.27,
+     102.07
+    ],
+    [
+     162.0,
+     100.0
+    ],
+    [
+     162.27,
+     97.93
+    ],
+    [
+     163.07,
+     96.0
+    ],
+    [
+     164.34,
+     94.34
+    ],
+    [
+     166.0,
+     93.07
+    ],
+    [
+     167.93,
+     92.27
+    ],
+    [
+     170.0,
+     92.0
+    ],
+    [
+     172.07,
+     92.27
+    ],
+    [
+     174.0,
+     93.07
+    ],
+    [
+     175.66,
+     94.34
+    ],
+    [
+     176.93,
+     96.0
+    ],
+    [
+     177.73,
+     97.93
+    ],
+    [
+     178.0,
+     100.0
+    ]
+   ],
+   "width": 1.0
+  },
+  {
+   "color": "#ff0000",
+   "points": [
+    [
+     178.0,
+     100.0
+    ],
+    [
+     300.0,
+     100.0
+    ]
+   ],
+   "width": 1.0
+  },
+  {
+   "color": "#0000ff",
+   "points": [
+    [
+     240.0,
+     100.0
+    ],
+    [
+     240.0,
+     200.0
+    ]
+   ],
+   "width": 1.0
+  },
+  {
+   "color": "#0000ff",
+   "points": [
+    [
+     240.0,
+     200.0
+    ],
+    [
+     320.0,
+     200.0
+    ]
+   ],
+   "width": 1.0
+  },
+  {
+   "color": "#333333",
+   "points": [
+    [
+     40.0,
+     250.0
+    ],
+    [
+     360.0,
+     250.0
+    ]
+   ],
+   "width": 1.0
+  },
+  {
+   "color": "#333333",
+   "points": [
+    [
+     40.0,
+     260.0
+    ],
+    [
+     360.0,
+     260.0
+    ]
+   ],
+   "width": 1.0
+  },
+  {
+   "color": "#333333",
+   "points": [
+    [
+     40.0,
+     270.0
+    ],
+    [
+     360.0,
+     270.0
+    ]
+   ],
+   "width": 1.0
+  }
+ ],
+ "links": [
+  [
+   "H1007",
+   "P4711"
+  ],
+  [
+   "H1007",
+   "WT 4a"
+  ],
+  [
+   "P4711",
+   "WT 4a"
+  ]
+ ],
+ "nodes": [
+  {
+   "class": "P4711",
+   "id": "tag0",
+   "source": "tag",
+   "x": 44.0,
+   "y": 92.0
+  },
+  {
+   "class": "H1007",
+   "id": "tag1",
+   "source": "tag",
+   "x": 326.0,
+   "y": 204.0
+  }
+ ],
+ "pageBox": [
+  0.0,
+  0.0,
+  400.0,
+  300.0
+ ],
+ "stats": {
+  "bySource": {
+   "tag": 2
+  },
+  "colorRuns": 3,
+  "components": 4,
+  "connections": 3,
+  "edges": 0,
+  "instruments": 0,
+  "nodes": 2,
+  "pipeSegments": 6,
+  "polylines": 10
+ },
+ "texts": [
+  {
+   "text": "P4711",
+   "x": 44.0,
+   "y": 92.0
+  },
+  {
+   "text": "WT 4a",
+   "x": 304.0,
+   "y": 92.0
+  },
+  {
+   "text": "H1007",
+   "x": 326.0,
+   "y": 204.0
+  },
+  {
+   "text": "M1.1",
+   "x": 160.0,
+   "y": 84.0
+  },
+  {
+   "text": "DN 800",
+   "x": 60.0,
+   "y": 240.0
+  }
+ ],
+ "viewBox": "0 0 400.0 300.0",
+ "warnings": [
+  "no template library given -- symbol detection skipped; nodes are equipment tags + junction clusters only",
+  "2 inferred connector(s) through equipment symbols; pipes stop at symbol outlines and were rejoined",
+  "3 of 7 nodes are unnamed pipe terminals (off-sheet or untagged equipment)",
+  "extraction produced 0 edges."
+ ]
+}

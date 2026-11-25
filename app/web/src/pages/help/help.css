@@ -1,0 +1,218 @@
+/* Help pages (Home, AboutPage, GuidePage, AssistantPage): cards over the full page width; the card grids keep the
+   lines a readable length. */
+.help { width: 100%; padding-bottom: var(--space-8); }
+.help p { margin: 0; font-size: 14px; line-height: 1.6; }
+.help .card { display: flex; flex-direction: column; gap: var(--space-3); }
+.help .card a:not(.btn) { color: var(--accent); }
+.help__hero { display: flex; flex-direction: column; gap: var(--space-2); padding: var(--space-2) 0; }
+.help__title { font-size: 24px; font-weight: 700; letter-spacing: -0.01em; }
+.help .help__lead { font-size: 16px; color: var(--foreground-secondary); }
+.help__h2 { margin: 0; font-size: 16px; font-weight: 700; }
+.help__grid { display: grid; gap: var(--space-4); }
+.help__grid--2 { grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr)); }
+.help__grid--3 { grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr)); margin-top: var(--space-3); }
+.help__dl { margin: 0; display: flex; flex-direction: column; gap: var(--space-3); }
+.help__dl dt { font-weight: 600; font-size: 14px; }
+.help__dl dd { margin: 2px 0 0; font-size: 13px; line-height: 1.5; color: var(--foreground-secondary); }
+
+/* The three section cards on "What is this?" */
+.help-section__title { margin: 0; display: flex; align-items: center; gap: 10px; font-size: 17px; font-weight: 700; color: var(--accent); }
+.help-section__icon { width: 34px; height: 34px; }
+.help-section__links { display: flex; flex-wrap: wrap; gap: var(--space-2); margin-top: auto; }
+
+/* Home (landing page): spreads over the whole screen width (the other help pages keep their reading column): the system
+   figure over the whole width, each part's pages under its box and the whole twin's under the figure; at the bottom the
+   project, where to start and the documentation. */
+
+/* Heat path sketch (HeatFlowSketch.tsx, on "What is this?") */
+.flow { width: 100%; height: auto; display: block; }
+.flow text { text-anchor: middle; font-family: var(--font); }
+.flow__box { stroke-width: 1.5; }
+.flow__box--heat { fill: color-mix(in srgb, var(--heat) 12%, var(--surface)); stroke: var(--heat); }
+.flow__box--accent { fill: color-mix(in srgb, var(--accent) 8%, var(--surface)); stroke: var(--accent); }
+.flow__box--cool { fill: color-mix(in srgb, var(--cool) 12%, var(--surface)); stroke: var(--cool); }
+.flow__title { font-size: 16px; font-weight: 700; fill: var(--foreground); }
+.flow__line { font-size: 13px; fill: var(--foreground-secondary); }
+.flow__pipe { stroke: var(--heat); stroke-width: 5; stroke-linecap: round; }
+.flow__power { stroke: var(--accent); stroke-width: 2.5; stroke-dasharray: 5 4; }
+.flow__head--heat { fill: var(--heat); }
+.flow__head--power { fill: var(--accent); }
+.flow__note { font-size: 12px; fill: var(--foreground-secondary); text-anchor: start !important; }
+.flow__bracket { fill: none; stroke: var(--border-strong); stroke-width: 1.5; }
+.flow__section { font-size: 12px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; fill: var(--accent); }
+
+/* The system figure (SystemFigure.tsx): the three parts in the twin's colours, each a link; scrolls sideways on a
+   phone rather than shrinking its text below reading size. */
+.sys-scroll { overflow-x: auto; }
+.sys { display: block; width: 100%; min-width: 760px; height: auto; margin-inline: auto; } /* as wide as the twin's frame */
+.sys text { font-family: var(--font); text-anchor: middle; fill: var(--foreground); }
+.sys .sys__start { text-anchor: start; }
+.sys .sys__end { text-anchor: end; }
+.sys__label { font-size: 14px; font-weight: 600; }
+.sys .sys__sub { font-size: 12px; font-weight: 400; fill: var(--foreground-secondary); }
+.sys .sys__sub--tight { font-size: 11px; }
+.sys .sys__warm-text { fill: var(--hot); font-weight: 600; }
+.sys .sys__cold-text { fill: var(--cool-strong); font-weight: 600; }
+.sys__box { fill: color-mix(in srgb, var(--tone) 7%, var(--surface)); stroke: var(--tone); stroke-width: 2; transition: fill 0.15s, stroke-width 0.15s; }
+.sys__box--dc { --tone: var(--hot); }
+.sys__box--hd { --tone: var(--heat); }
+.sys__box--dist { --tone: var(--cool-strong); }
+/* a part's name with its top-bar icon in the part's colour (an HTML MaskIcon in a foreignObject) */
+.sys__head { height: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 19px; font-weight: 700; color: var(--foreground); }
+.sys__head .mask-icon { width: 26px; height: 26px; color: var(--tone); }
+.sys__mark path, .sys__mark circle { fill: none; stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
+.sys__mark-dc { stroke: var(--hot); }
+.sys__mark-hd { stroke: var(--heat); }
+.sys__mark-dist { stroke: var(--cool-strong); }
+/* the parts and the whole twin are links: a stronger edge and tint on hover, a focus ring for the keyboard */
+.sys__link { cursor: pointer; }
+.sys__link:focus { outline: none; }
+.sys__link:hover .sys__box { fill: color-mix(in srgb, var(--tone) 15%, var(--surface)); stroke-width: 3; }
+.sys__link:focus-visible .sys__box { fill: color-mix(in srgb, var(--tone) 15%, var(--surface)); stroke-width: 4; }
+.sys__flows { pointer-events: none; }
+/* the whole twin's activities: a band across the three parts, behind them, its name on the left; a link to its page */
+.sys__band { cursor: pointer; }
+.sys__band rect { fill: color-mix(in srgb, var(--accent) 7%, var(--surface)); stroke: color-mix(in srgb, var(--accent) 40%, var(--border)); stroke-width: 1.5; transition: fill 0.15s; }
+.sys__band:hover rect, .sys__band:focus-visible rect { fill: color-mix(in srgb, var(--accent) 15%, var(--surface)); }
+.sys__band:focus { outline: none; }
+.sys__band:focus-visible rect { stroke-width: 3; }
+.sys__band-name { height: 100%; display: flex; align-items: center; gap: 8px; font-size: 18px; font-weight: 700; color: var(--accent); }
+.sys__band-name .subtabs__icon { width: 22px; height: 22px; }
+/* line icons in currentColor: one stroke width, rounded ends and joins */
+.sys__icon { color: var(--foreground-secondary); fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.sys__icon--heat { color: var(--heat); }
+.sys__icon--cold { color: var(--cool-strong); }
+.sys__icon--ai { color: color-mix(in srgb, var(--ok) 75%, var(--foreground)); }
+.sys__fill { fill: currentColor; stroke: none; }
+.sys__solid { fill: var(--surface); }
+.sys__thin { stroke-width: 1.5; }
+.sys .sys__glyph { fill: currentColor; stroke: none; font-size: 10px; font-weight: 700; }
+.sys .sys__glyph--big { font-size: 14px; }
+.sys__hp { fill: var(--surface); stroke: var(--heat); stroke-width: 2.5; }
+.sys__ai rect { fill: color-mix(in srgb, var(--ok) 14%, var(--surface)); stroke: var(--ok); stroke-width: 1.5; }
+.sys .sys__ai-text { font-size: 14px; font-weight: 800; fill: color-mix(in srgb, var(--ok) 75%, var(--foreground)); }
+/* arrows: warm and cold water or air, the shared influences, and the hollow ones for emissions and electricity */
+.sys__warm, .sys__cold, .sys__feed { fill: none; stroke-width: 2.5; stroke-linecap: round; }
+.sys__warm { stroke: var(--hot); }
+.sys__cold { stroke: var(--cool-strong); }
+.sys__head--warm { fill: var(--hot); }
+.sys__head--cold { fill: var(--cool-strong); }
+.sys__head--feed { fill: var(--foreground-secondary); }
+.sys__bus, .sys__feed { fill: none; stroke: var(--foreground-secondary); stroke-width: 1.75; stroke-linecap: round; }
+.sys__pipe { stroke: var(--foreground-secondary); stroke-width: 6; stroke-linecap: round; opacity: 0.35; }
+.sys__hollow { fill: var(--surface); stroke: var(--foreground-secondary); stroke-width: 1.75; stroke-linejoin: round; }
+
+/* Documentation link card */
+.help .help-docs { flex-direction: row; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: var(--space-4); }
+.help-docs > div { display: flex; flex-direction: column; gap: var(--space-2); flex: 1 1 420px; }
+.help-docs > .help-section__links { flex: 0 1 auto; flex-direction: row; }
+
+/* "How to use": step overview and step cards */
+.help-steps ol { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: var(--space-1) var(--space-2); }
+.help-steps .btn { font-weight: 500; }
+.help-steps__num,
+.help-step__num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: var(--accent-light);
+  color: var(--accent);
+  font-weight: 700;
+  flex-shrink: 0;
+}
+.help-steps__num { width: 20px; height: 20px; font-size: 11px; }
+.help-step { scroll-margin-top: var(--space-4); }
+.help-step__head { display: flex; align-items: center; flex-wrap: wrap; gap: var(--space-3); }
+.help-step__num { width: 36px; height: 36px; font-size: 16px; }
+.help-step__name { display: flex; flex-direction: column; gap: 2px; flex: 1 1 260px; }
+.help-step__where { display: flex; align-items: center; gap: 6px; font-size: 13px; }
+.help-step__icon { width: 18px; height: 18px; }
+.help-step__body { display: flex; flex-direction: column; gap: var(--space-4); padding-left: 48px; }
+.help-step__body > div { display: flex; flex-direction: column; gap: var(--space-2); }
+.help-step__body h3 { margin: 0; }
+.help-step__body ul { margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 6px; font-size: 14px; line-height: 1.55; }
+@media (max-width: 640px) {
+  .help { padding: var(--space-4); }
+  .help-step__body { padding-left: 0; }
+}
+
+/* AI assistant page: a copyable settings block and the tool list */
+.assistant__code { position: relative; }
+.assistant__code pre {
+  margin: 0;
+  padding: var(--space-3);
+  padding-right: 80px;
+  overflow: auto;
+  border-radius: var(--radius-sm);
+  background: var(--surface-2);
+  font-size: 12px;
+}
+.assistant__code .btn { position: absolute; top: 6px; right: 6px; }
+.assistant__tools { width: 100%; border-collapse: collapse; font-size: 13px; }
+.assistant__tools td { padding: 4px 8px; border-top: 1px solid var(--border-strong); vertical-align: top; }
+/* each part's pages under its box of the figure: the figure's columns (SystemFigure: boxes 334 of 1200, 79 apart, 20 in) */
+/* under the figure's three boxes: its 1400 wide view, 200 of it the activities' names on the left (SystemFigure LEFT) */
+.home__part-links { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); column-gap: 5.64%; padding: 0 1.43% 0 15.71%; width: 100%; margin: -6px auto 0; }
+.home__part-links > div { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; }
+.home__part-links > [data-part="dc"] { --part: var(--hot); }
+.home__part-links > [data-part="heat"] { --part: var(--heat); }
+.home__part-links > [data-part="district"] { --part: var(--cool-strong); }
+.home__part-link { font-size: 11px; font-weight: 600; color: var(--part); border: 1px solid color-mix(in srgb, var(--part) 45%, var(--border)); background: color-mix(in srgb, var(--part) 7%, var(--surface)); text-decoration: none; }
+.home__part-link:hover { background: color-mix(in srgb, var(--part) 14%, var(--surface)); }
+/* at the bottom: the project, "New here?" and the documentation, side by side */
+/* Home kept small: one screen wide, the figure with it */
+.help.home { max-width: 1400px; margin-inline: auto; }
+.home__bottom { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr)); gap: var(--space-4); }
+/* a page link's description, under it on hover or keyboard focus */
+.home__part-link { position: relative; }
+.home__tip { position: absolute; z-index: 20; top: calc(100% + 8px); left: 50%; transform: translateX(-50%); width: max-content; max-width: 300px; padding: 10px 12px; border-radius: 10px; border: 1px solid color-mix(in srgb, var(--part) 40%, var(--border)); background: var(--surface); box-shadow: var(--shadow-md, 0 8px 24px rgba(0, 0, 0, 0.14)); color: var(--foreground); font-size: 12px; font-weight: 400; line-height: 1.45; text-align: left; white-space: normal; pointer-events: none; opacity: 0; visibility: hidden; transition: opacity 0.12s; }
+.home__part-link:hover .home__tip, .home__part-link:focus-visible .home__tip { opacity: 1; visibility: visible; }
+/* the whole twin: a dashed frame round the figure and the parts' pages, its name, what it is and its pages at its foot */
+.home__frame { width: 100%; margin-inline: auto; padding: 12px 16px 14px; border: 2px dashed color-mix(in srgb, var(--accent) 35%, var(--border-strong)); border-radius: 26px; background: color-mix(in srgb, var(--accent) 3%, transparent); display: flex; flex-direction: column; gap: 10px; }
+.home__twin { --part: var(--accent); display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 8px 16px; padding: 4px 0 10px; border-bottom: 1px dashed color-mix(in srgb, var(--accent) 30%, var(--border)); }
+.home__twin-name { display: inline-flex; align-items: center; gap: 10px; font-size: 24px; font-weight: 700; background: linear-gradient(90deg, var(--hot), var(--heat) 50%, var(--cool-strong)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.home__twin-name img { width: 34px; height: 34px; }
+.card--lg.home__sketch { padding: 10px; } /* the twin's frame fills the card */
+/* the tutorial's three paths (PathsCard): side by side, each a column with its steps */
+.help-paths { display: flex; flex-direction: column; gap: var(--space-2); }
+.help-paths__lead { margin: 0; color: var(--foreground-secondary); line-height: 1.5; }
+.help-paths__grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--space-3); }
+.help-path { display: flex; flex-direction: column; gap: 8px; padding: 12px 14px; border: 1px solid var(--border); border-top: 3px solid var(--path); border-radius: var(--radius-md); background: var(--surface); }
+.help-path--ideation { --path: var(--cool-strong); }
+.help-path--planning { --path: var(--heat); }
+.help-path--operation { --path: var(--hot); }
+.help-path__title { margin: 0; font-size: 15px; color: var(--path); }
+.help-path__lead { margin: 0; line-height: 1.45; }
+.help-path__needs { margin: 0; font-size: 12px; color: var(--foreground-secondary); }
+.help-path__steps { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 8px; line-height: 1.4; }
+.help-path__steps li { display: flex; flex-direction: column; gap: 4px; }
+.help-path__go { display: flex; gap: 6px; }
+.help-paths__head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; }
+
+/* AI assistant > Reference > What the model knows (WikiCard.tsx): the wiki's pages by folder, a page opens in a dialog */
+.assistant__wiki { margin-top: 18px; padding-top: 14px; border-top: 1px solid var(--border); }
+.assistant__wiki h3 { margin: 10px 0 2px; color: var(--foreground-tertiary); }
+.assistant__wiki ul { list-style: none; margin: 0; padding: 0; }
+.assistant__wiki-page { border: 0; background: none; padding: 2px 0; font: inherit; font-size: 13px; text-align: left; color: var(--accent); cursor: pointer; }
+.assistant__wiki-page:hover { text-decoration: underline; }
+.assistant__wiki-dialog { width: min(820px, calc(100vw - 32px)); }
+.assistant__wiki-dialog pre { max-height: 60vh; overflow: auto; padding: 12px 14px; border: 1px solid var(--border); border-radius: 10px; background: var(--surface-2); font: 12px/1.5 var(--font-mono); white-space: pre-wrap; }
+
+/* The assistant figure (AssistantFigure.tsx): you, the app, the AI model, for a slide */
+.asys__box { stroke-width: 2; fill: color-mix(in srgb, var(--tone) 7%, var(--surface)); stroke: var(--tone); }
+.asys__box--you, .asys__dot--you { --tone: var(--cool-strong); }
+.asys__box--app, .asys__dot--app { --tone: var(--heat); }
+.asys__box--ai, .asys__dot--ai { --tone: var(--accent); }
+.asys__dot { fill: var(--tone); }
+.sys .asys__title { font-size: 22px; font-weight: 700; }
+.sys .asys__line { font-size: 14px; }
+.sys .asys__say { font-size: 13px; font-weight: 600; fill: var(--foreground-secondary); }
+.sys .asys__say--key { fill: var(--accent); font-size: 14px; }
+.asys__arrow { stroke: var(--foreground-secondary); stroke-width: 2; }
+.asys__arc { fill: none; stroke: var(--accent); stroke-width: 2; stroke-dasharray: 6 5; }
+.asys__head { fill: var(--foreground-secondary); }
+.asys__robot { fill: none; stroke: var(--accent); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+
+/* the agent's instruction: a sentence, wrapped, the Copy button beside it rather than over it */
+.assistant__code--wrap pre { white-space: pre-wrap; padding-right: 96px; }

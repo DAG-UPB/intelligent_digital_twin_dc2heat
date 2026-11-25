@@ -1,0 +1,650 @@
+/* Global styles: reset, design tokens (spacing, radii, type, 3 palettes x light/dark colours), base elements,
+   and the app shell (top bar, sub-tabs). Shared component classes are in ui/ui.css. */
+*, *::before, *::after { box-sizing: border-box; }
+body { margin: 0; }
+button, input, select, textarea { font: inherit; }
+
+/* Themes: three palettes (data-palette on <html>: aurora = default, electric, emerald), each light
+   (default) and dark (data-theme="dark"). Semantic colors: heat (sources), cool (sinks), ok / warn / danger. */
+:root {
+  /* Shadows */
+  --shadow-sm: 0 1px 2px rgba(16, 16, 40, 0.05), 0 1px 3px rgba(16, 16, 40, 0.04);
+  --shadow-md: 0 6px 20px rgba(16, 16, 40, 0.08), 0 2px 6px rgba(16, 16, 40, 0.04);
+  --shadow-lg: 0 12px 40px rgba(16, 16, 40, 0.14), 0 4px 10px rgba(16, 16, 40, 0.06);
+
+  /* Spacing scale (use these for gaps and padding) */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+
+  /* Radii */
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+
+  /* Diverging scale of correlations (-1 blue, 0 grey, +1 red; same in every palette), and the text on its strong ends */
+  --corr-neg: #2a78d6;
+  --corr-mid: #f0efec;
+  --corr-pos: #e34948;
+  --corr-ink-strong: #ffffff;
+
+  /* How each variable is made (approaches.ts): Modelling's columns, and the variables and the links into them on the
+     structure's drawing. The same in every palette and part (the accent changes with both) */
+  --way-data: #2563EB;
+  --way-physics: #14b8a6;
+  --way-profile: #EA580C;
+  --way-off: #94A3B8;
+
+  /* Type */
+  --font: "Plus Jakarta Sans", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+}
+:root[data-theme="dark"] {
+  --way-data: #60A5FA;
+  --way-physics: #2DD4BF;
+  --way-profile: #FB923C;
+  --way-off: #7E879B;
+  --corr-neg: #3987e5;
+  --corr-mid: #383835;
+  --corr-pos: #e66767;
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 6px 20px rgba(0, 0, 0, 0.45);
+  --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.55);
+}
+:root {
+  color-scheme: light;
+  --background: #F6F6FB;
+  --surface: #FFFFFF;
+  --surface-2: #F1F0F9;
+  --surface-hover: #E8E6F6;
+  --foreground: #17152B;
+  --foreground-secondary: #5D5A78;
+  --foreground-tertiary: #A09DB8;
+  --accent: #5B4BFF;
+  --accent-hover: #4936F5;
+  --accent-light: rgba(91, 75, 255, 0.10);
+  --accent-fg: #FFFFFF;
+  --heat: #FF6B3D;
+  --heat-strong: #FF4D2E;
+  --hot: #F43F5E;
+  --cool: #3B82F6;
+  --cool-strong: #2563EB;
+  --ok: #10B981;
+  --warn: #F59E0B;
+  --danger: #F43F5E;
+  --warn-bg: color-mix(in srgb, #F59E0B 12%, transparent);
+  --danger-bg: color-mix(in srgb, #F43F5E 10%, transparent);
+  --brand-gradient: linear-gradient(90deg, #3B82F6, #8B5CF6, #F43F5E);
+  --nav-bg: #FFFFFF;
+  --nav-fg: #17152B;
+  --nav-fg-muted: #77738F;
+  --nav-active: #5B4BFF;
+  --nav-sub-bg: #FFFFFF;
+  --chart-grid: rgba(91, 75, 255, 0.08);
+  --chart-axis: #5D5A78;
+  --border: rgba(23, 21, 43, 0.08);
+  --border-strong: rgba(23, 21, 43, 0.16);
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --background: #0C0B16;
+  --surface: #15142A;
+  --surface-2: #1C1A36;
+  --surface-hover: #25234A;
+  --foreground: #EEEDFB;
+  --foreground-secondary: #A9A6C8;
+  --foreground-tertiary: #6D6A8E;
+  --accent: #8B7CFF;
+  --accent-hover: #A79CFF;
+  --accent-light: rgba(139, 124, 255, 0.18);
+  --accent-fg: #0C0B16;
+  --heat: #FF8A5C;
+  --heat-strong: #FF6B45;
+  --hot: #FB7185;
+  --cool: #60A5FA;
+  --cool-strong: #7AB4FF;
+  --ok: #34D399;
+  --warn: #FBBF24;
+  --danger: #FB7185;
+  --warn-bg: color-mix(in srgb, #FBBF24 12%, transparent);
+  --danger-bg: color-mix(in srgb, #FB7185 10%, transparent);
+  --brand-gradient: linear-gradient(90deg, #60A5FA, #A78BFA, #FB7185);
+  --nav-bg: #100F20;
+  --nav-fg: #EEEDFB;
+  --nav-fg-muted: #8E8AB0;
+  --nav-active: #8B7CFF;
+  --nav-sub-bg: #15142A;
+  --chart-grid: rgba(139, 124, 255, 0.10);
+  --chart-axis: #A9A6C8;
+  --border: rgba(238, 237, 251, 0.08);
+  --border-strong: rgba(238, 237, 251, 0.16);
+}
+:root[data-palette="electric"] {
+  color-scheme: light;
+  --background: #F5F7FA;
+  --surface: #FFFFFF;
+  --surface-2: #EEF2F7;
+  --surface-hover: #E3E9F2;
+  --foreground: #0A0F1C;
+  --foreground-secondary: #4F5B70;
+  --foreground-tertiary: #98A3B5;
+  --accent: #1F5BFF;
+  --accent-hover: #0F47F0;
+  --accent-light: rgba(31, 91, 255, 0.10);
+  --accent-fg: #FFFFFF;
+  --heat: #FF5C39;
+  --heat-strong: #FF3B1F;
+  --hot: #FF2E63;
+  --cool: #1F9BFF;
+  --cool-strong: #1F5BFF;
+  --ok: #16A34A;
+  --warn: #CA8A04;
+  --danger: #FF2E63;
+  --warn-bg: color-mix(in srgb, #CA8A04 12%, transparent);
+  --danger-bg: color-mix(in srgb, #FF2E63 10%, transparent);
+  --brand-gradient: linear-gradient(90deg, #1F9BFF, #1F5BFF, #FF2E63);
+  --nav-bg: #FFFFFF;
+  --nav-fg: #0A0F1C;
+  --nav-fg-muted: #6B778C;
+  --nav-active: #1F5BFF;
+  --nav-sub-bg: #FFFFFF;
+  --chart-grid: rgba(31, 91, 255, 0.08);
+  --chart-axis: #4F5B70;
+  --border: rgba(10, 15, 28, 0.08);
+  --border-strong: rgba(10, 15, 28, 0.16);
+}
+:root[data-palette="electric"][data-theme="dark"] {
+  color-scheme: dark;
+  --background: #05070D;
+  --surface: #0E131F;
+  --surface-2: #141B2B;
+  --surface-hover: #1C2538;
+  --foreground: #F1F5FB;
+  --foreground-secondary: #9AA6BC;
+  --foreground-tertiary: #5E6A80;
+  --accent: #4D7CFF;
+  --accent-hover: #7398FF;
+  --accent-light: rgba(77, 124, 255, 0.18);
+  --accent-fg: #05070D; /* white on this blue is only 3.7:1 */
+  --heat: #FF7A55;
+  --heat-strong: #FF5C39;
+  --hot: #FF4F7B;
+  --cool: #4DB5FF;
+  --cool-strong: #6E94FF;
+  --ok: #A3E635;
+  --warn: #FACC15;
+  --danger: #FF4F7B;
+  --warn-bg: color-mix(in srgb, #FACC15 12%, transparent);
+  --danger-bg: color-mix(in srgb, #FF4F7B 10%, transparent);
+  --brand-gradient: linear-gradient(90deg, #4DB5FF, #4D7CFF, #FF4F7B);
+  --nav-bg: #0A0E18;
+  --nav-fg: #F1F5FB;
+  --nav-fg-muted: #7F8BA3;
+  --nav-active: #C6FF3D;
+  --nav-sub-bg: #0E131F;
+  --chart-grid: rgba(77, 124, 255, 0.10);
+  --chart-axis: #9AA6BC;
+  --border: rgba(241, 245, 251, 0.08);
+  --border-strong: rgba(241, 245, 251, 0.16);
+}
+:root[data-palette="emerald"] {
+  color-scheme: light;
+  --background: #F4F8F6;
+  --surface: #FFFFFF;
+  --surface-2: #EDF4F0;
+  --surface-hover: #E1ECE6;
+  --foreground: #0B1F17;
+  --foreground-secondary: #4A6157;
+  --foreground-tertiary: #93A89E;
+  --accent: #047857; /* emerald-700: white text on it is 5.5:1 (emerald-600 was 3.8:1) */
+  --accent-hover: #065F46;
+  --accent-light: rgba(5, 150, 105, 0.10);
+  --accent-fg: #FFFFFF;
+  --heat: #F97316;
+  --heat-strong: #EA580C;
+  --hot: #E11D48;
+  --cool: #3B82F6;
+  --cool-strong: #2563EB;
+  --ok: #059669;
+  --warn: #D97706;
+  --danger: #E11D48;
+  --warn-bg: color-mix(in srgb, #D97706 12%, transparent);
+  --danger-bg: color-mix(in srgb, #E11D48 10%, transparent);
+  --brand-gradient: linear-gradient(90deg, #3B82F6, #10B981, #F97316, #E11D48);
+  --nav-bg: #FFFFFF;
+  --nav-fg: #0B1F17;
+  --nav-fg-muted: #6B8379;
+  --nav-active: #059669;
+  --nav-sub-bg: #FFFFFF;
+  --chart-grid: rgba(5, 150, 105, 0.08);
+  --chart-axis: #4A6157;
+  --border: rgba(11, 31, 23, 0.08);
+  --border-strong: rgba(11, 31, 23, 0.16);
+}
+:root[data-palette="emerald"][data-theme="dark"] {
+  color-scheme: dark;
+  --background: #07120E;
+  --surface: #0E1D17;
+  --surface-2: #13261E;
+  --surface-hover: #1A3328;
+  --foreground: #E8F5EF;
+  --foreground-secondary: #9DB8AC;
+  --foreground-tertiary: #5E7A6E;
+  --accent: #34D399;
+  --accent-hover: #6EE7B7;
+  --accent-light: rgba(52, 211, 153, 0.16);
+  --accent-fg: #07120E;
+  --heat: #FB923C;
+  --heat-strong: #F97316;
+  --hot: #FB7185;
+  --cool: #60A5FA;
+  --cool-strong: #7AB4FF;
+  --ok: #34D399;
+  --warn: #FBBF24;
+  --danger: #FB7185;
+  --warn-bg: color-mix(in srgb, #FBBF24 12%, transparent);
+  --danger-bg: color-mix(in srgb, #FB7185 10%, transparent);
+  --brand-gradient: linear-gradient(90deg, #60A5FA, #34D399, #FB923C, #FB7185);
+  --nav-bg: #0A1712;
+  --nav-fg: #E8F5EF;
+  --nav-fg-muted: #84A396;
+  --nav-active: #34D399;
+  --nav-sub-bg: #0E1D17;
+  --chart-grid: rgba(52, 211, 153, 0.10);
+  --chart-axis: #9DB8AC;
+  --border: rgba(232, 245, 239, 0.08);
+  --border-strong: rgba(232, 245, 239, 0.16);
+}
+
+/* Base */
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+code, pre, kbd { font-family: var(--font-mono); }
+/* German: a long compound is hyphenated where the browser knows the word, else broken at its box's edge, never run out of it */
+html:lang(de) body { -webkit-hyphens: auto; hyphens: auto; overflow-wrap: break-word; }
+/* and a button too narrow for its words wraps them and grows (its height a min-height, ui.css), never cuts them off */
+html:lang(de) .btn { white-space: normal; text-align: center; }
+html:lang(de) .topbar .btn { white-space: nowrap; } /* the top bar's few words stay on one line */
+html:lang(de) :is(code, pre, kbd, [translate="no"]) { -webkit-hyphens: manual; hyphens: manual; }
+input, select, textarea { background-color: var(--surface-2); color: var(--foreground); }
+
+/* Refined scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-strong);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--foreground-tertiary);
+}
+
+/* Polished range inputs */
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 4px;
+  background: var(--border-strong);
+  border-radius: 2px;
+  outline: none;
+  cursor: pointer;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.12), 0 2px 6px rgba(0, 0, 0, 0.16);
+  cursor: pointer;
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+
+input[type="range"]::-webkit-slider-thumb:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.14), 0 3px 8px rgba(0, 0, 0, 0.2);
+}
+
+input[type="range"]::-webkit-slider-thumb:active {
+  transform: scale(1.15);
+  box-shadow:
+    0 0 0 1px rgba(0, 0, 0, 0.1),
+    0 2px 4px rgba(0, 0, 0, 0.1),
+    0 0 0 5px var(--accent-light);
+}
+
+/* Focus ring: one for every control (the outline follows the element's own corner radius) */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* Select chrome removal (the data-center picker pill draws the same chevron) */
+select, .topbar__picker {
+  -webkit-appearance: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%236E6E73' stroke-width='1.4' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 9px center;
+  padding-right: 26px !important;
+}
+
+/* uPlot selection */
+.u-select { background: var(--accent-light); }
+
+/* App shell (app/App.tsx, app/TopBar.tsx) */
+.app { height: calc(100vh / var(--fit, 1)); display: flex; flex-direction: column; }
+.app__strip { height: 2px; background: var(--brand-gradient); }
+/* position: relative so absolutely positioned children (e.g. .sr-only) stay inside the scroll area and never stretch the document */
+.app__page { position: relative; flex: 1; min-height: 0; overflow: auto; background: var(--background); }
+/* a mounted page (App.tsx): as if it were main's own child; one kept out of sight is not drawn */
+.app__slot { display: contents; }
+.app__slot[hidden] { display: none; }
+
+/* Brand | centred section tabs | tools. The two outer columns are equal, so the tabs sit exactly in the middle
+   of the page and the tools can never slide under them. From 1280 px everything is one row: the tools fill their
+   column, the data-center picker takes the room that is left, and Save/Open show their labels once the column is
+   wide enough for them (a container query, so they never push into the tabs). */
+.topbar {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(450px, 1fr); /* the tools keep their room (about 444 px with their labels folded): the tabs never run under them, centred where there is room */
+  align-items: center;
+  column-gap: var(--space-4);
+  row-gap: var(--space-1);
+  padding: 6px var(--space-5);
+  min-height: 68px;
+  background: var(--nav-bg);
+  position: relative;
+  z-index: 1100; /* its pop-ups (Connect AI, the project) over the Site map's Leaflet panes and controls (up to 1000) */
+}
+.topbar__brand { display: flex; align-items: center; gap: 10px; white-space: nowrap; justify-self: start; }
+.topbar__home { color: var(--nav-fg); }
+.topbar__home:not(:hover) { border-color: transparent; background: transparent; box-shadow: none; } /* the bare house, as in the brand before */
+/* one track for the whole twin and its parts: no borders, a light tint; the page's tab sits on a raised pill that
+   slides between them (TopBar.tsx places it) */
+.topbar__tabs { position: relative; display: flex; align-items: center; gap: 2px; padding: 4px; border-radius: 999px; background: color-mix(in srgb, var(--nav-fg) 6%, transparent); }
+.topbar__pill { position: absolute; top: 0; left: 0; border-radius: 999px; background: var(--surface); box-shadow: var(--shadow-sm), 0 0 0 1px color-mix(in srgb, var(--nav-fg) 6%, transparent); transition: transform 0.28s cubic-bezier(0.2, 0.8, 0.2, 1), width 0.28s cubic-bezier(0.2, 0.8, 0.2, 1), height 0.28s; }
+@media (prefers-reduced-motion: reduce) { .topbar__pill { transition: none; } }
+.topbar__parts { display: flex; align-items: center; gap: 2px; }
+/* the whole twin: its name in the colours of the three parts it is made of */
+.topbar__twin {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font: inherit;
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  border: none;
+  border-radius: 999px;
+  padding: 9px 18px 9px 14px;
+  background: transparent;
+  cursor: pointer;
+}
+.topbar__twin-name { background: linear-gradient(90deg, var(--hot), var(--heat) 50%, var(--cool-strong)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+/* the twin's mark: the loop of its three parts; a part's piece lights up (the others fade) while its tab is hovered */
+.topbar__mark { flex: none; overflow: visible; }
+.topbar__mark g { transition: opacity 0.2s, transform 0.25s; transform-box: fill-box; transform-origin: center; }
+.topbar__mark-dc { stroke: var(--hot); }
+.topbar__mark-heat { stroke: var(--heat); }
+.topbar__mark-district { stroke: var(--cool-strong); }
+.topbar__tabs:has([data-part]:hover) .topbar__mark g { opacity: 0.25; }
+.topbar__tabs:has([data-part="dc"]:hover) .topbar__mark .topbar__mark-dc,
+.topbar__tabs:has([data-part="heat"]:hover) .topbar__mark .topbar__mark-heat,
+.topbar__tabs:has([data-part="district"]:hover) .topbar__mark .topbar__mark-district { opacity: 1; transform: scale(1.12); }
+/* hovering the twin: the three pieces close in on the middle, together */
+.topbar__twin:hover .topbar__mark-dc { transform: translateX(1px); }
+.topbar__twin:hover .topbar__mark-district { transform: translateX(-1px); }
+.topbar__twin:hover .topbar__mark-heat { transform: scale(1.12); }
+/* hovering the twin: the whole track in the parts' colours, a slow sheen across it, the parts' icons glowing */
+.topbar__tabs::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  opacity: 0;
+  transition: opacity 0.3s;
+  pointer-events: none;
+  background:
+    linear-gradient(105deg, transparent 30%, var(--sheen) 50%, transparent 70%) 0 0 / 250% 100%,
+    linear-gradient(90deg, color-mix(in srgb, var(--hot) 22%, transparent), color-mix(in srgb, var(--heat) 22%, transparent), color-mix(in srgb, var(--cool-strong) 22%, transparent));
+}
+.topbar__tabs { --sheen: color-mix(in srgb, white 45%, transparent); }
+:root[data-theme="dark"] .topbar__tabs { --sheen: color-mix(in srgb, white 8%, transparent); }
+.topbar__tabs:has(.topbar__twin:hover)::before { opacity: 1; animation: topbar-sheen 2.4s ease-in-out infinite; }
+@keyframes topbar-sheen { from { background-position: 120% 0, 0 0; } to { background-position: -120% 0, 0 0; } }
+.topbar__tabs:has(.topbar__twin:hover) .topbar__icon { filter: drop-shadow(0 0 5px var(--part)); }
+/* hovering a part: its tab in its colour, a fine stripe moving through it like heat in a pipe */
+.topbar__tab:hover:not([aria-selected="true"]) {
+  color: var(--nav-fg);
+  background: repeating-linear-gradient(135deg, color-mix(in srgb, var(--part) 16%, transparent) 0 6px, color-mix(in srgb, var(--part) 8%, transparent) 6px 12px);
+  background-size: 34px 34px;
+  animation: topbar-flow 1.6s linear infinite;
+}
+.topbar__tab[aria-selected="true"]:hover .topbar__icon { filter: drop-shadow(0 0 4px var(--part)); }
+@keyframes topbar-flow { to { background-position: 34px 0; } }
+@media (prefers-reduced-motion: reduce) {
+  .topbar__tabs:has(.topbar__twin:hover)::before, .topbar__tab:hover { animation: none; }
+}
+.topbar__divide { width: 1px; height: 22px; margin: 0 6px; background: color-mix(in srgb, var(--nav-fg) 14%, transparent); }
+/* the heat flows from part to part */
+.topbar__flow { color: var(--nav-fg-muted); opacity: 0.55; font-size: 16px; line-height: 1; user-select: none; }
+/* each part its own colour, in its icon */
+.topbar__tab[data-part="dc"] { --part: var(--hot); }
+.topbar__tab[data-part="heat"] { --part: var(--heat); }
+.topbar__tab[data-part="district"] { --part: var(--cool-strong); }
+.topbar__tab[data-part] .topbar__icon { background: var(--part); }
+.topbar__home.btn--on { color: var(--accent); }
+.topbar__tab {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: none;
+  background: transparent;
+  color: var(--nav-fg-muted);
+  font-weight: 500;
+  font-size: 16px;
+  padding: 9px 16px 9px 12px;
+  border-radius: 999px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color 0.15s, background-color 0.15s;
+}
+.topbar__tab[aria-selected="true"] { color: var(--nav-fg); font-weight: 650; }
+.topbar__icon { width: 26px; height: 26px; }
+.topbar__tools {
+  position: relative;
+  min-width: 0;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 6px;
+  container: topbar-tools / inline-size; /* its width is the grid column's, never its content's */
+}
+/* the language button (lib/i18n.ts): the globe and EN / DE */
+.topbar__lang { display: inline-flex; align-items: center; gap: 4px; padding: 0 9px; }
+.topbar__lang-code { font-size: 11px; font-weight: 700; letter-spacing: 0.04em; }
+.topbar__tools .btn { font-size: 12px; font-weight: 500; color: var(--nav-fg); text-decoration: none; }
+.topbar__tools .btn--on { color: var(--accent); }
+/* Connect AI (ConnectAi.tsx): a pill with a robot; green while an agent is connected; its code in a box under it */
+.connect-ai { position: relative; flex: none; }
+.topbar__tools .connect-ai__btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; min-width: 32px; min-height: 32px; border: 1px solid var(--border-strong); background: var(--surface); }
+.topbar__tools .connect-ai__btn--on { border-color: var(--ok); color: var(--ok); }
+.connect-ai__icon { width: 16px; height: 16px; }
+.connect-ai__pop {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 8px);
+  z-index: 50;
+  width: 280px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 13px;
+  box-shadow: var(--shadow-lg);
+}
+.connect-ai__pop p { margin: 0; }
+.connect-ai__code { font-size: 28px; font-weight: 700; letter-spacing: 0.08em; text-align: center; color: var(--accent); }
+.connect-ai__row { display: flex; align-items: center; justify-content: space-between; }
+.connect-ai__link { color: var(--accent); font-size: 12px; font-weight: 600; }
+.connect-ai__error { color: var(--danger); font-size: 12px; }
+/* Data-center picker: a pill with the short name; an invisible select covers it, so the menu lists the full names */
+.topbar__picker {
+  position: relative;
+  display: flex;
+  align-items: center;
+  height: 32px;
+  flex: 0 1 auto;
+  min-width: 112px;
+  max-width: 260px;
+  padding: 0 14px;
+  border-radius: 999px;
+  border: 1px solid var(--border-strong);
+  background-color: var(--surface-2);
+  color: var(--nav-fg);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.topbar__picker:hover { border-color: var(--foreground-tertiary); }
+.topbar__picker:has(select:focus-visible) { outline: 2px solid var(--accent); outline-offset: 2px; }
+.topbar__picker-label { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.topbar__project-picker { min-width: 120px; max-width: 220px; }
+.topbar__picker select { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; }
+/* Save / Open project: a round icon button, with its label when the tools have room for it (from ~1760 px) */
+.topbar__project { width: 32px; padding: 0; font-size: 14px; flex-shrink: 0; }
+.topbar__label { display: none; font-size: 12px; }
+@container topbar-tools (min-width: 560px) {
+  .topbar__project { width: auto; padding: 0 14px; }
+  .topbar__label { display: inline; }
+}
+/* the project picker with Save and Open as two small icons inside its pill (TopBar.tsx) */
+.topbar__project-group { position: relative; display: flex; align-items: center; flex: 0 1 auto; min-width: 0; height: 32px; padding-right: 4px; gap: 1px; border: 1px solid var(--border-strong); border-radius: 999px; background: var(--surface-2); }
+.topbar__project-group:hover { border-color: var(--foreground-tertiary); }
+.topbar__project-group .topbar__picker { height: 30px; border: none; background-color: transparent; }
+.topbar__project-group .topbar__project { width: 24px; height: 24px; min-height: 24px; padding: 0; font-size: 12px; }
+.topbar__project-group .topbar__project:not(:hover) { border-color: transparent; background: transparent; }
+.topbar__project-group .topbar__label { display: none; }
+/* Connect AI's words only with room for them; the robot alone otherwise */
+.connect-ai__label { display: none; }
+@container topbar-tools (min-width: 500px) {
+  .connect-ai__label { display: inline; }
+}
+.topbar__lang { cursor: help; }
+/* Save/open errors float under the tools, so they never push the header around */
+.live-notice {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin: var(--space-2) var(--space-5) 0;
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid color-mix(in srgb, var(--accent) 35%, transparent);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  box-shadow: var(--shadow-md);
+  font-size: 13px;
+}
+.live-notice > span { flex: 1; }
+.topbar__error.topbar__notice { border-color: color-mix(in srgb, var(--accent) 35%, transparent); color: var(--foreground); }
+.topbar__error {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  z-index: 60;
+  max-width: 360px;
+  text-align: left;
+  border: 1px solid color-mix(in srgb, var(--danger) 30%, transparent);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  box-shadow: var(--shadow-md);
+  padding: var(--space-2) var(--space-3);
+  font-size: 12px;
+  color: var(--danger);
+  cursor: pointer;
+}
+/* Below 1600: smaller tabs, so the brand keeps the tabs centred */
+@media (max-width: 1599px) {
+  .topbar__tab { font-size: 15px; gap: 7px; padding: 7px 13px 7px 10px; }
+  .topbar__twin { font-size: 15px; padding: 7px 15px 7px 12px; }
+  .topbar__icon { width: 22px; height: 22px; }
+}
+/* 1280..1439: tighter brand and tabs, still one row */
+@media (max-width: 1439px) {
+  .topbar__brand img { height: 40px; width: auto; }
+  .topbar__tab { font-size: 13px; gap: 5px; padding: 6px 9px 6px 7px; }
+  .topbar__twin { font-size: 13px; padding: 6px 11px 6px 9px; }
+  .topbar__icon { width: 19px; height: 19px; }
+  .topbar__divide { margin: 0 3px; }
+}
+/* Below 1280: brand and tools on the first row (tools wrap if they must), the tabs centred on their own row */
+@media (max-width: 1279px) {
+  .topbar { grid-template-columns: 1fr auto; }
+  .topbar__tools { flex-wrap: wrap; container-type: normal; } /* an auto column: sized by its content */
+  .topbar__tabs { grid-row: 2; grid-column: 1 / -1; justify-self: center; flex-wrap: wrap; justify-content: center; }
+}
+/* Phones: everything stacked and centred */
+@media (max-width: 760px) {
+  .topbar { grid-template-columns: 1fr; padding: 6px var(--space-4); }
+  .topbar__brand, .topbar__tools { justify-self: center; justify-content: center; }
+  .topbar__tabs { grid-row: auto; }
+}
+
+.subtabs { position: relative; display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; padding: 8px 16px; background: var(--nav-sub-bg); border-bottom: 1px solid var(--border); }
+/* the three systems' datasets (DataCenterPicker): after the sub-tabs, on a line of their own when there is no room; the page's own outlined */
+.subtabs:has(.subtabs__pickers)::before { content: ""; flex: 1 1 0; } /* the sub-tabs stay in the middle */
+.subtabs__pickers { flex: 1 1 0; display: flex; justify-content: flex-end; gap: 6px; margin-left: 12px; }
+.subtabs__picker { max-width: 200px; min-width: 0; height: 28px; padding: 0 12px; }
+.subtabs__picker--mine { border-color: var(--accent); }
+.subtabs__picker-caps { font-weight: 500; color: var(--foreground-tertiary); margin-right: 4px; }
+.subtabs__tab {
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--foreground-secondary);
+  font-weight: 500;
+  font-size: 14px;
+  padding: 6px 16px;
+  border-radius: 999px;
+  cursor: pointer;
+  text-decoration: none;
+}
+.subtabs__tab:hover { background: var(--surface-2); color: var(--foreground); }
+.subtabs__tab[aria-current="page"] { border-color: var(--accent); background: var(--accent-light); color: var(--accent); font-weight: 600; }
+/* the twin's steps: a small mark before the name (SubIcon.tsx) */
+.subtabs__icon { vertical-align: -5px; margin-right: 6px; }
+
+/* Each part of the twin in its own colour, on its pages: the accent (buttons, selected tabs, sliders, toggles,
+   highlights) and the sub-tabs' active colour follow the part. Set on the shell (App.tsx data-part), so it wins over
+   the palette's without a fight; the whole twin and Home/Help keep the palette's accent. Light: the deeper tones, so
+   white text on them stays readable; the data center's red a shade deeper than the error red. Dark: the lighter
+   tones, with dark text on them (the palette's --accent-fg). */
+.app[data-part] {
+  --accent-hover: color-mix(in srgb, var(--accent) 82%, var(--foreground));
+  --accent-light: color-mix(in srgb, var(--accent) 12%, transparent);
+  --nav-active: var(--accent);
+}
+.app[data-part="dc"] { --accent: color-mix(in srgb, var(--hot) 86%, black); }
+.app[data-part="heat"] { --accent: var(--heat-strong); }
+.app[data-part="district"] { --accent: var(--cool-strong); }
+:root[data-theme="dark"] .app[data-part="dc"] { --accent: var(--hot); }
+:root[data-theme="dark"] .app[data-part="heat"] { --accent: var(--heat); }
+/* the line under the top bar: the part's colour on its pages (the brand gradient elsewhere) */
+.app[data-part] .app__strip { background: var(--accent); }

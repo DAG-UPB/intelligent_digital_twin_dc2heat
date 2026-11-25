@@ -1,0 +1,64 @@
+# Lint, fast tests and build of the app. No end-to-end or slow tests, no data: the tests make
+# their own synthetic datasets (only the tracked app/data/sim_* folders are in the checkout).
+# Paths are relative to the repository root, the folder that holds AGENTS.md (app/, app/web/, app/uv.lock).
+name: CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  backend:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: app
+    env:
+      OMP_NUM_THREADS: "1"
+      # TabPFN (torch + CUDA wheels, several GB) is a runtime dependency, but only the slow tests
+      # use it and it is imported lazily, so CI skips installing it and its torch/CUDA stack.
+      HEAVY: >-
+        tabpfn torch triton mlx mlx-metal
+        cuda-bindings cuda-pathfinder cuda-toolkit
+        nvidia-cublas nvidia-cuda-cupti nvidia-cuda-nvrtc nvidia-cuda-runtime nvidia-cudnn-cu13
+        nvidia-cufft nvidia-cufile nvidia-curand nvidia-cusolver nvidia-cusparse nvidia-cusparselt-cu13
+        nvidia-nccl-cu13 nvidia-nvjitlink nvidia-nvshmem-cu13 nvidia-nvtx
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
+          cache-dependency-glob: app/uv.lock
+      - name: Install (without TabPFN)
+        run: uv sync --frozen $(printf -- '--no-install-package %s ' $HEAVY)
+      - name: Lint
+        run: uv run --no-sync ruff check backend tests scripts
+      - name: Format
+        run: uv run --no-sync ruff format --check backend tests scripts
+      - name: Tests (fast suite; slow = TabPFN, tigramite, gplearn)
+        run: uv run --no-sync pytest -q
+
+  frontend:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: app/web
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: app/web/package-lock.json
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm test
+      - run: npm run build

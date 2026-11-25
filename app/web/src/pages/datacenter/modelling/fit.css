@@ -1,0 +1,91 @@
+/* The fit dialog (FitDialog.tsx) and the Results table's fit columns (ResultsCard.tsx): colours from the tokens only */
+/* the Results card: its fit columns make the table wider than a narrow card */
+.fit-table-scroll {
+  overflow-x: auto;
+}
+.fit-table-scroll .train-table th[title] {
+  cursor: help;
+}
+.fit-inspect {
+  white-space: nowrap;
+}
+
+.fit-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.fit-head h2 {
+  margin: 0;
+}
+.fit-metrics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+  margin: 0;
+}
+.fit-metrics > div {
+  cursor: help;
+}
+.fit-metrics dt {
+  color: var(--foreground-secondary);
+}
+.fit-metrics dd {
+  margin: 0;
+  font-size: 16px;
+  color: var(--foreground);
+}
+.fit-note {
+  margin: 0;
+  font-size: 12px;
+}
+
+.fit-plots {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 12px;
+}
+.fit-dialog figure {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.fit-plot {
+  display: block;
+  width: 100%;
+  max-width: 560px;
+  height: auto;
+}
+.fit-plot__grid {
+  stroke: var(--chart-grid);
+  stroke-width: 1;
+}
+.fit-plot__frame {
+  fill: none;
+  stroke: var(--chart-axis);
+  stroke-width: 1;
+}
+.fit-plot__ref {
+  stroke: var(--danger);
+  stroke-width: 1.2;
+  stroke-dasharray: 4 3;
+}
+.fit-plot__dots {
+  fill: var(--accent);
+  fill-opacity: 0.22;
+}
+.fit-plot__bars {
+  fill: var(--foreground-tertiary);
+  fill-opacity: 0.55;
+}
+.fit-plot__tick {
+  fill: var(--foreground-secondary);
+  font: 10px var(--font-mono);
+}
+.fit-plot__label {
+  fill: var(--foreground-secondary);
+  font: 11px var(--font);
+}

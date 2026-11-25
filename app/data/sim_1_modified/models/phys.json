@@ -1,0 +1,475 @@
+{
+  "order": [
+    "In_Temp",
+    "ITE_Ener",
+    "Heat_Demand",
+    "HEX_Hall_T_in",
+    "HEX_Hall_m",
+    "HEX_Hall_T_out",
+    "HEX_Cond_T_in",
+    "HEX_Cond_m",
+    "HEX_Cond_T_out"
+  ],
+  "variables": {
+    "In_Temp": {
+      "intercept": 0.0,
+      "inputs": [
+        {
+          "parent": "In_Temp",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 1.866832661742446
+        },
+        {
+          "parent": "Cool_Set",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 2.0533116143922183
+        },
+        {
+          "parent": "ITE_Ener",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 12.10285158697849
+        }
+      ],
+      "equation": "a*In_Temp[t-1] + b*(Cool_Set[t-1] - In_Temp[t-1]) + c*ITE_Ener[t-1] + d",
+      "params": {
+        "a": 0.9386125190005402,
+        "b": 0.42440071496572973,
+        "c": 0.0026176935707938886,
+        "d": 1.564676835064326
+      },
+      "sigma": 0.3871479882963109,
+      "scale": 25.634292783415418,
+      "nmae_test": 0.009681309029440843,
+      "r2_train": 0.9569682862744191,
+      "r2_test": 0.9626369667307423,
+      "min": 19.764574,
+      "max": 28.443504,
+      "mean": 25.63278643154762
+    },
+    "ITE_Ener": {
+      "intercept": -23.724985503269313,
+      "inputs": [
+        {
+          "parent": "IT_Load",
+          "lag": -1,
+          "coef": 16.179161722450647,
+          "std": 0.2831380364600297
+        },
+        {
+          "parent": "IT_Load",
+          "lag": -2,
+          "coef": 31.3368042726645,
+          "std": 0.2831380364600297
+        },
+        {
+          "parent": "IT_Load",
+          "lag": -3,
+          "coef": 2.4122581502860663,
+          "std": 0.2831380364600297
+        },
+        {
+          "parent": "IT_Load",
+          "lag": -4,
+          "coef": -2.1807280718159245,
+          "std": 0.2831380364600297
+        },
+        {
+          "parent": "IT_Load",
+          "lag": -5,
+          "coef": -2.3557293919485947,
+          "std": 0.2831380364600297
+        },
+        {
+          "parent": "ITE_Ener",
+          "lag": -1,
+          "coef": -0.3123440990512359,
+          "std": 12.10285158697849
+        },
+        {
+          "parent": "ITE_Ener",
+          "lag": -2,
+          "coef": 0.05275261628744393,
+          "std": 12.10285158697849
+        },
+        {
+          "parent": "ITE_Ener",
+          "lag": -3,
+          "coef": 0.03738932025140206,
+          "std": 12.10285158697849
+        },
+        {
+          "parent": "ITE_Ener",
+          "lag": -4,
+          "coef": 0.013333395324219594,
+          "std": 12.10285158697849
+        },
+        {
+          "parent": "In_Temp",
+          "lag": -1,
+          "coef": 1.087412762900311,
+          "std": 1.866832661742446
+        },
+        {
+          "parent": "In_Temp",
+          "lag": -3,
+          "coef": 0.384471693903554,
+          "std": 1.866832661742446
+        },
+        {
+          "parent": "In_Temp",
+          "lag": -5,
+          "coef": 0.3372190212124801,
+          "std": 1.866832661742446
+        }
+      ],
+      "sigma": 4.958960773400944,
+      "scale": 38.192845837342034,
+      "nmae_test": 0.08645975317714422,
+      "r2_train": 0.8319620747344502,
+      "r2_test": 0.8455801542281469,
+      "min": 1.2788883333333334,
+      "max": 62.28070833333334,
+      "mean": 38.18168780827101
+    },
+    "Heat_Demand": {
+      "intercept": 4.1089849816846815,
+      "inputs": [
+        {
+          "parent": "Out_Temp",
+          "lag": -1,
+          "coef": -0.10418000176680299,
+          "std": 11.980068960788378
+        },
+        {
+          "parent": "Hour",
+          "lag": -1,
+          "coef": 0.08057341257706883,
+          "std": 6.922186552431729
+        },
+        {
+          "parent": "Hour",
+          "lag": -2,
+          "coef": -0.025827256836119278,
+          "std": 6.922186552431729
+        },
+        {
+          "parent": "Hour",
+          "lag": -3,
+          "coef": -0.03205505230794399,
+          "std": 6.922186552431729
+        },
+        {
+          "parent": "Hour",
+          "lag": -4,
+          "coef": -0.027749919584417308,
+          "std": 6.922186552431729
+        },
+        {
+          "parent": "Hour",
+          "lag": -5,
+          "coef": -0.0874725930841676,
+          "std": 6.922186552431729
+        },
+        {
+          "parent": "Heat_Demand",
+          "lag": -1,
+          "coef": 1.6511628428725855,
+          "std": 25.238103491386276
+        },
+        {
+          "parent": "Heat_Demand",
+          "lag": -2,
+          "coef": -0.9201941149609844,
+          "std": 25.238103491386276
+        },
+        {
+          "parent": "Heat_Demand",
+          "lag": -3,
+          "coef": -0.005983129739853722,
+          "std": 25.238103491386276
+        },
+        {
+          "parent": "Heat_Demand",
+          "lag": -4,
+          "coef": 0.2435337287277871,
+          "std": 25.238103491386276
+        },
+        {
+          "parent": "Heat_Demand",
+          "lag": -5,
+          "coef": -0.02726403742606368,
+          "std": 25.238103491386276
+        }
+      ],
+      "sigma": 3.82393580598422,
+      "scale": 19.604371013014692,
+      "nmae_test": 0.10496909473215864,
+      "r2_train": 0.9770267516443584,
+      "r2_test": 0.9782872530488248,
+      "min": 2.000217615087358,
+      "max": 146.0717604645881,
+      "mean": 19.626112582653256
+    },
+    "HEX_Hall_T_in": {
+      "intercept": 0.0,
+      "inputs": [
+        {
+          "parent": "In_Temp",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 1.866832661742446
+        }
+      ],
+      "equation": "In_Temp[t-1] + dT",
+      "params": {
+        "dT": 12.0
+      },
+      "sigma": 0.0,
+      "scale": 37.633685797388615,
+      "nmae_test": 0.0,
+      "r2_train": 1.0,
+      "r2_test": 1.0,
+      "min": 31.764574,
+      "max": 40.443504000000004,
+      "mean": 37.632180000915746
+    },
+    "HEX_Hall_m": {
+      "intercept": 0.0,
+      "inputs": [
+        {
+          "parent": "ITE_Ener",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 12.10285158697849
+        }
+      ],
+      "equation": "ITE_Ener[t-1] / (1.006*dT)",
+      "params": {
+        "dT": 11.999999999999998
+      },
+      "sigma": 2.661153090673132e-16,
+      "scale": 3.1633341910474613,
+      "nmae_test": 1.487066132146316e-16,
+      "r2_train": 1.0,
+      "r2_test": 1.0,
+      "min": 0.10593839739341729,
+      "max": 5.159104401369561,
+      "mean": 3.1624189360170676
+    },
+    "HEX_Hall_T_out": {
+      "intercept": 0.0,
+      "inputs": [
+        {
+          "parent": "In_Temp",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 1.866832661742446
+        },
+        {
+          "parent": "Heat_Demand",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 25.238103491386276
+        },
+        {
+          "parent": "ITE_Ener",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 12.10285158697849
+        }
+      ],
+      "equation": "(In_Temp[t-1] + dT) - minimum(eps*maximum(0, (In_Temp[t-1] + dT) - 25), Heat_Demand[t-1] / (1.006*(ITE_Ener[t-1] / (1.006*dT))))",
+      "params": {
+        "dT": 12.0,
+        "eps": 0.6
+      },
+      "sigma": 7.071824432778496e-16,
+      "scale": 34.07938465273535,
+      "nmae_test": 3.735082302200861e-18,
+      "r2_train": 1.0,
+      "r2_test": 1.0,
+      "min": 27.7058296,
+      "max": 40.00606799878245,
+      "mean": 34.076478127224405
+    },
+    "HEX_Cond_T_in": {
+      "intercept": 0.0,
+      "inputs": [
+        {
+          "parent": "Out_Temp",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 11.980068960788378
+        },
+        {
+          "parent": "Out_Hum",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 20.76715284215292
+        },
+        {
+          "parent": "ITE_Ener",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 12.10285158697849
+        },
+        {
+          "parent": "HVAC_Ener",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 5.492667026506844
+        }
+      ],
+      "equation": "maximum((Out_Temp[t-1]*arctan(0.151977*sqrt(Out_Hum[t-1] + 8.313659)) + arctan(Out_Temp[t-1] + Out_Hum[t-1]) - arctan(Out_Hum[t-1] - 1.676331) + 0.00391838*Out_Hum[t-1]**1.5*arctan(0.023101*Out_Hum[t-1]) - 4.686035) + approach, 27) + (ITE_Ener[t-1] + HVAC_Ener[t-1]) / (4.18*(maximum((ITE_Ener[t-1] + HVAC_Ener[t-1]), 45) / (4.18*dT)))",
+      "params": {
+        "approach": 3.9999999999999996,
+        "dT": 5.5
+      },
+      "sigma": 1.1937939875299401e-15,
+      "scale": 33.140841347742814,
+      "nmae_test": 4.785735146792449e-18,
+      "r2_train": 1.0,
+      "r2_test": 1.0,
+      "min": 27.168762522839508,
+      "max": 47.973041616356156,
+      "mean": 33.13867257272833
+    },
+    "HEX_Cond_m": {
+      "intercept": 0.0,
+      "inputs": [
+        {
+          "parent": "ITE_Ener",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 12.10285158697849
+        },
+        {
+          "parent": "HVAC_Ener",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 5.492667026506844
+        }
+      ],
+      "equation": "maximum((ITE_Ener[t-1] + HVAC_Ener[t-1]), 45) / (4.18*dT)",
+      "params": {
+        "dT": 5.5
+      },
+      "sigma": 0.0,
+      "scale": 2.13771693230134,
+      "nmae_test": 0.0,
+      "r2_train": 1.0,
+      "r2_test": 1.0,
+      "min": 1.9573727707699,
+      "max": 3.8334942607897156,
+      "mean": 2.137613713344419
+    },
+    "HEX_Cond_T_out": {
+      "intercept": 0.0,
+      "inputs": [
+        {
+          "parent": "Out_Temp",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 11.980068960788378
+        },
+        {
+          "parent": "Out_Hum",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 20.76715284215292
+        },
+        {
+          "parent": "ITE_Ener",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 12.10285158697849
+        },
+        {
+          "parent": "HVAC_Ener",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 5.492667026506844
+        },
+        {
+          "parent": "Heat_Demand",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 25.238103491386276
+        }
+      ],
+      "equation": "(maximum((Out_Temp[t-1]*arctan(0.151977*sqrt(Out_Hum[t-1] + 8.313659)) + arctan(Out_Temp[t-1] + Out_Hum[t-1]) - arctan(Out_Hum[t-1] - 1.676331) + 0.00391838*Out_Hum[t-1]**1.5*arctan(0.023101*Out_Hum[t-1]) - 4.686035) + approach, 27) + (ITE_Ener[t-1] + HVAC_Ener[t-1]) / (4.18*(maximum((ITE_Ener[t-1] + HVAC_Ener[t-1]), 45) / (4.18*dT)))) - minimum((ITE_Ener[t-1] + HVAC_Ener[t-1]), Heat_Demand[t-1]) / (4.18*(maximum((ITE_Ener[t-1] + HVAC_Ener[t-1]), 45) / (4.18*dT)))",
+      "params": {
+        "approach": 4.0,
+        "dT": 5.500000000000001
+      },
+      "sigma": 1.9413843412877953e-15,
+      "scale": 31.486578597697264,
+      "nmae_test": 2.134985670793671e-17,
+      "r2_train": 1.0,
+      "r2_test": 1.0,
+      "min": 26.999999999999996,
+      "max": 47.7735415164745,
+      "mean": 31.48401072991012
+    }
+  },
+  "drivers": [
+    "Cool_Set",
+    "HVAC_Ener",
+    "Hour",
+    "IT_Load",
+    "Out_Hum",
+    "Out_Temp"
+  ],
+  "max_lag": 5,
+  "split_index": 8736,
+  "split_time": "2024-01-01 00:00:00",
+  "rows": 17472,
+  "kind": "physics",
+  "name": "phys",
+  "file": "df_sim_1_modified",
+  "graph_file": "causal_graph_pcmci.json",
+  "requested_drivers": [
+    "Hour",
+    "Out_Temp",
+    "Out_Hum",
+    "Out_Wind",
+    "Out_Wind_Dir",
+    "Cool_Set",
+    "IT_Load"
+  ],
+  "structure": "graph",
+  "max_lag_setting": 5,
+  "variables_used": [
+    "In_Temp",
+    "In_Hum",
+    "HVAC_Ener",
+    "ITE_Ener",
+    "Hour",
+    "Out_Temp",
+    "Out_Hum",
+    "Out_Wind",
+    "Out_Wind_Dir",
+    "Cool_Set",
+    "IT_Load",
+    "Heat_Demand",
+    "HEX_Hall_T_in",
+    "HEX_Hall_T_out",
+    "HEX_Hall_m",
+    "HEX_Cond_T_in",
+    "HEX_Cond_T_out",
+    "HEX_Cond_m"
+  ],
+  "model_type": "physics",
+  "equations": {
+    "In_Temp": "a*In_Temp[t-1] + b*(Cool_Set[t-1] - In_Temp[t-1]) + c*ITE_Ener[t-1] + d",
+    "HEX_Hall_T_in": "In_Temp[t-1] + dT",
+    "HEX_Hall_m": "ITE_Ener[t-1] / (1.006*dT)",
+    "HEX_Hall_T_out": "(In_Temp[t-1] + dT) - minimum(eps*maximum(0, (In_Temp[t-1] + dT) - 25), Heat_Demand[t-1] / (1.006*(ITE_Ener[t-1] / (1.006*dT))))",
+    "HEX_Cond_m": "maximum((ITE_Ener[t-1] + HVAC_Ener[t-1]), 45) / (4.18*dT)",
+    "HEX_Cond_T_in": "maximum((Out_Temp[t-1]*arctan(0.151977*sqrt(Out_Hum[t-1] + 8.313659)) + arctan(Out_Temp[t-1] + Out_Hum[t-1]) - arctan(Out_Hum[t-1] - 1.676331) + 0.00391838*Out_Hum[t-1]**1.5*arctan(0.023101*Out_Hum[t-1]) - 4.686035) + approach, 27) + (ITE_Ener[t-1] + HVAC_Ener[t-1]) / (4.18*(maximum((ITE_Ener[t-1] + HVAC_Ener[t-1]), 45) / (4.18*dT)))",
+    "HEX_Cond_T_out": "(maximum((Out_Temp[t-1]*arctan(0.151977*sqrt(Out_Hum[t-1] + 8.313659)) + arctan(Out_Temp[t-1] + Out_Hum[t-1]) - arctan(Out_Hum[t-1] - 1.676331) + 0.00391838*Out_Hum[t-1]**1.5*arctan(0.023101*Out_Hum[t-1]) - 4.686035) + approach, 27) + (ITE_Ener[t-1] + HVAC_Ener[t-1]) / (4.18*(maximum((ITE_Ener[t-1] + HVAC_Ener[t-1]), 45) / (4.18*dT)))) - minimum((ITE_Ener[t-1] + HVAC_Ener[t-1]), Heat_Demand[t-1]) / (4.18*(maximum((ITE_Ener[t-1] + HVAC_Ener[t-1]), 45) / (4.18*dT)))"
+  }
+}

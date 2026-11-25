@@ -1,0 +1,215 @@
+/* Dashboard page (DashboardPage and its parts). Shared looks (.card, .field, .chip, .pill, .caps, .muted) come from src/ui/ui.css. */
+.dash__head { display: flex; justify-content: space-between; align-items: flex-end; gap: var(--space-4); flex-wrap: wrap; }
+/* KPI cards (data overview and data-center KPIs; --center marks the latter for the E2E spec): same-width cards, centred as a group and within each wrapped row */
+.dash__kpis { display: flex; flex-wrap: wrap; justify-content: center; gap: var(--space-3); }
+.dash__kpis > .kpi { flex: 0 1 220px; min-width: 170px; }
+/* the KPI card's caption and note centred too, so the whole block sits in the middle */
+.dash__kpi-card > .card__title { justify-content: center; }
+.dash__note { margin: 0; }
+.dash__kpi-card > .dash__note { text-align: center; }
+
+/* Roles, coloured as on the Physical structure page */
+.dash-role { margin-left: 6px; }
+.dash-role--heat { --pill: var(--heat-strong); }
+.dash-role--actuator, .dash-role--lever { --pill: var(--ok); }
+
+/* Variables table */
+.dash-table__wrap { overflow-x: auto; }
+.dash-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.dash-table th, .dash-table td { padding: 5px 8px; text-align: right; border-bottom: 1px solid var(--border); white-space: nowrap; }
+.dash-table th[scope="row"], .dash-table thead th:first-child { text-align: left; font-weight: 500; }
+.dash-table thead th { font-size: 11px; color: var(--foreground-secondary); font-weight: 600; }
+.dash-table__sort { background: none; border: 0; padding: 0; color: inherit; font: inherit; cursor: pointer; }
+.dash-table__sort:hover { color: var(--foreground); }
+.dash-table tbody tr:hover { background: var(--surface-2); }
+.dash-table__name { font-size: 12px; }
+
+/* Time series */
+.dash-series { display: flex; flex-direction: column; gap: var(--space-3); }
+.dash-series__row { display: flex; align-items: flex-start; }
+/* the note and the Rows / Tiles switch on one line; the tiles as many side by side as the width takes */
+.dash-series__bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.dash-series__list { display: flex; flex-direction: column; gap: var(--space-3); }
+.dash-series__list--tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(460px, 1fr)); gap: 12px 18px; }
+.dash-series__chart { flex: 1; min-width: 0; min-height: 130px; }
+/* the distribution beside each chart, on its y scale; the fill is its line's colour (set inline) */
+.dash-series__dist { flex: none; display: block; fill-opacity: 0.45; }
+.dash-series__name { font-size: 12px; font-weight: 600; }
+
+/* Distributions: one histogram per variable, min and max under it */
+.dash-dists { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: var(--space-3) var(--space-4); }
+.dash-dist { margin: 0; padding: 6px 8px; border-radius: var(--radius-sm); display: flex; flex-direction: column; gap: 4px; }
+.dash-dist--focus { background: var(--accent-light); }
+.dash-dist[role="button"] { cursor: pointer; }
+.dash-dist[role="button"]:hover { background: var(--surface-hover); }
+.dash-dist[role="button"]:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.dash-hist--big { height: 260px; }
+.dash-hist--big rect:hover { opacity: 0.7; }
+.dash-dist__stats { display: grid; grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)); gap: 10px 16px; margin: 16px 0 0; }
+.dash-dist__stats dd { margin: 2px 0 0; font-size: 14px; }
+.dash-dist__name { font-size: 12px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.dash-hist { display: block; width: 100%; height: 56px; fill: var(--accent); opacity: 0.75; }
+.dash-dist__range { display: flex; justify-content: space-between; font-size: 10px; }
+
+/* Correlation matrix and scatter */
+.dash-corr { display: flex; flex-direction: column; gap: var(--space-3); }
+.dash-corr__tools { display: flex; align-items: center; gap: var(--space-4); flex-wrap: wrap; }
+.dash-corr__tools .segmented { flex: none; }
+.dash-corr__tools .segmented > button { padding: 0 12px; white-space: nowrap; }
+.dash-corr__legend { display: inline-flex; align-items: center; gap: 6px; font-size: 11px; color: var(--foreground-secondary); }
+.dash-corr__ramp { width: 120px; height: 10px; border-radius: 5px; background: linear-gradient(90deg, var(--corr-neg), var(--corr-mid), var(--corr-pos)); }
+.dash-corr__body { display: grid; grid-template-columns: repeat(2, minmax(0, 460px)); gap: var(--space-6); align-items: start; } /* two equal squares, 460 px = SIZE */
+@media (max-width: 900px) { .dash-corr__body { grid-template-columns: minmax(0, 460px); } }
+.dash-corr__scroll { max-width: 100%; }
+.dash-corr__svg { display: block; max-width: 100%; height: auto; font-size: 11px; fill: var(--foreground-secondary); }
+.dash-corr__cell { cursor: pointer; }
+.dash-corr__cell:hover rect { stroke: var(--foreground); stroke-width: 1.5; }
+.dash-corr__on { stroke: var(--foreground); stroke-width: 2; }
+.dash-corr__none { stroke: var(--foreground-tertiary); stroke-width: 1; }
+.dash-corr__value { font-size: 10px; font-family: var(--font-mono); pointer-events: none; }
+.dash-corr__value--sm { font-size: 8.5px; }
+.dash-corr__pair { display: flex; flex-direction: column; gap: var(--space-2); min-width: 0; }
+.dash-corr__selects { display: flex; gap: var(--space-3); }
+.dash-corr__selects .field { max-width: 150px; }
+.dash-scatter { display: block; max-width: 100%; height: auto; font-size: 10px; fill: var(--foreground-secondary); }
+.dash-scatter circle { fill: var(--accent); fill-opacity: 0.45; }
+.dash-scatter__axis { stroke: var(--border-strong); }
+.dash-scatter__name { font-size: 11px; fill: var(--foreground); }
+
+/* Recommendations and Prepare variables, side by side when there is room */
+.dash__pair { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(520px, 100%), 1fr)); gap: var(--space-4); align-items: start; }
+.dash-recs { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--space-2); max-height: 520px; overflow: auto; }
+.dash-rec { display: flex; align-items: flex-start; gap: var(--space-2); padding: var(--space-2); border-radius: var(--radius-sm); background: var(--surface-2); font-size: 13px; line-height: 1.45; }
+.dash-rec__text { flex: 1; }
+.dash-rec .btn { flex: none; white-space: nowrap; }
+.dash-rec__kind { flex: none; }
+.dash-rec__kind--warn { --pill: var(--heat-strong); }
+.dash-rec__kind--info { --pill: var(--accent); }
+.dash-role--prepared { --pill: var(--accent); }
+.dash-prep { display: flex; flex-direction: column; gap: var(--space-3); scroll-margin-top: var(--space-6); }
+.dash-prep__row { display: flex; flex-wrap: wrap; gap: var(--space-3); align-items: flex-end; }
+.dash-prep__formula { min-width: 260px; }
+.dash-prep__actions { display: flex; gap: var(--space-2); align-items: center; flex-wrap: wrap; }
+.dash-prep__done { margin: 0; font-size: 13px; color: var(--ok); }
+.dash-prep__preview { display: flex; flex-direction: column; gap: var(--space-3); }
+.dash-prep__list h3 { margin: 0 0 var(--space-2); }
+.dash-prep__list ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 4px; font-size: 13px; }
+.dash-prep__list li { display: flex; align-items: center; gap: var(--space-2); }
+.dash-prep__list li .muted { flex: 1; }
+
+/* Weekly profile and missing-data map */
+.dash-profile, .dash-missing { display: flex; flex-direction: column; gap: var(--space-3); margin-top: var(--space-3); }
+.dash-profile__svg { width: 100%; max-width: 1100px; height: auto; }
+.dash-profile__label { font-size: 11px; fill: var(--foreground-secondary); }
+.dash-profile__ramp { display: inline-block; width: 120px; height: 10px; border-radius: 5px; background: linear-gradient(90deg, color-mix(in srgb, var(--accent) 8%, var(--surface)), var(--accent)); }
+.dash-missing__svg { width: 100%; height: auto; }
+
+/* Aggregate data: one method per variable */
+.dash-agg__grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 6px var(--space-3); max-height: 260px; overflow: auto; }
+.dash-agg__item { display: flex; align-items: center; justify-content: space-between; gap: var(--space-2); font-size: 12px; }
+.dash-agg__item .mono { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* Choose the KPI variables */
+.dash__kpi-vars { border-top: 1px solid var(--border); padding-top: 10px; }
+/* the KPI card's folded lines (More figures, Choose the KPI variables, Data overview): a chevron, small and calm,
+   the accent under the pointer and when open */
+.dash__kpi-vars > summary { list-style: none; cursor: pointer; display: flex; align-items: center; gap: 10px; font: 600 13px var(--font); letter-spacing: 0.01em; color: var(--foreground-secondary); }
+.dash__kpi-vars > summary::-webkit-details-marker { display: none; }
+.dash__kpi-vars > summary::before { content: ""; width: 7px; height: 7px; border-right: 1.6px solid currentColor; border-bottom: 1.6px solid currentColor; transform: rotate(-45deg); transition: transform 0.15s; }
+.dash__kpi-vars[open] > summary::before { transform: rotate(45deg); }
+.dash__kpi-vars > summary:hover, .dash__kpi-vars[open] > summary { color: var(--accent); }
+.dash__kpi-vars > .dash__kpis { margin-top: 12px; }
+/* the KPI card: the mode switch at its top left, the title in the middle */
+.dash__kpi-card { position: relative; }
+.dash__mode { position: absolute; top: 10px; left: 14px; z-index: 1; }
+.dash__overview { margin-top: 12px; }
+.dash__kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; margin: 10px 0; }
+.dash__kpi-heat { display: flex; flex-wrap: wrap; gap: 4px 14px; max-height: 140px; overflow: auto; border: 1px solid var(--border); border-radius: 6px; padding: 6px 10px; font-size: 13px; }
+.dash__kpi-ticks { margin-top: 8px; font-size: 13px; }
+.dash__kpi-ticks > summary { cursor: pointer; margin-bottom: 4px; }
+.dash__kpi-heat label { display: inline-flex; gap: 4px; align-items: center; }
+.dash__kpi-actions { display: flex; gap: 8px; align-items: center; margin-top: 10px; flex-wrap: wrap; }
+
+/* a data file too big to load: aggregate it, or keep one period */
+.dash-big { display: flex; flex-direction: column; gap: 12px; }
+.dash-big > p { margin: 0; }
+.dash-big__pair { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; }
+.dash-big__pair section { display: flex; flex-direction: column; gap: 8px; align-items: flex-start; }
+.dash-big__pair h3, .dash-big__pair p { margin: 0; }
+.dash-big__fields { display: flex; gap: 10px; flex-wrap: wrap; }
+.dash-big__vars { display: flex; flex-wrap: wrap; gap: 4px 14px; max-height: 180px; overflow: auto; border: 1px solid var(--border); border-radius: 6px; padding: 6px 10px; font-size: 13px; }
+.dash-big__vars label { display: inline-flex; gap: 4px; align-items: center; }
+.dash-role--group { --pill: var(--warn); }
+.dash-table__own { display: block; font-size: 10px; color: var(--foreground-tertiary); }
+
+/* What if (WhatIfCard): the levers on the left, the KPIs measured / twin without / twin with on the right */
+.whatif { display: flex; flex-direction: column; gap: 8px; }
+/* the sliders side by side: the card stays low, in the band where Historical has its data overview */
+.whatif__levers { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 8px 24px; }
+.whatif__levers > .dash-filters, .whatif__levers > .whatif__note { grid-column: 1 / -1; }
+.whatif__foot { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+/* the intervention variables' chips (in the panel on the left): actuators and setpoints with a green dot, as on the causal map */
+.whatif__actuator { display: inline-block; width: 7px; height: 7px; margin-right: 5px; border-radius: 50%; background: var(--ok); }
+.whatif__note { margin: 0; font-size: 12px; line-height: 1.5; }
+.whatif__table { width: 100%; border-collapse: collapse; font-size: 13px; font-variant-numeric: tabular-nums; }
+.whatif__table th, .whatif__table td { padding: 6px 8px; border-bottom: 1px solid var(--border); text-align: right; }
+.whatif__table th:first-child { text-align: left; }
+.whatif__table thead th { font-size: 12px; font-weight: 600; color: var(--foreground-secondary); }
+
+/* Scenarios mode: the same page in amber, as the Scenarios page draws the simulated */
+.dash--scenario { --accent: var(--warn); --accent-light: color-mix(in srgb, var(--warn) 14%, transparent); background: color-mix(in srgb, var(--warn) 5%, transparent); }
+.dash--scenario .card { border-color: color-mix(in srgb, var(--warn) 35%, var(--border)); }
+/* the Scenarios page's tools inside the Dashboard in Scenarios mode: full width, its own layout */
+.dash__scenarios { overflow: hidden; }
+/* the band under the KPIs (Historical's data overview; Scenarios' levers and replay buttons), its height kept in JS */
+.dash__band { display: flex; flex-direction: column; gap: var(--space-4, 16px); }
+
+/* the causal graph on the left of the Dashboard, pinned while scrolling */
+.dash-layout { display: flex; flex-wrap: wrap; min-height: 100%; width: 100%; }
+.dash-layout > .dash { flex: 1; min-width: 0; }
+/* only as tall as the graph, not a column down the whole page: a box at the top that moves down with the page */
+.dash-layout > .graph-side { align-self: flex-start; position: sticky; top: 0; border-bottom: 1px solid var(--border); border-bottom-right-radius: var(--radius-sm); }
+/* the graph and the time series' filters under it: taller than the window, the panel scrolls on its own
+   (ponytail: 120px is the top bar and the sub-tabs; measure them if that header changes height) */
+.dash-layout > .graph-side { max-height: calc(100vh / var(--fit, 1) - 120px); overflow-y: auto; }
+.dash-side-slot:empty { display: none; }
+.dash-filters { display: flex; flex-direction: column; gap: 8px; padding-top: 10px; border-top: 1px solid var(--border); }
+.dash-filters__period { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.dash-filters__period select { width: 100%; }
+.dash-filters__head { display: flex; align-items: center; gap: 4px; }
+.dash-filters__head .caps { flex: 1; }
+.dash-filters__hint { margin: 0; font-size: 11px; }
+.dash-filters .chips { gap: 4px; }
+.dash-filters .chip { height: 24px; padding: 0 8px; font-size: 12px; }
+/* a variable's chip and the legend: a dot in the colour of how it is modelled (--way, set inline) */
+.dash-chip { display: inline-flex; align-items: center; gap: 5px; user-select: none; } /* a double click selects no text */
+.dash-layout .minimap__node { user-select: none; }
+.dash-chip::before { content: ""; flex: none; width: 8px; height: 8px; border-radius: 50%; background: var(--way); }
+.dash-filters .chip.dash-chip.chip--on { background: var(--way); box-shadow: 0 0 0 3px color-mix(in srgb, var(--way) 22%, transparent); color: #fff; }
+.dash-chip.chip--on::before { background: #fff; }
+
+.dash-filters__legend { display: flex; flex-wrap: wrap; gap: 4px 12px; font-size: 11px; color: var(--foreground-secondary); }
+
+/* the variable picked in the causal graph on the left (shared/focus), marked in the tables */
+.dash-table__row--focus th, .dash-table__row--focus td { background: var(--accent-light); }
+.dash-profile__label--focus { fill: var(--accent); font-weight: 700; }
+/* Weekly and monthly: the two heatmaps side by side, as wide, their values on the cells */
+.dash-weekmonth { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-5); align-items: start; }
+@media (max-width: 1100px) { .dash-weekmonth { grid-template-columns: 1fr; } }
+.dash-profile__value { pointer-events: none; font-family: var(--font-mono); }
+/* Explore's tabs (DashboardPage VIEWS): one line each, ten across the card */
+.dash .card > .segmented[aria-label="View"] > button { white-space: nowrap; padding-inline: 6px; }
+/* the charts' read-out under each (uPlot's legend): small, close under the chart */
+.dash-series .u-legend { font-size: 11px; margin-top: -2px; }
+.dash-series .u-legend .u-marker { width: 9px; height: 9px; }
+/* the KPI card: its tiles, one row of tabs under them (as Explore's), the open one under the tabs; the More figures
+   panel (KpiRow's, controlled) moves under the tabs too (the group's parts are the card's own items) */
+.dash__kpi-card .kpi-group--ctl { display: contents; }
+.dash__kpi-card > * { order: 1; }
+.dash__kpi-card .kpi-group--ctl > .dash__kpis { order: 0; }
+.dash__kpi-card > .card__title { order: -1; }
+.dash__kpi-tabs { order: 2; display: flex; justify-content: center; gap: 6px; flex-wrap: wrap; padding: 4px; margin-top: 4px; border-radius: 12px; }
+.dash__kpi-card .kpi-more__panel--ctl, .dash__kpi-card .dash__kpi-vars-body, .dash__kpi-card [aria-label="Data overview"] { order: 3; }
+.dash__kpi-tab { border: none; background: transparent; cursor: pointer; padding: 6px 14px; border-radius: 9px; font: 500 13px var(--font); color: var(--foreground-secondary); }
+.dash__kpi-tab:hover { color: var(--foreground); box-shadow: var(--neo-in, none); }
+.dash__kpi-tab[aria-expanded="true"] { color: var(--accent); font-weight: 600; background: var(--surface); box-shadow: var(--neo-up-sm, var(--shadow-sm)); }

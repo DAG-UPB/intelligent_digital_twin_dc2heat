@@ -1,0 +1,71 @@
+{
+  "name": "Box · water cooled",
+  "kind": "simulation",
+  "actuators": [
+    "Cool_Set",
+    "IT_Load"
+  ],
+  "heat": [
+    "Heat_Demand",
+    "FC_Share",
+    "HEX_Liq_T_in",
+    "HEX_Liq_T_out",
+    "HEX_Liq_m",
+    "HEX_Liq_Q",
+    "HEX_Cond_T_in",
+    "HEX_Cond_T_out",
+    "HEX_Cond_m",
+    "HEX_Cond_Q"
+  ],
+  "levers": [
+    "Cool_Set"
+  ],
+  "pid_image": null,
+  "plant": {
+    "cooling": "liquid",
+    "heat_rejection": "cooling_tower",
+    "free_cooling": "plate_hex",
+    "chiller": "trim"
+  },
+  "heat_source": {
+    "liquid": {
+      "q": "HEX_Liq_Q",
+      "t": "HEX_Liq_T_in",
+      "t_in": "HEX_Liq_T_in",
+      "t_out": "HEX_Liq_T_out",
+      "m": "HEX_Liq_m"
+    },
+    "condenser": {
+      "q": "HEX_Cond_Q",
+      "t": "HEX_Cond_T_in",
+      "t_in": "HEX_Cond_T_in",
+      "t_out": "HEX_Cond_T_out",
+      "m": "HEX_Cond_m"
+    }
+  },
+  "derived": {
+    "HEX_Liq_Q": {
+      "m": "HEX_Liq_m",
+      "t_in": "HEX_Liq_T_in",
+      "t_out": "HEX_Liq_T_out",
+      "cp": 4.18
+    },
+    "HEX_Cond_Q": {
+      "m": "HEX_Cond_m",
+      "t_in": "HEX_Cond_T_in",
+      "t_out": "HEX_Cond_T_out",
+      "cp": 4.18
+    }
+  },
+  "kpi": {
+    "it_power": "ITE_Ener",
+    "cooling_power": "HVAC_Ener",
+    "heat_demand": "Heat_Demand",
+    "reuse": {
+      "liquid": "HEX_Liq_Q",
+      "condenser": "HEX_Cond_Q"
+    },
+    "power_unit": "kW"
+  },
+  "frame": true
+}

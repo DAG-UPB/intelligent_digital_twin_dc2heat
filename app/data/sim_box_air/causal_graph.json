@@ -1,0 +1,161 @@
+{
+  "targets": {
+    "Cool_Set": [],
+    "FC_Share": [
+      [
+        "Out_Temp",
+        -1
+      ],
+      [
+        "Out_Hum",
+        -1
+      ]
+    ],
+    "HEX_Cond_T_in": [
+      [
+        "Out_Temp",
+        -1
+      ],
+      [
+        "Out_Hum",
+        -1
+      ],
+      [
+        "ITE_Ener",
+        -1
+      ]
+    ],
+    "HEX_Cond_T_out": [
+      [
+        "Out_Temp",
+        -1
+      ],
+      [
+        "Out_Hum",
+        -1
+      ],
+      [
+        "ITE_Ener",
+        -1
+      ],
+      [
+        "Heat_Demand",
+        -1
+      ]
+    ],
+    "HEX_Cond_m": [
+      [
+        "Out_Temp",
+        -1
+      ],
+      [
+        "Out_Hum",
+        -1
+      ],
+      [
+        "ITE_Ener",
+        -1
+      ]
+    ],
+    "HEX_Hall_T_in": [
+      [
+        "In_Temp",
+        -1
+      ]
+    ],
+    "HEX_Hall_T_out": [
+      [
+        "ITE_Ener",
+        -1
+      ],
+      [
+        "In_Temp",
+        -1
+      ],
+      [
+        "Heat_Demand",
+        -1
+      ]
+    ],
+    "HEX_Hall_m": [
+      [
+        "ITE_Ener",
+        -1
+      ]
+    ],
+    "HVAC_Ener": [
+      [
+        "Out_Temp",
+        -1
+      ],
+      [
+        "Out_Hum",
+        -1
+      ],
+      [
+        "ITE_Ener",
+        -1
+      ]
+    ],
+    "Heat_Demand": [
+      [
+        "Out_Temp",
+        -1
+      ],
+      [
+        "Hour",
+        -1
+      ],
+      [
+        "Heat_Demand",
+        -1
+      ]
+    ],
+    "Heat_rejected": [],
+    "Hour": [],
+    "ITE_Ener": [
+      [
+        "IT_Load",
+        -1
+      ],
+      [
+        "ITE_Ener",
+        -1
+      ],
+      [
+        "In_Temp",
+        -1
+      ]
+    ],
+    "IT_Load": [],
+    "In_Hum": [],
+    "In_Temp": [
+      [
+        "In_Temp",
+        -1
+      ],
+      [
+        "Cool_Set",
+        -1
+      ],
+      [
+        "ITE_Ener",
+        -1
+      ],
+      [
+        "IT_Load",
+        -1
+      ],
+      [
+        "Out_Temp",
+        -1
+      ]
+    ],
+    "Out_Hum": [],
+    "Out_Temp": [],
+    "Out_Wind": [],
+    "Out_Wind_Dir": [],
+    "solar_radiation": []
+  },
+  "link_strengths": []
+}

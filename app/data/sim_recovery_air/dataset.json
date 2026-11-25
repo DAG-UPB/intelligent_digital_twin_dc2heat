@@ -1,0 +1,75 @@
+{
+  "name": "Recovery · air cooled",
+  "kind": "simulation",
+  "actuators": [
+    "Cool_Set",
+    "IT_Load"
+  ],
+  "heat": [
+    "Heat_Demand",
+    "Loop_T_cold",
+    "Loop_T_warm",
+    "HEX_Hall_T_in",
+    "HEX_Hall_T_out",
+    "HEX_Hall_m",
+    "HEX_Hall_Q",
+    "Heat_rejected"
+  ],
+  "levers": [
+    "Cool_Set"
+  ],
+  "pid_image": null,
+  "plant": {
+    "cooling": "air",
+    "heat_rejection": "cooling_tower",
+    "free_cooling": "plate_hex",
+    "chiller": "trim"
+  },
+  "heat_source": {
+    "hall": {
+      "q": "HEX_Hall_Q",
+      "t": "Loop_T_warm",
+      "t_in": "HEX_Hall_T_in",
+      "t_out": "HEX_Hall_T_out",
+      "m": "HEX_Hall_m",
+      "t_return": "Loop_T_cold"
+    },
+    "condenser": {
+      "q": "HEX_Cond_Q",
+      "t": "Loop_T_warm_Cond",
+      "t_in": "HEX_Cond_T_in",
+      "t_out": "HEX_Cond_T_out",
+      "m": "HEX_Cond_m",
+      "t_return": "Loop_T_cold"
+    }
+  },
+  "derived": {
+    "HEX_Hall_Q": {
+      "m": "HEX_Hall_m",
+      "t_in": "HEX_Hall_T_in",
+      "t_out": "HEX_Hall_T_out",
+      "cp": 4.18
+    },
+    "HEX_Cond_Q": {
+      "m": "HEX_Cond_m",
+      "t_in": "HEX_Cond_T_in",
+      "t_out": "HEX_Cond_T_out",
+      "cp": 4.18
+    }
+  },
+  "kpi": {
+    "it_power": "ITE_Ener",
+    "cooling_power": "HVAC_Ener",
+    "other_power": [
+      "Elec_Loss_Ener",
+      "Building_Ener"
+    ],
+    "heat_power": "HEX_Hall_Q",
+    "heat_demand": "Heat_Demand",
+    "reuse": {
+      "hall": "HEX_Hall_Q"
+    },
+    "power_unit": "kW"
+  },
+  "frame": true
+}

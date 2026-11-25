@@ -1,0 +1,93 @@
+/* Scenarios page: mode tabs, causal mini map sidebar, step-through replay and what-if, test-period simulation.
+   Shared looks (.card, .btn, .field, .caps, .muted) come from src/ui/ui.css; only what is specific to this page is here. */
+
+/* Shell */
+.scenarios { display: flex; flex-direction: column; min-height: 100%; width: 100%; }
+/* the mode tabs look like Historical's View switch (ui/Segmented) */
+.segmented.scenarios__tabs > button[aria-selected="true"] { font-weight: 600; background: var(--surface); color: var(--accent); box-shadow: var(--shadow-sm); }
+.scenarios__body { display: flex; flex: 1; min-height: 0; flex-wrap: wrap; }
+.scenarios__mode { flex: 1; min-width: 0; }
+.scenarios__mode[hidden] { display: none; }
+.step__main .caps { color: var(--foreground-tertiary); }
+
+/* Step-through page */
+.step { display: flex; flex-direction: column; min-height: 100%; }
+.step__head {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 16px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.step__main { flex: 1; display: flex; flex-direction: column; gap: 12px; padding-top: 12px; }
+/* the replay's buttons and window, in the band under the page's KPIs */
+.step__controls { display: flex; align-items: center; gap: 16px; }
+.step__controls > :first-child { flex: 1; min-width: 0; }
+.step__row { display: flex; align-items: center; gap: 8px; }
+.step__empty--grow { flex: 1; }
+.step__empty > svg { opacity: 0.4; }
+.step__empty { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; padding: 60px 0; color: var(--foreground-tertiary); font-size: 13px; }
+
+/* Replay bar */
+.replay { display: flex; align-items: center; gap: 10px; padding: 10px 14px; }
+.replay .btn { background: var(--surface); box-shadow: var(--shadow-sm); }
+.replay .btn:disabled { opacity: 0.3; }
+.replay__play.btn { width: 36px; height: 36px; border: 0; background: var(--accent); box-shadow: 0 0 0 4px var(--accent-light); }
+.replay__speed.btn { font-size: 11px; color: var(--foreground-secondary); padding: 0 10px; }
+.replay__divider { width: 1px; height: 20px; background: var(--border); flex-shrink: 0; }
+.replay input[type="range"] { flex: 1; accent-color: var(--accent); }
+.replay__time { min-width: 148px; text-align: right; font-size: 11px; color: var(--foreground-secondary); flex-shrink: 0; }
+
+/* One chart card per signal */
+.charts { display: flex; flex-direction: column; gap: 10px; }
+.chart-card { padding: 0; overflow: hidden; }
+.chart-card__head { display: flex; align-items: center; gap: 8px; padding: 10px 14px 8px; border-bottom: 1px solid var(--border); font-size: 12px; font-weight: 500; color: var(--foreground-secondary); }
+.chart-card__body { padding: 6px 8px 8px; }
+
+/* What-if panel */
+.whatif {
+  border-radius: var(--radius-md);
+  background: color-mix(in srgb, var(--warn) 5%, transparent);
+  border: 1px solid color-mix(in srgb, var(--warn) 30%, transparent);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.whatif__head { display: flex; align-items: center; justify-content: space-between; }
+.whatif__active { border: 0; padding: 2px 8px; text-transform: uppercase; letter-spacing: 0.06em; }
+.whatif__exit.btn { font-size: 11px; }
+.whatif__title { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; letter-spacing: -0.01em; color: var(--foreground); }
+.whatif__box { background: var(--surface-2); border-radius: var(--radius-sm); border: 1px solid var(--border); padding: 12px 14px; display: flex; flex-direction: column; gap: 10px; }
+.whatif__ready { font-size: 11px; color: var(--foreground-tertiary); line-height: 1.5; }
+.whatif__ready b { color: var(--ok); }
+.whatif__form { display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-end; }
+.whatif__form .field-label > span { font-size: 11px; font-weight: 400; letter-spacing: 0; text-transform: none; }
+.whatif__form .field-label { gap: 4px; }
+.whatif .field { height: 30px; padding: 0 8px; font-size: 12px; }
+.whatif__setup { display: flex; flex-direction: column; gap: 12px; }
+.whatif__setup > p, .whatif__label { font-size: 12px; color: var(--foreground-tertiary); margin: 0; }
+.whatif__label { font-size: 11px; }
+.whatif__section { display: flex; flex-direction: column; gap: 8px; }
+.whatif__override { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--foreground-secondary); }
+.whatif__override > span { min-width: 120px; }
+.whatif__override .field { width: 180px; }
+.whatif__steps { width: 72px; }
+.whatif__split { width: 64px; }
+.whatif__run { align-self: flex-start; }
+.whatif__stepper { display: flex; align-items: center; gap: 12px; }
+.whatif__count { font-size: 13px; font-weight: 600; }
+.progress { flex: 1; height: 4px; border-radius: 2px; background: var(--border); overflow: hidden; }
+.progress > span { display: block; height: 100%; background: var(--warn); border-radius: 2px; transition: width 0.2s ease; }
+
+/* Test-period simulation */
+.test-period__missing { padding: 48px; font-size: 14px; color: var(--foreground-secondary); }
+.test-period__controls { display: flex; flex-direction: column; gap: 12px; }
+.test-period__row { display: flex; gap: 16px; flex-wrap: wrap; align-items: flex-end; }
+.test-period__check { font-size: 12px; display: flex; gap: 4px; align-items: center; }
+.test-period__run.btn { padding: 0 20px; }
+.intervention { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; font-size: 13px; }
+.intervention__value { width: 90px; }
+.result__head { display: flex; gap: 16px; align-items: baseline; flex-wrap: wrap; margin-bottom: 6px; }
+.result__head b { font-weight: 600; }

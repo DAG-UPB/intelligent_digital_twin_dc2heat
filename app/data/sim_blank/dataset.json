@@ -1,0 +1,42 @@
+{
+  "name": "Blank · inputs and outputs only",
+  "kind": "simulation",
+  "blank": true,
+  "actuators": [
+    "IT_load"
+  ],
+  "heat": [
+    "Supply_temp",
+    "Return_temp",
+    "Water_flow",
+    "Heat_recovered",
+    "Heat_rejected"
+  ],
+  "levers": [],
+  "pid_image": null,
+  "heat_source": {
+    "condenser": {
+      "q": "Heat_recovered",
+      "t": "Supply_temp",
+      "t_in": "Supply_temp",
+      "t_out": "Return_temp",
+      "m": "Water_flow"
+    }
+  },
+  "derived": {
+    "Heat_recovered": {
+      "m": "Water_flow",
+      "t_in": "Supply_temp",
+      "t_out": "Return_temp",
+      "cp": 4.18
+    }
+  },
+  "kpi": {
+    "it_power": "IT_power",
+    "cooling_power": "Cooling_power",
+    "reuse": {
+      "condenser": "Heat_recovered"
+    },
+    "power_unit": "kW"
+  }
+}

@@ -1,0 +1,32 @@
+# What never goes into the image (Dockerfile): real data, the user's links and local folders, builds, caches.
+# Of app/data only the simulations (sim_*), without the drawings and documents a user may have put into them.
+app/data/*
+!app/data/sim_*
+app/data/*/.backup
+app/data/*/pid.png
+app/data/*/pid_plant.json
+app/data/*/pid_construct.json
+app/data/*/pid_views
+app/data/*/weather_open_meteo.json
+app/data/*/documents
+app/data/*/silver/documents
+app/data_versions
+app/.data_version
+**/_local
+**/_external
+**/_status
+**/.venv
+**/node_modules
+**/__pycache__
+**/.pytest_cache
+**/.ruff_cache
+app/web/dist
+docs/_build
+**/test-results
+**/playwright-report
+graphify-out
+.git
+.github
+.claude
+.mcp.json
+CLAUDE.md

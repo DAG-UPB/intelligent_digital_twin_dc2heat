@@ -1,0 +1,65 @@
+{
+  "order": [
+    "Heat_Demand"
+  ],
+  "variables": {
+    "Heat_Demand": {
+      "intercept": 0.0,
+      "inputs": [
+        {
+          "parent": "Heat_Demand",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 754.260604125565
+        },
+        {
+          "parent": "Out_Temp",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 10.635929055439474
+        }
+      ],
+      "equation": "a*Heat_Demand[t-1] + (1 - a)*(b*maximum(0, c - Out_Temp[t-1]) + d)",
+      "params": {
+        "a": 0.8743691340161027,
+        "b": 102.39847827273852,
+        "c": 18.269397769328446,
+        "d": 106.24421010889029
+      },
+      "sigma": 157.69590696296171,
+      "scale": 612.8283542032359,
+      "nmae_test": 0.1511851948465432,
+      "r2_train": 0.956293190254096,
+      "r2_test": 0.9534551303107348,
+      "min": 52.0889107884189,
+      "max": 4990.137281370183,
+      "mean": 612.8395132036871
+    }
+  },
+  "drivers": [
+    "Out_Temp"
+  ],
+  "max_lag": 1,
+  "split_index": 8736,
+  "split_time": "2024-01-01 00:00:00",
+  "rows": 17472,
+  "kind": "physics",
+  "name": "phys",
+  "file": "df_sim_district_heat",
+  "graph_file": "causal_graph.json",
+  "requested_drivers": [
+    "Hour",
+    "Out_Temp"
+  ],
+  "structure": "graph",
+  "max_lag_setting": 5,
+  "variables_used": [
+    "Hour",
+    "Out_Temp",
+    "Heat_Demand"
+  ],
+  "model_type": "physics",
+  "equations": {
+    "Heat_Demand": "a*Heat_Demand[t-1] + (1 - a)*(b*maximum(0, c - Out_Temp[t-1]) + d)"
+  }
+}

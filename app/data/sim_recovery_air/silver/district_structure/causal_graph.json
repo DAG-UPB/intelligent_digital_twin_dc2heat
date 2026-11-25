@@ -1,0 +1,32 @@
+{
+  "targets": {
+    "Out_Temp": [],
+    "Out_Temp_mean24": [],
+    "Out_Temp_mean72": [],
+    "Is_Weekend": [],
+    "Hour": [],
+    "Heat_Demand": [
+      [
+        "Out_Temp",
+        0
+      ],
+      [
+        "Out_Temp_mean24",
+        0
+      ],
+      [
+        "Out_Temp_mean72",
+        0
+      ],
+      [
+        "Is_Weekend",
+        0
+      ],
+      [
+        "Hour",
+        0
+      ]
+    ]
+  },
+  "link_strengths": []
+}

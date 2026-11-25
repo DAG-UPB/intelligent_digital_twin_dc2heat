@@ -1,0 +1,71 @@
+{
+  "name": "Box · air cooled, free cooling",
+  "kind": "simulation",
+  "actuators": [
+    "Cool_Set",
+    "IT_Load"
+  ],
+  "heat": [
+    "Heat_Demand",
+    "FC_Share",
+    "HEX_Hall_T_in",
+    "HEX_Hall_T_out",
+    "HEX_Hall_m",
+    "HEX_Hall_Q",
+    "HEX_Cond_T_in",
+    "HEX_Cond_T_out",
+    "HEX_Cond_m",
+    "HEX_Cond_Q"
+  ],
+  "levers": [
+    "Cool_Set"
+  ],
+  "pid_image": null,
+  "plant": {
+    "cooling": "air",
+    "heat_rejection": "cooling_tower",
+    "free_cooling": "plate_hex",
+    "chiller": "trim"
+  },
+  "heat_source": {
+    "hall": {
+      "q": "HEX_Hall_Q",
+      "t": "HEX_Hall_T_in",
+      "t_in": "HEX_Hall_T_in",
+      "t_out": "HEX_Hall_T_out",
+      "m": "HEX_Hall_m"
+    },
+    "condenser": {
+      "q": "HEX_Cond_Q",
+      "t": "HEX_Cond_T_in",
+      "t_in": "HEX_Cond_T_in",
+      "t_out": "HEX_Cond_T_out",
+      "m": "HEX_Cond_m"
+    }
+  },
+  "derived": {
+    "HEX_Hall_Q": {
+      "m": "HEX_Hall_m",
+      "t_in": "HEX_Hall_T_in",
+      "t_out": "HEX_Hall_T_out",
+      "cp": 1.006
+    },
+    "HEX_Cond_Q": {
+      "m": "HEX_Cond_m",
+      "t_in": "HEX_Cond_T_in",
+      "t_out": "HEX_Cond_T_out",
+      "cp": 4.18
+    }
+  },
+  "kpi": {
+    "it_power": "ITE_Ener",
+    "cooling_power": "HVAC_Ener",
+    "heat_demand": "Heat_Demand",
+    "reuse": {
+      "hall": "HEX_Hall_Q",
+      "condenser": "HEX_Cond_Q"
+    },
+    "power_unit": "kW"
+  },
+  "frame": true
+}

@@ -1,0 +1,27 @@
+{
+  "prepared": [
+    {
+      "name": "Out_Temp_mean24",
+      "op": "rolling_mean",
+      "inputs": [
+        "Out_Temp"
+      ],
+      "params": {
+        "window": 24
+      },
+      "scope": "district"
+    },
+    {
+      "name": "Out_Temp_mean72",
+      "op": "rolling_mean",
+      "inputs": [
+        "Out_Temp"
+      ],
+      "params": {
+        "window": 72
+      },
+      "scope": "district"
+    }
+  ],
+  "resampled": []
+}

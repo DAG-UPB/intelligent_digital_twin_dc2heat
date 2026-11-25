@@ -1,0 +1,233 @@
+{
+  "order": [
+    "Heat_Demand"
+  ],
+  "variables": {
+    "Heat_Demand": {
+      "intercept": 1115.2202707686251,
+      "inputs": [
+        {
+          "parent": "Out_Temp",
+          "lag": -1,
+          "coef": -42.2165990857089,
+          "std": 7.781080959315769
+        },
+        {
+          "parent": "Out_Temp",
+          "lag": -2,
+          "coef": 41.60417585867384,
+          "std": 7.781080959315769
+        },
+        {
+          "parent": "Out_Temp",
+          "lag": -3,
+          "coef": 5.860229931782621,
+          "std": 7.781080959315769
+        },
+        {
+          "parent": "Out_Temp",
+          "lag": -4,
+          "coef": 32.74229824163843,
+          "std": 7.781080959315769
+        },
+        {
+          "parent": "Out_Temp",
+          "lag": -5,
+          "coef": 8.110462135167639,
+          "std": 7.781080959315769
+        },
+        {
+          "parent": "Out_Temp_mean24",
+          "lag": -1,
+          "coef": 238.86292351685088,
+          "std": 7.198134116920657
+        },
+        {
+          "parent": "Out_Temp_mean24",
+          "lag": -2,
+          "coef": -593.726781113085,
+          "std": 7.198134116920657
+        },
+        {
+          "parent": "Out_Temp_mean24",
+          "lag": -3,
+          "coef": 201.2502876124111,
+          "std": 7.198134116920657
+        },
+        {
+          "parent": "Out_Temp_mean24",
+          "lag": -4,
+          "coef": -115.69760496380763,
+          "std": 7.198134116920657
+        },
+        {
+          "parent": "Out_Temp_mean24",
+          "lag": -5,
+          "coef": 244.94167232878704,
+          "std": 7.198134116920657
+        },
+        {
+          "parent": "Out_Temp_mean72",
+          "lag": -1,
+          "coef": 618.0304806018298,
+          "std": 7.037735950945088
+        },
+        {
+          "parent": "Out_Temp_mean72",
+          "lag": -2,
+          "coef": -1442.3857571142012,
+          "std": 7.037735950945088
+        },
+        {
+          "parent": "Out_Temp_mean72",
+          "lag": -3,
+          "coef": 543.9569992812438,
+          "std": 7.037735950945088
+        },
+        {
+          "parent": "Out_Temp_mean72",
+          "lag": -4,
+          "coef": -278.9955682726812,
+          "std": 7.037735950945088
+        },
+        {
+          "parent": "Out_Temp_mean72",
+          "lag": -5,
+          "coef": 504.34748110720477,
+          "std": 7.037735950945088
+        },
+        {
+          "parent": "Is_Weekend",
+          "lag": -1,
+          "coef": -65.73109203313615,
+          "std": 0.4517539514526256
+        },
+        {
+          "parent": "Is_Weekend",
+          "lag": -2,
+          "coef": 95.3325588417155,
+          "std": 0.4517539514526256
+        },
+        {
+          "parent": "Is_Weekend",
+          "lag": -3,
+          "coef": -0.45377859542235544,
+          "std": 0.4517539514526256
+        },
+        {
+          "parent": "Is_Weekend",
+          "lag": -4,
+          "coef": -71.57841044348045,
+          "std": 0.4517539514526256
+        },
+        {
+          "parent": "Is_Weekend",
+          "lag": -5,
+          "coef": 50.24173628424169,
+          "std": 0.4517539514526256
+        },
+        {
+          "parent": "Hour",
+          "lag": -1,
+          "coef": -3.4401642626517117,
+          "std": 6.922186552431729
+        },
+        {
+          "parent": "Hour",
+          "lag": -2,
+          "coef": -7.2038817410600755,
+          "std": 6.922186552431729
+        },
+        {
+          "parent": "Hour",
+          "lag": -3,
+          "coef": -5.7802305574722235,
+          "std": 6.922186552431729
+        },
+        {
+          "parent": "Hour",
+          "lag": -4,
+          "coef": -5.630517684793022,
+          "std": 6.922186552431729
+        },
+        {
+          "parent": "Hour",
+          "lag": -5,
+          "coef": -13.891890131943535,
+          "std": 6.922186552431729
+        },
+        {
+          "parent": "Heat_Demand",
+          "lag": -1,
+          "coef": 1.4846052525645859,
+          "std": 2858.1718882617015
+        },
+        {
+          "parent": "Heat_Demand",
+          "lag": -2,
+          "coef": -0.7858467024942549,
+          "std": 2858.1718882617015
+        },
+        {
+          "parent": "Heat_Demand",
+          "lag": -3,
+          "coef": -0.02358866836489855,
+          "std": 2858.1718882617015
+        },
+        {
+          "parent": "Heat_Demand",
+          "lag": -4,
+          "coef": 0.24968406515001076,
+          "std": 2858.1718882617015
+        },
+        {
+          "parent": "Heat_Demand",
+          "lag": -5,
+          "coef": -0.012789580370228898,
+          "std": 2858.1718882617015
+        }
+      ],
+      "sigma": 283.2680437451609,
+      "scale": 3418.5381528036883,
+      "nmae_test": 0.05441862722888162,
+      "r2_train": 0.9901828130134925,
+      "r2_test": 0.9902100963954177,
+      "min": 203.44346360135523,
+      "max": 13345.957241341008,
+      "mean": 3418.1331560607377
+    }
+  },
+  "drivers": [
+    "Hour",
+    "Is_Weekend",
+    "Out_Temp",
+    "Out_Temp_mean24",
+    "Out_Temp_mean72"
+  ],
+  "max_lag": 5,
+  "split_index": 8736,
+  "split_time": "2024-01-01 00:00:00",
+  "rows": 17472,
+  "kind": "linear",
+  "name": "linear_all",
+  "file": "df_sim_recovery_air",
+  "graph_file": "causal_graph.json",
+  "requested_drivers": [
+    "Hour",
+    "Out_Temp",
+    "Is_Weekend",
+    "Out_Temp_mean24",
+    "Out_Temp_mean72"
+  ],
+  "structure": "all",
+  "max_lag_setting": 5,
+  "variables_used": [
+    "Out_Temp",
+    "Out_Temp_mean24",
+    "Out_Temp_mean72",
+    "Is_Weekend",
+    "Hour",
+    "Heat_Demand"
+  ],
+  "model_type": "linear"
+}

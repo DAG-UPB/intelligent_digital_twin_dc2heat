@@ -1,0 +1,233 @@
+{
+  "order": [
+    "Heat_Demand"
+  ],
+  "variables": {
+    "Heat_Demand": {
+      "intercept": 0.0,
+      "inputs": [
+        {
+          "parent": "Out_Temp",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 7.781080959315769
+        },
+        {
+          "parent": "Out_Temp",
+          "lag": -2,
+          "coef": 0.0,
+          "std": 7.781080959315769
+        },
+        {
+          "parent": "Out_Temp",
+          "lag": -3,
+          "coef": 0.0,
+          "std": 7.781080959315769
+        },
+        {
+          "parent": "Out_Temp",
+          "lag": -4,
+          "coef": 0.0,
+          "std": 7.781080959315769
+        },
+        {
+          "parent": "Out_Temp",
+          "lag": -5,
+          "coef": 0.0,
+          "std": 7.781080959315769
+        },
+        {
+          "parent": "Out_Temp_mean24",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 7.198134116920657
+        },
+        {
+          "parent": "Out_Temp_mean24",
+          "lag": -2,
+          "coef": 0.0,
+          "std": 7.198134116920657
+        },
+        {
+          "parent": "Out_Temp_mean24",
+          "lag": -3,
+          "coef": 0.0,
+          "std": 7.198134116920657
+        },
+        {
+          "parent": "Out_Temp_mean24",
+          "lag": -4,
+          "coef": 0.0,
+          "std": 7.198134116920657
+        },
+        {
+          "parent": "Out_Temp_mean24",
+          "lag": -5,
+          "coef": 0.0,
+          "std": 7.198134116920657
+        },
+        {
+          "parent": "Out_Temp_mean72",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 7.037735950945088
+        },
+        {
+          "parent": "Out_Temp_mean72",
+          "lag": -2,
+          "coef": 0.0,
+          "std": 7.037735950945088
+        },
+        {
+          "parent": "Out_Temp_mean72",
+          "lag": -3,
+          "coef": 0.0,
+          "std": 7.037735950945088
+        },
+        {
+          "parent": "Out_Temp_mean72",
+          "lag": -4,
+          "coef": 0.0,
+          "std": 7.037735950945088
+        },
+        {
+          "parent": "Out_Temp_mean72",
+          "lag": -5,
+          "coef": 0.0,
+          "std": 7.037735950945088
+        },
+        {
+          "parent": "Is_Weekend",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 0.4517539514526256
+        },
+        {
+          "parent": "Is_Weekend",
+          "lag": -2,
+          "coef": 0.0,
+          "std": 0.4517539514526256
+        },
+        {
+          "parent": "Is_Weekend",
+          "lag": -3,
+          "coef": 0.0,
+          "std": 0.4517539514526256
+        },
+        {
+          "parent": "Is_Weekend",
+          "lag": -4,
+          "coef": 0.0,
+          "std": 0.4517539514526256
+        },
+        {
+          "parent": "Is_Weekend",
+          "lag": -5,
+          "coef": 0.0,
+          "std": 0.4517539514526256
+        },
+        {
+          "parent": "Hour",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 6.922186552431729
+        },
+        {
+          "parent": "Hour",
+          "lag": -2,
+          "coef": 0.0,
+          "std": 6.922186552431729
+        },
+        {
+          "parent": "Hour",
+          "lag": -3,
+          "coef": 0.0,
+          "std": 6.922186552431729
+        },
+        {
+          "parent": "Hour",
+          "lag": -4,
+          "coef": 0.0,
+          "std": 6.922186552431729
+        },
+        {
+          "parent": "Hour",
+          "lag": -5,
+          "coef": 0.0,
+          "std": 6.922186552431729
+        },
+        {
+          "parent": "Heat_Demand",
+          "lag": -1,
+          "coef": 0.0,
+          "std": 2858.1718882617015
+        },
+        {
+          "parent": "Heat_Demand",
+          "lag": -2,
+          "coef": 0.0,
+          "std": 2858.1718882617015
+        },
+        {
+          "parent": "Heat_Demand",
+          "lag": -3,
+          "coef": 0.0,
+          "std": 2858.1718882617015
+        },
+        {
+          "parent": "Heat_Demand",
+          "lag": -4,
+          "coef": 0.0,
+          "std": 2858.1718882617015
+        },
+        {
+          "parent": "Heat_Demand",
+          "lag": -5,
+          "coef": 0.0,
+          "std": 2858.1718882617015
+        }
+      ],
+      "sigma": 70.01192039517734,
+      "scale": 3418.5381528036883,
+      "nmae_test": 0.0185762594346477,
+      "r2_train": 0.9994002973881251,
+      "r2_test": 0.998269571138276,
+      "min": 203.44346360135523,
+      "max": 13345.957241341008,
+      "mean": 3418.1331560607377
+    }
+  },
+  "drivers": [
+    "Hour",
+    "Is_Weekend",
+    "Out_Temp",
+    "Out_Temp_mean24",
+    "Out_Temp_mean72"
+  ],
+  "max_lag": 5,
+  "split_index": 8736,
+  "split_time": "2024-01-01 00:00:00",
+  "rows": 17472,
+  "kind": "xgboost",
+  "name": "xgb_all",
+  "file": "df_sim_recovery_air",
+  "graph_file": "causal_graph.json",
+  "requested_drivers": [
+    "Hour",
+    "Out_Temp",
+    "Is_Weekend",
+    "Out_Temp_mean24",
+    "Out_Temp_mean72"
+  ],
+  "structure": "all",
+  "max_lag_setting": 5,
+  "variables_used": [
+    "Out_Temp",
+    "Out_Temp_mean24",
+    "Out_Temp_mean72",
+    "Is_Weekend",
+    "Hour",
+    "Heat_Demand"
+  ],
+  "model_type": "xgboost"
+}

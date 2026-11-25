@@ -1,0 +1,474 @@
+{
+  "targets": {
+    "Hour": [],
+    "Out_Temp": [],
+    "Out_Hum": [],
+    "Is_Weekend": [],
+    "Cool_Set": [],
+    "IT_Load": [
+      [
+        "IT_Load",
+        -1
+      ],
+      [
+        "Hour",
+        -1
+      ],
+      [
+        "Is_Weekend",
+        -1
+      ]
+    ],
+    "Heat_Demand": [],
+    "ITE_Ener": [
+      [
+        "IT_Load",
+        -1
+      ],
+      [
+        "In_Temp",
+        -1
+      ]
+    ],
+    "In_Temp": [
+      [
+        "In_Temp",
+        -1
+      ],
+      [
+        "Cool_Set",
+        -1
+      ],
+      [
+        "ITE_Ener",
+        -1
+      ]
+    ],
+    "Loop_T_cold": [
+      [
+        "Loop_T_cold",
+        -1
+      ],
+      [
+        "Out_Temp",
+        -1
+      ],
+      [
+        "IT_Load",
+        -1
+      ],
+      [
+        "In_Temp",
+        -1
+      ],
+      [
+        "Heat_Demand",
+        -1
+      ]
+    ],
+    "Loop_T_warm": [
+      [
+        "IT_Load",
+        -1
+      ],
+      [
+        "In_Temp",
+        -1
+      ],
+      [
+        "Loop_T_cold",
+        -1
+      ]
+    ],
+    "HEX_Hall_T_in": [
+      [
+        "In_Temp",
+        -1
+      ]
+    ],
+    "HEX_Hall_T_out": [
+      [
+        "IT_Load",
+        -1
+      ],
+      [
+        "In_Temp",
+        -1
+      ],
+      [
+        "Loop_T_cold",
+        -1
+      ]
+    ],
+    "HEX_Hall_m": [
+      [
+        "IT_Load",
+        -1
+      ],
+      [
+        "In_Temp",
+        -1
+      ]
+    ],
+    "HEX_Cond_T_in": [
+      [
+        "IT_Load",
+        -1
+      ],
+      [
+        "In_Temp",
+        -1
+      ],
+      [
+        "Out_Temp",
+        -1
+      ],
+      [
+        "Out_Hum",
+        -1
+      ]
+    ],
+    "HEX_Cond_T_out": [
+      [
+        "IT_Load",
+        -1
+      ],
+      [
+        "In_Temp",
+        -1
+      ],
+      [
+        "Out_Temp",
+        -1
+      ],
+      [
+        "Out_Hum",
+        -1
+      ],
+      [
+        "Loop_T_cold",
+        -1
+      ]
+    ],
+    "HEX_Cond_m": [
+      [
+        "IT_Load",
+        -1
+      ],
+      [
+        "In_Temp",
+        -1
+      ],
+      [
+        "Out_Temp",
+        -1
+      ],
+      [
+        "Out_Hum",
+        -1
+      ]
+    ],
+    "Loop_T_warm_Cond": [
+      [
+        "IT_Load",
+        -1
+      ],
+      [
+        "In_Temp",
+        -1
+      ],
+      [
+        "Out_Temp",
+        -1
+      ],
+      [
+        "Out_Hum",
+        -1
+      ],
+      [
+        "Loop_T_cold",
+        -1
+      ]
+    ],
+    "HVAC_Ener": [
+      [
+        "IT_Load",
+        -1
+      ],
+      [
+        "In_Temp",
+        -1
+      ],
+      [
+        "Out_Temp",
+        -1
+      ],
+      [
+        "Out_Hum",
+        -1
+      ],
+      [
+        "Loop_T_cold",
+        -1
+      ]
+    ],
+    "Elec_Loss_Ener": [
+      [
+        "IT_Load",
+        -1
+      ],
+      [
+        "In_Temp",
+        -1
+      ]
+    ],
+    "Building_Ener": [
+      [
+        "Hour",
+        -1
+      ],
+      [
+        "Out_Temp",
+        -1
+      ]
+    ],
+    "Heat_rejected": [
+      [
+        "IT_Load",
+        -1
+      ],
+      [
+        "In_Temp",
+        -1
+      ],
+      [
+        "Out_Temp",
+        -1
+      ],
+      [
+        "Out_Hum",
+        -1
+      ],
+      [
+        "Loop_T_cold",
+        -1
+      ],
+      [
+        "Hour",
+        -1
+      ]
+    ]
+  },
+  "link_strengths": [
+    {
+      "source": "Cool_Set",
+      "target": "In_Temp",
+      "lag": -1,
+      "value": 0.4840200079483155
+    },
+    {
+      "source": "Hour",
+      "target": "Building_Ener",
+      "lag": -1,
+      "value": -0.06236319719417134
+    },
+    {
+      "source": "Hour",
+      "target": "IT_Load",
+      "lag": -1,
+      "value": 0.0614663874505408
+    },
+    {
+      "source": "ITE_Ener",
+      "target": "In_Temp",
+      "lag": -1,
+      "value": 0.03734541298385157
+    },
+    {
+      "source": "IT_Load",
+      "target": "Elec_Loss_Ener",
+      "lag": -1,
+      "value": 0.9995144719459329
+    },
+    {
+      "source": "IT_Load",
+      "target": "HEX_Cond_T_in",
+      "lag": -1,
+      "value": 0.3292286034901081
+    },
+    {
+      "source": "IT_Load",
+      "target": "HEX_Cond_T_out",
+      "lag": -1,
+      "value": 0.5789330924782885
+    },
+    {
+      "source": "IT_Load",
+      "target": "HEX_Cond_m",
+      "lag": -1,
+      "value": 0.9256505276214798
+    },
+    {
+      "source": "IT_Load",
+      "target": "HEX_Hall_T_out",
+      "lag": -1,
+      "value": 0.29146157107885723
+    },
+    {
+      "source": "IT_Load",
+      "target": "HEX_Hall_m",
+      "lag": -1,
+      "value": 0.9646535822306381
+    },
+    {
+      "source": "IT_Load",
+      "target": "HVAC_Ener",
+      "lag": -1,
+      "value": 0.7207587282368701
+    },
+    {
+      "source": "IT_Load",
+      "target": "Heat_rejected",
+      "lag": -1,
+      "value": 0.6646569415897939
+    },
+    {
+      "source": "IT_Load",
+      "target": "ITE_Ener",
+      "lag": -1,
+      "value": 0.9998570247222943
+    },
+    {
+      "source": "IT_Load",
+      "target": "Loop_T_warm",
+      "lag": -1,
+      "value": 0.8357170437161129
+    },
+    {
+      "source": "IT_Load",
+      "target": "Loop_T_warm_Cond",
+      "lag": -1,
+      "value": 0.6612753728400169
+    },
+    {
+      "source": "In_Temp",
+      "target": "Elec_Loss_Ener",
+      "lag": -1,
+      "value": 0.03187159762493041
+    },
+    {
+      "source": "In_Temp",
+      "target": "HEX_Hall_T_in",
+      "lag": -1,
+      "value": 0.9999999999999998
+    },
+    {
+      "source": "In_Temp",
+      "target": "HEX_Hall_T_out",
+      "lag": -1,
+      "value": 0.10433210791737071
+    },
+    {
+      "source": "In_Temp",
+      "target": "HEX_Hall_m",
+      "lag": -1,
+      "value": -0.4248528400594501
+    },
+    {
+      "source": "In_Temp",
+      "target": "ITE_Ener",
+      "lag": -1,
+      "value": 0.061027890157443046
+    },
+    {
+      "source": "Loop_T_cold",
+      "target": "HEX_Hall_T_out",
+      "lag": -1,
+      "value": 0.30051161874410687
+    },
+    {
+      "source": "Loop_T_cold",
+      "target": "HVAC_Ener",
+      "lag": -1,
+      "value": 0.028094724275520504
+    },
+    {
+      "source": "Loop_T_cold",
+      "target": "Heat_rejected",
+      "lag": -1,
+      "value": 0.1646283921933604
+    },
+    {
+      "source": "Loop_T_cold",
+      "target": "Loop_T_warm",
+      "lag": -1,
+      "value": 0.44857830906615154
+    },
+    {
+      "source": "Loop_T_cold",
+      "target": "Loop_T_warm_Cond",
+      "lag": -1,
+      "value": 0.5270176509117975
+    },
+    {
+      "source": "Out_Hum",
+      "target": "HEX_Cond_T_in",
+      "lag": -1,
+      "value": 0.043512014558497354
+    },
+    {
+      "source": "Out_Hum",
+      "target": "HVAC_Ener",
+      "lag": -1,
+      "value": 0.15092043734155391
+    },
+    {
+      "source": "Out_Hum",
+      "target": "Heat_rejected",
+      "lag": -1,
+      "value": -0.09361933879120074
+    },
+    {
+      "source": "Out_Temp",
+      "target": "HEX_Cond_m",
+      "lag": -1,
+      "value": 0.028174735925529958
+    },
+    {
+      "source": "Out_Temp",
+      "target": "HVAC_Ener",
+      "lag": -1,
+      "value": 0.3086274389108239
+    },
+    {
+      "source": "Out_Temp",
+      "target": "Heat_rejected",
+      "lag": -1,
+      "value": 0.1271919755192181
+    },
+    {
+      "source": "Out_Temp",
+      "target": "Loop_T_warm_Cond",
+      "lag": -1,
+      "value": 0.04364801462137731
+    },
+    {
+      "source": "IT_Load",
+      "target": "IT_Load",
+      "lag": -1,
+      "value": 0.6911638460948972
+    },
+    {
+      "source": "In_Temp",
+      "target": "In_Temp",
+      "lag": -1,
+      "value": 0.5381078205660911
+    },
+    {
+      "source": "Loop_T_cold",
+      "target": "Loop_T_cold",
+      "lag": -1,
+      "value": 0.7010679662313393
+    }
+  ]
+}

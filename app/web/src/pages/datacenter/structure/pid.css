@@ -1,0 +1,212 @@
+/* Physical structure page (PidPage and its parts). Shared looks (.btn, .card, .field, .caps) come from src/ui/ui.css. */
+
+.pid-page { padding: 24px; display: flex; flex-direction: column; gap: 12px; }
+
+/* Title, description and the controls */
+.pid-toolbar { display: flex; gap: 12px; align-items: flex-end; flex-wrap: wrap; }
+.pid-intro { flex: 1; min-width: 280px; }
+.pid-intro h1 { font-size: 18px; font-weight: 600; margin: 0; }
+.pid-intro p { font-size: 13px; color: var(--foreground-secondary); margin: 4px 0 0; }
+.pid-group { display: flex; align-items: center; gap: 6px; font-size: 12px; }
+.btn.pid-file { font-weight: 400; }
+
+/* "Save as" and "+ Variable" bars under the toolbar */
+.pid-bar { display: flex; gap: 8px; align-items: center; font-size: 13px; }
+.pid-hint { color: var(--foreground-secondary); }
+.pid-hint--error { color: var(--danger); }
+.pid-status { font-size: 13px; color: var(--foreground-secondary); }
+.pid-draft { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+
+/* Stage slider: the band marks "graph in place", the stop labels jump to a stage */
+.pid-stage { position: relative; padding-bottom: 22px; font-size: 13px; }
+.pid-stage input { width: 100%; }
+.pid-stage__band { position: absolute; top: 22px; height: 4px; border-radius: 2px; background: var(--accent-light); }
+.pid-stage__stop {
+  position: absolute;
+  top: 26px;
+  border: none;
+  background: none;
+  padding: 0;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  color: var(--foreground-secondary);
+}
+.pid-stage__stop[aria-pressed="true"] { color: var(--accent); }
+
+/* Drawing and side panel (the panel sits on the left) */
+.pid-main { display: flex; gap: 12px; align-items: flex-start; }
+/* as tall as the drawing (aspect-ratio, set inline), but never taller than the page's scroll area (max-height, set
+   by useView): a tall P&ID fits whole, the wheel zooms into it and a drag pans down. Sticky: scrolling the page
+   brings all of it on screen, and it stays there while the side panel scrolls on. */
+.pid-canvas { flex: 1; min-width: 0; padding: 0; position: sticky; top: 8px; overflow: hidden; } /* sticky also holds the zoom buttons */
+.pid-canvas > svg { width: 100%; height: auto; display: block; touch-action: none; user-select: none; }
+.pid-side { order: -1; width: 260px; flex-shrink: 0; min-width: 0; padding: 14px; font-size: 13px; display: flex; flex-direction: column; gap: 10px; }
+.pid-stack { display: flex; flex-direction: column; gap: 4px; }
+.pid-side .field { width: 100%; }
+.pid-muted { color: var(--foreground-secondary); }
+.pid-faint { color: var(--foreground-tertiary); }
+.btn.pid-delete { color: var(--danger); }
+
+/* Link chips of the selected variable (red: no evidence from lag discovery) */
+.pid-chips { display: flex; flex-wrap: wrap; gap: 4px; }
+.pid-chip {
+  border: 1px solid color-mix(in srgb, #8b5cf6 40%, transparent);
+  background: color-mix(in srgb, #8b5cf6 12%, transparent);
+  color: color-mix(in srgb, #8b5cf6 70%, var(--foreground));
+  border-radius: 999px;
+  padding: 2px 8px;
+  font-size: 11px;
+  cursor: pointer;
+}
+.pid-chip--warn { border-color: color-mix(in srgb, var(--danger) 40%, transparent); background: var(--danger-bg); color: var(--danger); }
+
+/* Legend */
+.pid-legend { margin-top: auto; border-top: 1px solid var(--border); padding-top: 10px; display: flex; flex-direction: column; gap: 6px; }
+.pid-legend__row { display: flex; align-items: center; gap: 8px; font-size: 12px; }
+.pid-legend__tags { font-size: 11px; color: var(--foreground-secondary); line-height: 1.5; }
+/* in the drawing's right margin, under the connection point (the margin's width, set inline): compact, it scrolls if long */
+.pid-legend-side { position: absolute; right: 6px; bottom: 8px; z-index: 4; max-height: 38%; overflow: auto; font-size: 11px; } /* below the connection point's water */
+.pid-legend-side .pid-legend { margin-top: 0; border-top: 0; padding-top: 0; gap: 4px; }
+.pid-legend-side .pid-legend__row { font-size: 11px; gap: 6px; flex-wrap: wrap; }
+.pid-legend-side .pid-legend__tags { display: none; } /* the tag list: too long for the margin */
+
+/* SVG text: labels with a halo so they stay readable over lines */
+.pid-halo { paint-order: stroke; stroke: var(--surface); stroke-width: 3px; }
+
+/* The paper's drawing is black on white: invert it in dark mode, keeping its hues */
+:root[data-theme="dark"] .pid-paper { filter: invert(0.88) hue-rotate(180deg); }
+
+/* Import dialog */
+.pid-import__head { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.pid-import__head h2 { margin: 0; font-size: 18px; }
+.pid-import__note { margin: 0; font-size: 12px; color: var(--foreground-secondary); }
+.pid-import__stats { display: flex; gap: 16px; flex-wrap: wrap; font-size: 13px; }
+.pid-import__stat { padding: 8px 12px; border-radius: var(--radius-sm); background: var(--surface-2); }
+.pid-import__stat > span:first-child { display: block; font-size: 11px; color: var(--foreground-secondary); }
+.pid-import__stat > span:last-child { display: block; font-family: var(--font-mono); font-weight: 700; font-size: 18px; }
+.pid-import__sheet { position: relative; flex: none; background: #fff; border-radius: var(--radius-md); border: 1px solid var(--border); overflow: hidden; }
+.pid-import__sheet > img { display: block; width: 100%; opacity: 0.45; }
+.pid-import__sheet > svg { width: 100%; height: auto; }
+.pid-import__sheet > img + svg { position: absolute; inset: 0; height: 100%; }
+.pid-import__sheet > svg.pid-import__read { inset: auto; }
+.pid-import__sheet > svg.pid-import__area { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.pid-import__sheet > svg.pid-import__area--on { pointer-events: auto; cursor: crosshair; touch-action: none; }
+.pid-import__list { font-size: 12px; line-height: 1.7; }
+.pid-import__warnings { margin: 0; padding-left: 18px; font-size: 12px; color: var(--foreground-secondary); }
+.pid-layers { flex-wrap: wrap; }
+.pid-layers__group { display: inline-flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+.pid-layers__check { display: inline-flex; gap: 4px; align-items: center; }
+
+/* a shape's values in the inspector: name, value, remove */
+.pid-value { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto; gap: 4px; align-items: center; }
+.pid-value__name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 12px; }
+
+/* zoom, fit and lock in the drawing's top right corner */
+.pid-zoom {
+  position: absolute; top: 8px; right: 8px; z-index: 5; display: flex; gap: 4px; align-items: center;
+  padding: 4px; border: 1px solid var(--border); border-radius: 6px; background: var(--surface);
+}
+.pid-zoom__pct { min-width: 44px; text-align: center; font-size: 12px; font-variant-numeric: tabular-nums; }
+
+/* the Variables menu at the top of the side panel */
+.pid-vars { display: flex; flex-direction: column; gap: 6px; border-bottom: 1px solid var(--border); padding-bottom: 10px; }
+.pid-vars__tools { display: flex; gap: 6px; flex-wrap: wrap; }
+.pid-vars__list { list-style: none; margin: 0; padding: 0; max-height: 300px; overflow: auto; border: 1px solid var(--border); border-radius: 6px; }
+.pid-vars__item { display: flex; align-items: center; gap: 6px; padding: 2px 6px; cursor: grab; }
+.pid-vars__item--on { background: var(--accent-soft, rgb(124 58 237 / 0.1)); }
+.pid-vars__name { flex: 1; min-width: 0; text-align: left; background: none; border: 0; padding: 2px 0; font: inherit; color: inherit; cursor: pointer; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+/* the row under the pointer (or in focus) shows its whole name, wrapped */
+.pid-vars__item:hover .pid-vars__name, .pid-vars__name:focus-visible { white-space: normal; overflow-wrap: anywhere; }
+.pid-vars__size { display: flex; align-items: center; gap: 8px; }
+.pid-vars__size input { flex: 1; min-width: 0; }
+
+/* the bar above the drawing (the drawing has the whole width): the Variables bar, its list a dropdown */
+.pid-topbar { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; padding: 8px 12px; margin-bottom: 8px; font-size: 13px; }
+.pid-topbar .pid-vars { flex-direction: row; flex-wrap: wrap; align-items: center; gap: 8px; border-bottom: 0; padding-bottom: 0; }
+.pid-topbar .pid-vars .field { width: 200px; }
+.pid-kpis { flex-basis: 100%; display: flex; flex-wrap: wrap; gap: 4px 18px; margin: 0; padding: 0; list-style: none; font-size: 12px; } /* the KPI variables' formulas, a line under the bar */
+.pid-kpis__missing { color: var(--danger); }
+.pid-kpis__name { border: 0; border-radius: 6px; background: none; padding: 1px 5px; font: inherit; font-weight: 700; color: var(--foreground); cursor: pointer; } /* a KPI: click to mark only its variables */
+.pid-kpis__name:hover { background: var(--border); }
+.pid-kpis__name[aria-pressed="true"] { background: var(--accent); color: #fff; }
+.pid-vars__drop { position: relative; }
+.pid-vars__drop > summary { list-style: none; cursor: pointer; }
+.pid-vars__drop > summary::-webkit-details-marker { display: none; }
+.pid-vars__pop {
+  position: absolute; top: calc(100% + 4px); left: 0; z-index: 20; width: 320px; padding: 10px;
+  display: flex; flex-direction: column; gap: 6px; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; box-shadow: var(--shadow-md);
+}
+.pid-topbar .pid-vars__size { width: 200px; }
+/* "+ Variable"'s name field, right under its button */
+.pid-vars__new { position: relative; }
+.pid-vars__newbar {
+  position: absolute; top: calc(100% + 4px); left: 0; z-index: 20; padding: 8px 10px; flex-wrap: wrap; width: max-content; max-width: 560px;
+  background: var(--surface); border: 1px solid var(--border); border-radius: 8px; box-shadow: var(--shadow-md);
+}
+.pid-vars__way { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 4px; } /* a filter chip's approach colour (roles.ts) */
+/* what was clicked, edited in a card over the drawing's corner; closed, the drawing is free again */
+.pid-inspect { position: absolute; top: 8px; left: 8px; z-index: 6; order: 0; width: 300px; max-height: calc(100% - 16px); overflow: auto; box-shadow: var(--shadow-md); }
+.pid-inspect__close { position: absolute; top: 6px; right: 6px; }
+/* above the drawing, folded: views, documents, the change log and the legend */
+.pid-more { margin-bottom: 8px; padding: 8px 14px; font-size: 13px; }
+.pid-more > summary { cursor: pointer; font-weight: 600; }
+.pid-more__body { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px; margin-top: 10px; align-items: start; }
+
+/* an instrument's whole name shows while the pointer rests on it (Instrument.tsx) */
+.pid-inst__full { display: none; pointer-events: none; }
+.pid-inst:hover .pid-inst__full { display: inline; }
+
+/* several selected variables: what can be done with them, over the drawing's top left (SelectionBar.tsx) */
+.pid-selbar {
+  position: absolute; top: 8px; left: 8px; z-index: 5; display: flex; flex-direction: column; gap: 6px; max-width: calc(100% - 300px);
+  padding: 6px 8px; border: 1px solid var(--border); border-radius: 6px; background: var(--surface); font-size: 12px;
+}
+.pid-selbar__row { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+.pid-selbar__field { display: flex; gap: 4px; align-items: center; }
+.pid-selbox { fill: var(--accent-light); stroke: var(--accent); stroke-dasharray: 5 3; pointer-events: none; }
+
+/* the log of changes on the page (ChangesBox.tsx) */
+.pid-changes summary { cursor: pointer; }
+.pid-changes__list { list-style: none; margin: 6px 0; padding: 0; max-height: 200px; overflow: auto; display: flex; flex-direction: column; gap: 4px; font-size: 12px; }
+.pid-changes__by { display: inline-block; min-width: 26px; margin-right: 4px; padding: 0 4px; border-radius: 4px; text-align: center; font-size: 10px; font-weight: 700; background: var(--border); }
+.pid-changes__by--ai { background: var(--accent); color: var(--accent-fg); }
+.pid-vars__kind { display: inline-block; min-width: 18px; padding: 0 3px; border-radius: 6px; color: #fff; font-size: 9px; font-weight: 700; text-align: center; }
+.pid-legend__wrap { flex-wrap: wrap; gap: 4px; }
+.pid-legend__ring { display: inline-flex; align-items: center; gap: 2px; }
+
+/* views: areas of the P&ID with a picture of their own (views.ts) */
+.pid-view__panel { fill: var(--surface); }
+.pid-view__frame { fill: none; stroke: var(--accent); stroke-width: 2; stroke-dasharray: 8 4; vector-effect: non-scaling-stroke; }
+.pid-view__name { fill: var(--accent); font-weight: 700; font-family: sans-serif; cursor: pointer; }
+.pid-view__name:hover { text-decoration: underline; }
+.pid-views { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 4px; }
+.pid-views li { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; }
+.pid-views li > .btn--ghost:first-child { flex: 1; justify-content: flex-start; text-align: left; overflow-wrap: anywhere; }
+.pid-view__box { fill: color-mix(in srgb, var(--accent) 16%, transparent); stroke: var(--accent); stroke-width: 2; vector-effect: non-scaling-stroke; }
+.pid-view__name--box { text-anchor: middle; dominant-baseline: central; }
+.pid-views__status { flex-basis: 100%; font-size: 11px; }
+
+/* Under the structure: the page that models it, whole (BelowStructure) */
+.pid-below { margin: 12px -24px -24px; border-top: 1px solid var(--border); min-height: 120px; }
+.pid-below__wait { padding: 24px; }
+/* DropMenu: one variable dropped on another, at the drop */
+.pid-drop { position: fixed; z-index: 40; display: flex; flex-direction: column; gap: 4px; padding: 8px; width: 170px; box-shadow: var(--shadow-md); font-size: 12px; }
+.pid-drop__head { margin-bottom: 2px; overflow-wrap: anywhere; }
+.pid-drop .btn { justify-content: flex-start; }
+.pid-drop__cancel { color: var(--foreground-secondary); }
+/* the variables bar holds the slider and the folded views too: one row instead of three */
+.pid-topbar__stage { flex: 1 1 320px; min-width: 260px; padding-top: 4px; }
+.pid-topbar__stage .pid-stage { padding-bottom: 18px; font-size: 11px; }
+.pid-more--inline { margin: 0; padding: 0; }
+.pid-more--inline > summary { white-space: nowrap; padding: 4px 12px; border-radius: 999px; background: var(--surface-2); font-size: 12px; }
+.pid-more--inline[open] { flex-basis: 100%; }
+/* the page's controls in one card (PidPage .pid-controls): the toolbar on top, the variables bar under it */
+.pid-controls { display: flex; flex-direction: column; gap: 6px; padding: 10px 14px; margin-bottom: 8px; }
+.pid-controls > .pid-topbar { padding: 6px 0 0; margin: 0; border-top: 1px solid var(--border); }
+.pid-controls .pid-status { margin: 0; }
+
+/* a heat exchanger on the built-in drawing: a click picks it as the extraction point (PidCanvas HexPicks) */
+.pid-hex-pick { fill: transparent; cursor: pointer; outline: none; }
+.pid-hex-pick:hover, .pid-hex-pick:focus-visible { stroke: var(--accent); stroke-width: 2; }

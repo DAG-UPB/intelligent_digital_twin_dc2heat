@@ -1,0 +1,16 @@
+{
+  "sinks": [],
+  "building": null,
+  "source": null,
+  "pid_layout": {},
+  "pid_notes": {},
+  "pid_views": [],
+  "hex_option": "condenser",
+  "district": null,
+  "heat_source_map": null,
+  "outdoor": "data",
+  "heat_parts": null,
+  "twin_model": "xgb",
+  "heat_components": null,
+  "network_station": null
+}

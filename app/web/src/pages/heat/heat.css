@@ -1,0 +1,182 @@
+/* Heat distribution page (src/pages/heat): layout, the cards' small controls and the flow diagram's text. */
+
+/* the page's five figures across its width (the others under More details, five to a row too) */
+.heat-kpis { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 16px; }
+.heat-kpis .kpi { padding: 18px 22px; gap: 6px; border-radius: var(--radius-lg); }
+.heat-kpis .kpi__value { font-size: 32px; font-weight: 700; }
+.heat-kpis .kpi__sub { font-size: 12px; }
+.heat-kpis .kpi__unit { font-size: 16px; }
+/* a KPI box's figures (HeatFactsInfo.tsx): a line each, name left, number right, how it is counted under them */
+.heat-facts { display: flex; flex-direction: column; gap: 6px; margin: 0; }
+.heat-facts > div { display: flex; justify-content: space-between; gap: 16px; padding-bottom: 6px; border-bottom: 1px solid var(--border); }
+.heat-facts dt { color: var(--foreground-secondary); font-size: 13px; }
+.heat-facts dd { margin: 0; font-size: 15px; font-weight: 600; }
+.heat-facts__note { margin: 10px 0 0; font-size: 12px; line-height: 1.45; color: var(--foreground-secondary); }
+/* Cards: data center | heat distribution (its three parts side by side) | district heat */
+.heat-cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; align-items: start; }
+@media (max-width: 1100px) { .heat-cards { grid-template-columns: 1fr; } }
+/* the cards under the flow diagram's columns: their widths and gaps (PartViews.tsx alignedCards) */
+@media (min-width: 1101px) { .heat-cards--aligned { grid-template-columns: var(--hc-cols); column-gap: var(--hc-gap); padding-inline: var(--hc-pad); } }
+.heat-cards .slider { font-size: 12px; }
+.heat-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+.heat-note { font-size: 11px; color: var(--foreground-tertiary); margin: 0; line-height: 1.45; }
+.heat-unit { color: var(--foreground-secondary); font-weight: 500; }
+.heat-meta { font-size: 12px; color: var(--foreground-secondary); }
+.heat-point-name { font-size: 12px; font-weight: 600; }
+.heat-link { color: var(--accent); font-weight: 600; font-size: 12px; }
+.heat-empty { padding: 60px; text-align: center; }
+
+.heat-formula {
+  font-size: 11px;
+  line-height: 1.6;
+  padding: 8px 10px;
+  border-radius: var(--radius-sm);
+  background: var(--surface-2);
+  color: var(--foreground-secondary);
+}
+
+/* MapEditor: column picker in one row */
+.heat-pick { display: grid; grid-template-columns: 1fr minmax(0, 1.4fr); align-items: center; gap: 6px; font-size: 12px; }
+.heat-pick .field { font-size: 12px; }
+
+/* District card figures */
+.heat-stats .stat__value { color: var(--cool-strong); }
+
+/* Chart cards */
+.heat-chart-head { display: flex; gap: 12px; align-items: baseline; flex-wrap: wrap; margin-bottom: 8px; }
+.heat-chart-head--center { align-items: center; }
+.heat-flow-card { padding: 16px 20px; }
+.heat-flow-card .heat-chart-head { justify-content: space-between; gap: 8px; margin-bottom: 6px; }
+.heat-diagram-scroll { overflow-x: auto; margin-inline: -20px; } /* as wide as the card: its columns over the cards below */
+.heat-diagram-scroll > svg { min-width: 720px; }
+.heat-winnav { display: flex; align-items: center; gap: 8px; margin-left: auto; flex: 1 1 280px; max-width: 460px; }
+.heat-winnav input[type="range"] { flex: 1; accent-color: var(--accent); }
+.heat-winnav__label { font-size: 12px; min-width: 128px; text-align: right; }
+
+/* Flow diagram (HeatFlowDiagram.tsx) */
+.heat-diagram { width: 100%; height: auto; display: block; overflow: visible; } /* the boxes' bottom line sits on its edge: not cut */
+.hf-fade { transition: opacity 0.2s; }
+.hf-flow { animation: hf-dash 1.2s linear infinite; }
+@keyframes hf-dash { to { stroke-dashoffset: -24; } }
+@media (prefers-reduced-motion: reduce) { .hf-flow { animation-duration: 4s; } } /* slower, but the flow still shows which way the heat goes */
+.hf-point { cursor: pointer; outline: none; }
+.hf-point:focus-visible rect { stroke: var(--accent); stroke-width: 2.5; }
+.hf-head { font: 600 10.5px var(--font); letter-spacing: 0.1em; fill: var(--foreground-tertiary); }
+.hf-title { font: 600 12.5px var(--font); fill: var(--foreground); }
+.hf-sub { font: 10.5px var(--font); fill: var(--foreground-secondary); }
+.hf-dc-title { font: 600 13px var(--font); fill: var(--foreground); }
+.hf-dc-sub { font: 11px var(--font-mono); fill: var(--foreground-secondary); }
+.hf-point-sub { font: 11px var(--font); fill: var(--foreground-secondary); }
+.hf-point-q { font: 600 17px var(--font-mono); }
+.hf-point-t { font: 600 14px var(--font-mono); }
+.hf-row-title { font: 600 11.5px var(--font); fill: var(--foreground); }
+.hf-row-value { font: 600 12px var(--font-mono); }
+.hf-flow-label { font: 600 11px var(--font-mono); paint-order: stroke; stroke: var(--surface); stroke-width: 4; }
+.hf-temp { font: 600 10.5px var(--font-mono); paint-order: stroke; stroke: var(--surface); stroke-width: 4; }
+.hf-weather { font: 600 11.5px var(--font-mono); fill: var(--foreground-secondary); }
+.hf-derived { fill: var(--foreground-tertiary); }
+.hf-thumb-link text { font: 600 10.5px var(--font); fill: var(--accent); }
+.hf-pick { fill: transparent; cursor: pointer; outline: none; }
+.hf-pick:hover, .hf-pick:focus-visible { stroke: var(--accent); stroke-width: 2; }
+
+.heat-logic { display: flex; flex-direction: column; gap: 6px; }
+.heat-settings { font-size: 12px; border-top: 1px solid var(--border); padding-top: 8px; }
+.heat-settings > summary { cursor: pointer; color: var(--accent); font-weight: 600; }
+.heat-settings__body { display: flex; flex-direction: column; gap: 10px; padding-top: 10px; }
+.heat-from { display: block; }
+.heat-units { display: flex; flex-wrap: wrap; gap: 6px; }
+.heat-plants { display: grid; gap: 4px; font-size: 12px; }
+
+/* Heat Matching: the year to pick the window from (YearPicker) and the what-if levers on the flow diagram (HeatDistributionPage) */
+.twin-year__charts { display: flex; flex-direction: column; gap: 2px; border-radius: 6px; }
+.twin-year__charts:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+.twin-whatif { margin: 10px 0 0; border-top: 1px solid var(--border); padding-top: 8px; font-size: 12px; }
+/* What if…: a clear button, not a small line */
+.twin-whatif > summary { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; list-style: none; }
+.twin-whatif > summary::-webkit-details-marker { display: none; }
+.twin-whatif__pill { display: inline-flex; align-items: center; gap: 6px; cursor: pointer; padding: 7px 16px; border: 1px solid var(--accent); border-radius: 999px; background: var(--accent-light); color: var(--accent); font-weight: 600; font-size: 14px; }
+.twin-whatif__pill:hover { background: color-mix(in srgb, var(--accent) 18%, transparent); }
+.twin-whatif[open] > summary { margin-bottom: 4px; }
+/* what it holds, beside the button (decorative: the control's name stays "What if…") */
+.twin-whatif__what { font-weight: 400; font-size: 12px; color: var(--foreground-secondary); }
+.twin-whatif__weather { display: flex; align-items: center; justify-content: center; gap: 8px; margin: 8px 0 6px; }
+.twin-whatif__weather input[type="range"] { width: 180px; }
+/* the levers in four columns side by side (a part each); in a column one under the other: the caption over the control
+   and its value */
+.twin-whatif__list { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px 28px; margin: 10px 0 0; }
+.twin-whatif__col { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 3px 10px; align-content: start; align-items: center; }
+.twin-whatif__col > label, .twin-whatif__col > div { display: contents; }
+.twin-whatif__col > label > .caps:first-child { grid-column: 1 / -1; margin-top: 4px; }
+.twin-whatif__col > label > span:empty, .twin-whatif__col > div > span:empty { display: none; }
+.twin-whatif__col input[type="range"], .twin-whatif__col select { width: 100%; }
+.twin-whatif__col .btn { justify-self: start; }
+.twin-whatif__group { grid-column: 1 / -1; padding-bottom: 2px; border-bottom: 1px solid var(--border); color: var(--foreground); }
+.twin-whatif__check { display: flex; align-items: center; gap: 8px; }
+/* open, the panel is one framed box; with a scenario on, the frame in the accent colour */
+.twin-whatif[open], .hm-look .twin-whatif[open] { border: 1px solid var(--border); border-radius: 14px; padding: 10px 16px 14px; }
+.twin-whatif.twin-whatif--on, .hm-look .twin-whatif.twin-whatif--on { border: 2px solid var(--warn); background: var(--warn-bg); }
+.twin-whatif__on { font-size: 11px; font-weight: 600; color: color-mix(in srgb, var(--warn) 55%, var(--foreground)); }
+/* a scenario on: the parts' frames, the KPI tiles and the What if… box turn yellow, so it is plain a scenario is shown */
+.heat-flow-card--scenario .hf-part-frame { stroke: color-mix(in srgb, var(--warn) 75%, var(--tone)); stroke-width: 3; fill: color-mix(in srgb, var(--warn) 9%, var(--surface)); }
+.heat-kpis--scenario .kpi { box-shadow: inset 0 0 0 2px color-mix(in srgb, var(--warn) 70%, transparent); }
+/* the part cards under the diagram's boxes, inside the heat flow card: as wide as its columns, side by side, each a row
+   of controls right under its box (no longer set into the box: nothing lies over the drawing) */
+.heat-cards--under { margin: 10px -20px 0; position: relative; }
+.heat-cards--under > .card { box-shadow: none; }
+@media (min-width: 1101px) {
+  .heat-cards--under { margin-top: 4px; }
+  /* the cards grow with the diagram (cqw: the share of its width), so they fill the boxes' feet at any screen size */
+  .heat-cards--under { container-type: inline-size; }
+  .heat-cards--under > .card { background: transparent; border: none !important; padding: 0 0.4em; grid-row: 1; align-self: start; gap: 0.35em; font-size: clamp(9.5px, 0.85cqw, 20px); }
+  .heat-cards--under .segmented { padding: 0.25em; gap: 0.25em; }
+  .heat-cards--under .segmented > button { height: 2.3em; font-size: 1em; }
+  .heat-cards--under > .card > .heat-settings { border-top: none; padding-top: 0; font-size: 1em; }
+  /* More options opens as a panel under its box, over what follows: the other boxes' switches stay where they are */
+  .heat-cards--under > .card { position: relative; }
+  .heat-cards--under > .card > .heat-settings > .heat-settings__body { position: absolute; z-index: 30; left: 0.6em; right: 0.6em; top: calc(100% + 6px); max-height: calc(70vh / var(--fit, 1)); overflow: auto; padding: 12px 14px; border: 1px solid var(--border-strong); border-radius: 12px; background: var(--surface); box-shadow: var(--shadow-md, 0 10px 28px rgba(0, 0, 0, 0.16)); font-size: 12px; }
+  .heat-cards--under > .card:nth-of-type(2) { grid-column: 2; }
+  .heat-cards--under > .card:nth-of-type(3) { grid-column: 3; }
+  .heat-cards--under > .card:nth-of-type(1) { grid-column: 1; }
+  .heat-cards--under > .card > .card__title { display: none; }
+}
+
+/* Heat Matching: the three systems it matches, each picked on its own */
+
+/* a part's model and system, from a small folder at the top right of its column, next to "Model ›" (SystemLoad) */
+.heat-load { position: relative; flex: none; display: inline-flex; align-items: center; justify-content: center; width: 26px; height: 24px; border-radius: 6px; color: var(--foreground-secondary); }
+.heat-load:hover, .heat-load:focus-within { background: var(--surface-hover); color: var(--foreground); }
+.heat-load select { position: absolute; inset: 0; width: 100%; opacity: 0; cursor: pointer; font-size: 13px; }
+
+/* Heat Matching (HeatDistributionPage .hm-look; the look itself is ui/look.css): compact, the KPI row with its details
+   under it, no line over What if… */
+.hm-look { padding-block: 14px; gap: 16px; }
+.hm-look .heat-kpis { gap: 10px; }
+/* the KPI row stays on top while the page scrolls: an open What if… and the KPIs it moves on one screen */
+.hm-look .heat-flow-card, .hm-look .heat-flow-card * { scroll-margin-top: 96px; } /* scrolled to (a tour): below that row */
+.hm-look .kpi-group:has(> .heat-kpis) { position: sticky; top: 0; z-index: 6; margin-top: -14px; padding-block: 10px 20px; background: var(--background); }
+.hm-look .heat-kpis .kpi { padding: 7px 14px; gap: 1px; } /* low: the flow and an open What if… fit on a laptop's screen with them */
+.hm-look .heat-kpis .kpi__value { font-size: 24px; }
+.hm-look .heat-kpis .kpi__unit { font-size: 13px; }
+.hm-look .heat-kpis .kpi__sub { font-size: 11px; }
+.hm-look > .heat-flow-card { padding: 4px 16px 6px; } /* little room over the weather band and under What if… */
+.hm-look .twin-whatif { border-top: none; }
+/* Heat Matching in detail (MatchDetail.tsx): five groups side by side, a figure and its note per line */
+.match-detail { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
+.match-detail__group { padding: 12px 16px; border-radius: 14px; background: var(--surface); border: 1px solid var(--look-edge, var(--border)); }
+.match-detail__group h3 { margin: 0 0 8px; font-size: 10px; color: var(--foreground-secondary); }
+.match-detail dl { margin: 0; display: flex; flex-direction: column; gap: 6px; }
+.match-detail dl > div { display: grid; grid-template-columns: 1fr auto; column-gap: 10px; font-size: 12px; }
+.match-detail dt { color: var(--foreground-secondary); }
+.match-detail dd { margin: 0; text-align: right; font-weight: 600; }
+.match-detail dd.match-detail__note { grid-column: 1 / -1; text-align: left; font: 11px var(--font); font-weight: 400; color: var(--foreground-tertiary); }
+/* the weather band opens the weather window (WeatherWindow.tsx) */
+.hf-weather-band { cursor: pointer; outline: none; }
+.hf-weather-band:hover > rect:first-of-type, .hf-weather-band:focus-visible > rect:first-of-type { stroke: var(--accent); stroke-width: 1.5; }
+.twin-whatif__weather-btn { margin: 8px auto 0; display: block; }
+.weather-window { display: flex; flex-direction: column; gap: 12px; width: min(560px, 92vw); }
+.weather-window h2 { margin: 0; }
+.weather-window__gen { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)) auto; gap: 10px; align-items: end; }
+.weather-window__file { display: flex; flex-direction: column; gap: 6px; font-size: 13px; }
+.weather-window__error { color: var(--danger); margin: 0; font-size: 13px; }
+.weather-window__now { margin: 0; font-size: 12px; }

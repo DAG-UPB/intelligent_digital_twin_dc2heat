@@ -1,0 +1,58 @@
+/* Intelligent Digital Twin documentation: the app's "aurora" palette on sphinx-book-theme. */
+
+html[data-theme="light"] {
+    --pst-color-primary: #5B4BFF;
+    --pst-color-link: #5B4BFF;
+    --pst-color-link-hover: #4936F5;
+    --pst-color-secondary: #8B5CF6;
+}
+
+html[data-theme="dark"] {
+    --pst-color-primary: #8B7CFF;
+    --pst-color-link: #8B7CFF;
+    --pst-color-link-hover: #A79CFF;
+    --pst-color-secondary: #A78BFA;
+}
+
+/* The app's brand gradient as a thin bar above the page */
+.bd-header-article::before {
+    content: "";
+    display: block;
+    height: 3px;
+    background: linear-gradient(90deg, #3B82F6, #8B5CF6, #F43F5E);
+}
+
+/* Toggle blocks with source code */
+.toggle-details summary {
+    font-weight: 600;
+    color: var(--pst-color-link);
+    cursor: pointer;
+}
+
+.toggle-details .highlight {
+    border-left: 3px solid var(--pst-color-link);
+}
+
+/* Math display spacing (display blocks only: inline math in tables stays on its line) */
+div.math {
+    margin: 1em 0;
+}
+
+/* Wide tables (API reference) scroll instead of squeezing */
+.bd-article table {
+    display: block;
+    overflow-x: auto;
+}
+
+/* Widen the content area */
+:root {
+    --pst-container-width: 100vw !important;
+}
+
+.bd-page-width {
+    max-width: 95% !important;
+}
+
+.bd-article-container, .bd-content {
+    max-width: 100% !important;
+}

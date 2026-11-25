@@ -1,0 +1,145 @@
+/*
+ * The app's look, on every page (main.tsx imports it; remove the import and the app looks as before): texture behind
+ * the pages (a fine grain and a soft glow of the twin's colours on top), cards with a light top edge and a long soft
+ * shadow, and neumorphism as an accent: KPI tiles in soft relief (a light shadow top left, a dark one bottom right,
+ * the colour of what they sit on), switches sunk in with the chosen option raised, small buttons as raised pills.
+ * No glass blur: it would make every card a layer of its own, and menus opening over the next card would go under it.
+ */
+:root {
+  --look-hi: rgba(255, 255, 255, 0.8); /* a card's light top edge */
+  --look-edge: color-mix(in srgb, var(--foreground) 8%, transparent);
+  --neo-dark: rgba(150, 156, 190, 0.42);
+  --neo-light: rgba(255, 255, 255, 0.95);
+  --neo-up: 6px 6px 14px var(--neo-dark), -6px -6px 14px var(--neo-light);
+  --neo-up-sm: 3px 3px 7px var(--neo-dark), -3px -3px 7px var(--neo-light);
+  --neo-in: inset 3px 3px 7px var(--neo-dark), inset -3px -3px 7px var(--neo-light);
+  --neo-bg: var(--background); /* what a relief sits on: the page, inside a card the card */
+  --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .08 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+:root[data-theme="dark"] {
+  --look-hi: rgba(255, 255, 255, 0.06);
+  --look-edge: color-mix(in srgb, white 9%, transparent);
+  --neo-dark: rgba(0, 0, 0, 0.6);
+  --neo-light: rgba(255, 255, 255, 0.045);
+  --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* behind the pages: the glow on top (it scrolls away with the page) and the grain */
+/* the glow takes the part's colour: the data center's pages red, the heat distribution's orange, the district's blue;
+   the twin's pages (Site map, Heat Matching, Operation) and Home all three */
+.app__page { --glow-1: var(--hot); --glow-2: var(--heat-strong); --glow-3: var(--cool); --glow: 12%; }
+.app[data-part="dc"] .app__page { --glow-1: var(--hot); --glow-2: var(--hot); --glow-3: var(--hot); --glow: 16%; }
+.app[data-part="heat"] .app__page { --glow-1: var(--warn); --glow-2: var(--heat); --glow-3: var(--warn); --glow: 18%; } /* orange: the heat's amber, not its red */
+.app[data-part="district"] .app__page { --glow-1: var(--cool); --glow-2: var(--cool-strong); --glow-3: var(--cool); --glow: 16%; }
+.app__page {
+  background:
+    radial-gradient(45% 560px at 10% 0, color-mix(in srgb, var(--glow-1) var(--glow), transparent), transparent 72%) no-repeat local,
+    radial-gradient(40% 520px at 50% 0, color-mix(in srgb, var(--glow-2) calc(var(--glow) * 0.8), transparent), transparent 72%) no-repeat local,
+    radial-gradient(45% 560px at 90% 0, color-mix(in srgb, var(--glow-3) var(--glow), transparent), transparent 72%) no-repeat local,
+    var(--grain) repeat local,
+    var(--background);
+}
+.page__title { font-weight: 650; letter-spacing: -0.02em; }
+
+/* cards: a fine edge, a light top edge, a long soft shadow */
+.card {
+  background: linear-gradient(180deg, var(--surface), color-mix(in srgb, var(--surface) 90%, var(--background)));
+  border-color: var(--look-edge);
+  box-shadow: inset 0 1px 0 var(--look-hi), 0 1px 2px rgba(16, 16, 40, 0.04), 0 16px 36px -18px rgba(16, 16, 40, 0.16);
+}
+.card { --neo-bg: var(--surface); }
+.kpi.card { --neo-bg: inherit; } /* a tile is a card too: it keeps the colour of what it sits on */
+
+/* KPI tiles: soft relief, a glow of their colour in the corner, the number tight, the bar a groove */
+.kpi {
+  position: relative;
+  overflow: hidden;
+  background: var(--neo-bg);
+  border: none;
+  border-radius: 16px;
+  box-shadow: var(--neo-up);
+}
+.kpi > * { position: relative; }
+.kpi::before {
+  content: "";
+  position: absolute;
+  top: -55%;
+  right: -15%;
+  width: 65%;
+  aspect-ratio: 1;
+  pointer-events: none;
+  background: radial-gradient(closest-side, color-mix(in srgb, var(--kpi-tone, var(--accent)) 16%, transparent), transparent);
+}
+.kpi__label { letter-spacing: 0.09em; color: var(--foreground-secondary); }
+.kpi__value { letter-spacing: -0.03em; font-variant-numeric: tabular-nums; }
+.kpi__bar { height: 7px; border-radius: 4px; background: var(--neo-bg); box-shadow: var(--neo-in); }
+.kpi__bar > span { border-radius: 4px; }
+
+/* switches: a groove, the chosen option a raised key */
+.segmented { background: color-mix(in srgb, var(--foreground) 3%, transparent); border: none; border-radius: 12px; box-shadow: var(--neo-in); }
+.segmented > button { border-radius: 9px; }
+.segmented > button[aria-checked="true"] { background: var(--surface); box-shadow: var(--neo-up-sm); }
+
+/* small buttons as raised pills that press in */
+.kpi-group > .kpi-more,
+.twin-whatif > summary { background: var(--neo-bg); border: none; box-shadow: var(--neo-up-sm); }
+.kpi-group > .kpi-more:hover,
+.kpi-group > .kpi-more[aria-expanded="true"],
+.twin-whatif > summary:hover,
+.twin-whatif[open] > summary { box-shadow: var(--neo-in); background: var(--neo-bg); }
+
+/* the top bar and the sub-tabs: the grain on them too, the part switch a groove with the chosen part a raised key,
+   the tools and pickers raised pills, the chosen sub-tab a raised key (no outline) */
+.topbar { background: var(--grain) repeat, var(--nav-bg); box-shadow: 0 1px 0 var(--look-edge); }
+.topbar__tabs { box-shadow: var(--neo-in); background: color-mix(in srgb, var(--nav-fg) 3%, transparent); }
+.topbar__pill { box-shadow: var(--neo-up-sm); }
+.topbar__project-group,
+.topbar__picker,
+.topbar__tools .connect-ai__btn,
+.topbar__tools > .btn,
+.subtabs__picker { border-color: transparent; box-shadow: var(--neo-up-sm); background-color: var(--surface); } /* the colour only: a picker's arrow is its image */
+.subtabs__picker--mine { border-color: var(--accent); } /* the open part's picker keeps its mark */
+.topbar__tools > .btn:hover,
+.topbar__picker:hover,
+.subtabs__picker:hover { box-shadow: var(--neo-in); }
+.subtabs {
+  background: var(--grain) repeat, color-mix(in srgb, var(--nav-sub-bg) 88%, transparent);
+  border-bottom-color: var(--look-edge);
+}
+.subtabs__tab { border-color: transparent; }
+.subtabs__tab[aria-current="page"] { border-color: transparent; background: var(--surface); box-shadow: var(--neo-up-sm); }
+.subtabs__tab:hover:not([aria-current="page"]) { background: transparent; box-shadow: var(--neo-in); }
+/* the DC2HEAT logo (public/dc2heat.png, the project's colours on white): its white melts into the bar */
+:root:not([data-theme="dark"]) .topbar__brand img { mix-blend-mode: multiply; }
+
+/* the sub-tab names the page: its title for screen readers only, less room taken on top */
+.page__title,
+.pid-intro > h1 { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+/* the brand: the logo and the home button on one raised pill, the home a round key that presses in */
+.topbar__brand { padding: 4px 6px 4px 14px; border-radius: 999px; box-shadow: var(--neo-up-sm); background: var(--nav-bg); }
+.topbar__brand img { transition: transform 0.2s; }
+.topbar__brand:hover img { transform: scale(1.04); }
+.topbar__home { display: inline-grid; place-items: center; width: 34px; height: 34px; padding: 0; border-radius: 50%; border: none; background: var(--surface); box-shadow: var(--neo-up-sm); }
+.topbar__home:hover, .topbar__home.btn--on { box-shadow: var(--neo-in); }
+
+/* compact: less room between and inside the cards on every page; a band with nothing in it takes none */
+.page { padding: 14px 18px; gap: 10px; }
+.card { padding: 12px 14px; }
+.card--lg { padding: 14px; }
+.card__title { margin-bottom: 6px; }
+.dash__band:empty { display: none; }
+
+/* a lower top bar: less padding, a smaller logo and tabs; the sub-tabs' bar slimmer */
+.topbar { min-height: 54px; padding-block: 4px; }
+.topbar__tab { font-size: 15px; padding: 6px 14px 6px 10px; }
+.topbar__icon { width: 22px; height: 22px; }
+.topbar__home { width: 30px; height: 30px; }
+.subtabs { padding-block: 4px; }
+.subtabs__tab { padding: 4px 14px; font-size: 13.5px; }
+/* the case's systems: one button, its three pickers in a panel under it */
+.subtabs__systems { position: relative; }
+.subtabs__systems > summary { list-style: none; cursor: pointer; display: inline-flex; align-items: center; }
+.subtabs__systems > summary::-webkit-details-marker { display: none; }
+.subtabs__systems-pop { position: absolute; right: 0; top: calc(100% + 8px); z-index: 60; display: flex; flex-direction: column; gap: 8px; padding: 10px; border-radius: 14px; background: var(--surface); box-shadow: var(--shadow-lg); border: 1px solid var(--look-edge); }
+.subtabs__systems-pop .subtabs__picker { max-width: none; width: 220px; }

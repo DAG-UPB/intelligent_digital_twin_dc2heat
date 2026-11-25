@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "digital-twin": {
+      "command": "bash",
+      "args": ["-c", "cd \"$(git rev-parse --show-toplevel)/app\" && exec .venv/bin/python -m backend.mcp_server"]
+    }
+  }
+}
