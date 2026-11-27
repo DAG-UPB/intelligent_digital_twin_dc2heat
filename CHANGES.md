@@ -3,6 +3,19 @@
 Newest first, one entry per change: the date, who (person · agent), the area, what changed and why, the files, the
 checks run (and what could not be checked), what stays open. Keep it short; the details are in the code and the docs.
 
+## 2026-11-27 · owner · Claude · Site map: the steps explained under the “?”
+
+- The “?” beside the Site panel's steps (① Data center → ② District → ③ Heat distribution → Quick analysis) now opens
+  every step with what to click, in the panel under the steps (a pop-up was cut off by the panel), the current one
+  marked; its hover title still says the current step. The step texts name the real buttons: search the place (“Go”),
+  “Pick a building”; “Load heat demand in view” + “Add all in view”, “+ Buildings” or “+ Area (district)”; the two
+  network kinds, “Plan the heat network”, “Load streets from OpenStreetMap” where no streets are stored; the Quick
+  analysis, “Costs and assumptions…”, “Save as project”. Files: `SiteSteps.tsx`, `district.css`, `i18n.de.ts`.
+- Checked: vitest, typecheck, lint, build; on 7614 (read-only for the app, the public OSM servers reached) the four
+  steps walked in Paderborn as the list says: building picked, 200 Wärmeatlas/NRW buildings added, streets loaded, the
+  network planned. Open: a click on a building OSM maps as something else first (e.g. a town hall, amenity=townhall)
+  answers “no building” (`buildingAt` takes Nominatim's polygon only for category building).
+
 ## 2026-11-27 · owner · Claude · Site map: streets from OpenStreetMap when Overpass is busy
 
 - *Load streets from OpenStreetMap* failed with "refused (502)": overpass-api.de answers 502 "Gateway Timeout" within a

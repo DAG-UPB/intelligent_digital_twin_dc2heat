@@ -3,27 +3,28 @@
  * sinks) → ③ Heat distribution (the pipe network, which needs the buildings) → the Quick analysis as the result. A
  * step is done (a tick), the current one (the first not done: highlighted, one line says what to do) or still to do;
  * a click on a step shows its card under the steps, alone (SitePage; a second click hides it): the open one stands out.
+ * The “?” beside them opens every step with what to click under them, the current one marked.
  */
 import type { Site } from "../../api";
 import { useSnapshotDetail } from "../../lib/live";
-import { InfoMark } from "../../ui/InfoMark";
+import { useState } from "react";
 
 /** The panel's cards, in the order of the steps (SitePage's `site-card-<kind>` keys). */
 export type StepKind = "source" | "sink" | "network" | "quick";
 export type StepState = "done" | "current" | "todo";
 
 const STEPS: { kind: StepKind; name: string; todo: string }[] = [
-  { kind: "source", name: "Data center", todo: "Pick the data center: “Pick a building” in ① Data center, then click its building on the map." },
+  { kind: "source", name: "Data center", todo: "Search the town or address at the top (“Go”); in ① Data center press “Pick a building” and click the data center's building on the map." },
   {
     kind: "sink",
     name: "District",
-    todo: "Add the heat sinks in ② District: “+ Buildings” and click them on the map, “+ Area (district)”, or “Load heat demand in view” and add the Wärmeatlas buildings.",
+    todo: "In ② District “Load heat demand in view” shows the buildings' heat demand (towns in Hessen and NRW), “Add all in view” takes them as heat sinks. Or “+ Buildings” and click buildings on the map, or “+ Area (district)”: click its corners, then “Finish area”.",
   },
-  { kind: "network", name: "Heat distribution", todo: "Plan the pipes: “Plan the heat network” in ③ Heat distribution." },
+  { kind: "network", name: "Heat distribution", todo: "In ③ Heat distribution choose “Compact, round the station” or “All the data center's heat”, then “Plan the heat network”. Where no streets are stored, “Load streets from OpenStreetMap” first (about 30 s)." },
   {
     kind: "quick",
     name: "Quick analysis",
-    todo: "The Quick analysis says what the heat gives the district over a year; “Costs and assumptions…” in ③ what the network costs and earns.",
+    todo: "The Quick analysis shows what the heat gives the district over a year; “Costs and assumptions…” in ③ what the network costs and earns. “Save as project” keeps the site.",
   },
 ];
 
@@ -48,6 +49,7 @@ export default function SiteSteps({
   open: Record<StepKind, boolean>;
   onOpen: (kind: StepKind) => void;
 }) {
+  const [how, setHow] = useState(false);
   const steps = stepsOf(site, planned);
   const now = steps.find((s) => s.state === "current");
   useSnapshotDetail(() => ({
@@ -87,8 +89,27 @@ export default function SiteSteps({
       </ol>
       {now && (
         <span className="site__step-q">
-          <InfoMark term="the next step" mark="?" hover text={`${now.kind === "quick" ? "Done" : `Step ${now.n}`}: ${now.todo}`} />
+          <button
+            type="button"
+            className="info-mark__btn info-mark__btn--q"
+            aria-expanded={how}
+            aria-label="How to go through the steps"
+            title={now.todo}
+            onClick={() => setHow(!how)}
+          >
+            ?
+          </button>
         </span>
+      )}
+      {how && (
+        // every step in order with what to click, the one to do now marked; in the panel's flow (a pop would be cut off)
+        <ol className="site__how">
+          {steps.map((s) => (
+            <li key={s.kind} className={s.state === "current" ? "site__how--now" : undefined}>
+              <b>{s.name}</b>: {s.todo}
+            </li>
+          ))}
+        </ol>
       )}
     </nav>
   );

@@ -588,6 +588,9 @@
 .site__steps { position: relative; }
 .site__step-q { position: absolute; top: 0; right: 0; }
 .site__step-q .info-mark__pop, .site__buttons .info-mark__pop { left: auto; right: 0; width: 260px; }
+/* the “?” beside the steps opens every step with what to click under them, the one to do now marked */
+.site__steps ol.site__how { display: grid; gap: 6px; margin: 0; padding: 8px 4px 0 20px; border-top: 1px solid var(--border); list-style: decimal; font-size: 12px; line-height: 1.45; }
+.site__how--now { color: var(--accent); }
 .site__buttons .info-mark { align-self: center; }
 
 /* the panel minimised to its title bar (SitePage), the waste heat's unit (PointEditor), what an action says (a toast) */
