@@ -21,7 +21,7 @@ checks run (and what could not be checked), what stays open. Keep it short; the 
   case; `reopened` in `cases.ts`: localStorage `app-opened`, sessionStorage `app-started`); a reload keeps the picks.
   Files: `dataset.ts`, `HomePage.tsx`, `main.tsx`, `DataCenterPicker.tsx`, `cases.ts` (+test), `i18n.de.ts`,
   `start.sh`, `dataset.test.ts`, e2e `shell-help` (new test), `operation` (renamed).
-- **NRW one file per municipality** (buildings_<AGS>_<name>.sqlite): with Münster and Paderborn one file was 115 MB,
+- **NRW one file per municipality** (`buildings_<AGS>_<name>.sqlite`): with Münster and Paderborn one file was 115 MB,
   over GitHub's 100 MB; now Bonn 44, Münster 42, Paderborn 27, Altenbeken 2 MB, and a municipality added on another
   machine is one more file. `find_dbs` reads every `buildings*.sqlite` of a source folder (not the PfA's file).
 - **Data check** of every shared text file (company, site, people's names, paths, e-mails): only public citations,
