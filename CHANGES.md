@@ -3,6 +3,13 @@
 Newest first, one entry per change: the date, who (person · agent), the area, what changed and why, the files, the
 checks run (and what could not be checked), what stays open. Keep it short; the details are in the code and the docs.
 
+## 2026-11-27 · owner · Claude · the repository moved to DAG-UPB
+
+- The repository is `DAG-UPB/intelligent_digital_twin_dc2heat` (all history, `main` and `general_dev`); a fork in the
+  owner's account points to it. The Space is deployed from here (`.github/workflows/space.yml`: variable `HF_SPACE`,
+  secret `HF_TOKEN` on this repository). Files: `docs/conf.py` (repository link), this entry.
+- Checked: the deploy workflow ran on a push to `main` and the Space rebuilt from it.
+
 ## 2026-11-27 · owner · Claude · the app opens blank; NRW per municipality (Münster, Paderborn); a data check
 
 - **Opens blank**: a fresh browser opens `sim_blank` (`DEFAULT_DATASET`, was the main example); Home's *New here?*
