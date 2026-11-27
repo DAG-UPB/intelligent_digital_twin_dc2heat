@@ -399,7 +399,7 @@ cd app && bash scripts/guard.sh .venv/bin/python scripts/import_waermeatlas.py  
 
 </details>
 
-**On the map** (`pages/district/WaermeatlasPanel.tsx`, `waermeatlas.ts`) buildings are coloured by total useful heat on a sequential scale with seven classes (≤ 20, 50, 100, 250, 500, 1000 and > 1000 MWh/a). The tooltip shows use, energy type, age class (with its probability), heated floor area, and heating and hot water in MWh/a. While the layer is shown the map's attribution reads *Wärmebedarf © LEA Hessen (Wärmeatlas Hessen), modelled useful heat 2020*.
+**On the map** (`pages/district/WaermeatlasPanel.tsx`, `waermeatlas.ts`) buildings are coloured by total useful heat on a sequential scale with seven classes (≤ 20, 50, 100, 250, 500, 1000 and > 1000 MWh/a). The tooltip shows use, energy type, age class (with its probability), heated floor area, and heating and hot water in MWh/a. While the layer is shown the map's attribution names the sources in view, e.g. *Wärmebedarf © LEA Hessen (Wärmeatlas Hessen), modelled useful heat 2020*.
 
 **As a heat sink** a building becomes one "house" (`houses: 1`) with
 
@@ -407,11 +407,21 @@ $$
 \text{kwhPerHouse} = (Q_{heating} + Q_{hot\ water}) \cdot f, \qquad \text{dhwShare} = \frac{Q_{hot\ water}}{Q_{heating} + Q_{hot\ water}}
 $$
 
-where $f$ is the **non-residential correction** (default 1, applied only to buildings whose energy type is not EFH, RH, MFH or GMH). Its id is `wah-<gebid>`, so a building is never added twice; its outline and point come from the data, its name is the ALKIS use and the building id, and its starting power is the annual demand over 2000 full-load hours (replaced by the demand model's peak once a page computes it). The Heat demand page then shows exactly that annual demand for it.
+where $f$ is the **non-residential correction** (default 1, applied only to buildings whose energy type is not EFH, RH, MFH or GMH). Its id is `wah-<gebid>` (a building of another source: `<source>-<id>`, e.g. `nrw-10602251`), so a building is never added twice; its outline and point come from the data, its name is the ALKIS use and the building id, and its starting power is the annual demand over 2000 full-load hours (replaced by the demand model's peak once a page computes it). The Heat demand page then shows exactly that annual demand for it.
 
 **Accuracy.** The values are **modelled useful heat** (Nutzwärme) from building type, size and age class, not measured consumption and not final energy. LEA's own evaluation finds the modelled non-residential demand about **45 % below** the state energy statistics, which matters in the office-heavy city centre: a correction factor of about 1.8 would undo that on average. The age class is a probability (the most likely class is shown), and buildings without a heat demand (garages, sheds) are left out. Positions are right: where ALKIS and OpenStreetMap cut a building the same way, the outlines agree to about 0.1 m (for an office tower in the centre: centroids 0.3 m apart, 807 vs 805 m²), and the buildings of a block add up exactly to LEA's own block sums (`WAH_Baubloecke`). Where they cut it differently (a tower and its podium, one outline per wing) a building's outline and demand cover only its ALKIS part.
 
-**Licence.** "Fachdaten: © LEA LandesEnergieAgentur Hessen GmbH"; no open licence is named. The building outlines come from the Geoportal Hessen (dl-de/zero-2.0). Use the data for internal planning, always show the attribution, and ask LEA (waermeatlas@lea-hessen.de) before any further reuse. The data stays on this machine and is never committed. It is the city's, not a data center's: one import serves every project on this machine, the examples included (`find_db` in `backend/core/waermeatlas.py`: the open data folder's own import, else the examples' or any version's). On another computer, run the import script once. Other municipalities of Hessen: pass each LEA delivery name (or its URL) to the script, e.g. `scripts/import_waermeatlas.py 06411000_Darmstadt`; it rebuilds the file with every delivery fetched so far, and the newest file is the one read.
+**Licence.** "Fachdaten: © LEA LandesEnergieAgentur Hessen GmbH"; no open licence is named. The building outlines come from the Geoportal Hessen (dl-de/zero-2.0). Use the data for internal planning, always show the attribution, and ask LEA (waermeatlas@lea-hessen.de) before any further reuse. The data stays on this machine and is never committed. It is the city's, not a data center's: one import serves every project on this machine, the examples included (`find_dbs` in `backend/core/waermeatlas.py`: each source's newest import of the open data folder, the examples or any version). On another computer, run the import script once. Other municipalities of Hessen: pass each LEA delivery name (or its URL) to the script, e.g. `scripts/import_waermeatlas.py 06411000_Darmstadt`; it rebuilds the file with every delivery fetched so far, and the newest file is the one read.
+
+### Other states: the open atlases of `app/sources/`
+
+Each folder of `app/sources/` imports one more source into the same format, its own `buildings.sqlite` beside the Wärmeatlas one (`app/data/_external/<source>/`, git-ignored); the layer reads every source's import for the box, biggest demand first, and each building and street segment carries its `source`. The attribution and the information texts name the sources in view.
+
+| Source | Folder · run (in `app/`) | What it adds | Licence |
+|---|---|---|---|
+| Kommunale Wärmeplanung NRW (LANUK, model 2024) | `sources/nrw/` · `bash scripts/guard.sh .venv/bin/python sources/nrw/fetch.py Bonn` (a name, ä → ae, or the AGS; several at once) | every heated building of the municipality (outline, ALKIS use, type EFH/RH/MFH/GMH, age class, useful floor area, space heating and hot water, space heating 2030 and 2045 with moderate renovation) and its street segments' heat line density (with commerce's process heat) | dl-de/zero-2.0 |
+
+The NRW values are modelled **useful heat**, like Hessen's; LANUK warns that a single building can differ greatly from its real consumption (compare sums). A zip is read where it is (`sources/shp.py`, a stdlib shapefile reader): Bonn's 134 MB zip gives 123,461 buildings in about 25 s at 65 MB RSS. The research behind the choice of sources (every German state's atlas, the national grids, profiles, heat networks, with their licences) is kept locally, not in the repository.
 
 ---
 

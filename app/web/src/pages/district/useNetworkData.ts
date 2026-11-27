@@ -58,10 +58,10 @@ export function useNetworkData(site: Site | null, planned: boolean) {
     if (!parts.length) return void setLines({ key: boxKey, lines: [], note: "the area is too large to load the heat line density" });
     Promise.all(parts.map(fetchHeatLines))
       .then((boxes) => {
-        const byId = new Map<number, HeatLine>();
-        for (const b of boxes) for (const l of b.lines) byId.set(l.id, l);
-        const got = [...byId.values()].map((l) => ({ line: l.line, mwhPerM: l.mwh_per_m }));
-        if (live) setLines({ key: boxKey, lines: got, note: got.length ? null : "no street with heat in the Wärmeatlas here" });
+        const byId = new Map<string, HeatLine>(); // by source and id: an id is unique within its source only
+        for (const b of boxes) for (const l of b.lines) byId.set(`${l.source}:${l.id}`, l);
+        const got = [...byId.values()].map((l) => ({ line: l.line, mwhPerM: l.mwh_per_m, source: l.source }));
+        if (live) setLines({ key: boxKey, lines: got, note: got.length ? null : "no street with heat in the local imports here" });
       })
       .catch((e) => live && setLines({ key: boxKey, lines: [], note: errorMessage(e) }));
     return () => {

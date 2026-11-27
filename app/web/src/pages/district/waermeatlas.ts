@@ -8,7 +8,17 @@ import { escapeHtml } from "./html";
 import { profileFor } from "./siteEdits";
 
 export const MAX_BOX_KM = 2; // as WAERMEATLAS_MAX_BOX_KM in backend/core/limits.py
-export const ATTRIBUTION = "Wärmebedarf © LEA Hessen (Wärmeatlas Hessen), modelled useful heat 2020";
+/** Each source's credit line, by the folder its import writes (backend/core/waermeatlas.py find_dbs). */
+export const CREDITS: Record<string, string> = {
+  waermeatlas: "© LEA Hessen (Wärmeatlas Hessen), modelled useful heat 2020",
+  nrw: "© LANUK NRW (Kommunale Wärmeplanung NRW), dl-de/zero-2.0, modelled useful heat 2024",
+};
+/** The credit lines of the sources these buildings or streets come from (" · "-joined; one without a line of its own
+ * here: the one its import stored, `stored`); "" for none. */
+export function creditOf(items: { source?: string }[], stored?: Record<string, string>): string {
+  const ids = [...new Set(items.map((x) => x.source ?? "waermeatlas"))].sort();
+  return ids.map((id) => CREDITS[id] ?? stored?.[id] ?? id).join(" · ");
+}
 const KM_PER_DEG = 111.32;
 // a rough peak for the bubble size until the demand model computes the real one from the profile
 const FULL_LOAD_HOURS = 2000;
@@ -34,7 +44,6 @@ export function tiles(box: [number, number, number, number], km = MAX_BOX_KM, ma
   return out;
 }
 
-export const LINES_ATTRIBUTION = "Wärmeliniendichte © LEA Hessen (Wärmeatlas Hessen), modelled useful heat 2020";
 /** Heat line density classes (MWh per m of street and year, upper bounds) and colours, light to dark: under 1.5 a
  * network rarely pays (the rule of thumb), above 4 it is dense. */
 export const LINE_CLASSES: { upTo: number; color: string }[] = [
@@ -131,8 +140,10 @@ export function tooltipHtml(b: WaermeatlasBuilding): string {
   ].join("<br>");
 }
 
-/** The sink id of a Wärmeatlas building: stable, so the same building is never added twice. */
-export const sinkId = (b: WaermeatlasBuilding) => `wah-${b.id}`;
+/** The sink id of a building: stable, so the same building is never added twice (the Wärmeatlas Hessen's as ever,
+ * another source's with its name: an id is unique within its source only). */
+export const sinkId = (b: Pick<WaermeatlasBuilding, "id" | "source">) =>
+  !b.source || b.source === "waermeatlas" ? `wah-${b.id}` : `${b.source}-${b.id}`;
 
 /** A building as a heat sink: one "house" with the building's annual demand and its hot-water share. */
 export function toSink(b: WaermeatlasBuilding, nonResidentialFactor: number): HeatPoint {

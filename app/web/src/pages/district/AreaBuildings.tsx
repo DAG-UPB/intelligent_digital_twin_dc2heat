@@ -9,7 +9,7 @@ import L from "leaflet";
 import type { HeatPoint, Site } from "../../api";
 import { errorMessage } from "../../lib/errors";
 import { fmt } from "../../lib/format";
-import { areaDemand, ATTRIBUTION, heatColor, tooltipHtml } from "./waermeatlas";
+import { areaDemand, creditOf, heatColor, sinkId, tooltipHtml } from "./waermeatlas";
 import { areaBuildingsOf } from "./loadAreaBuildings";
 
 type Loaded = { state: "loading" } | { state: "error"; message: string } | { state: "done"; demand: ReturnType<typeof areaDemand>; truncated: boolean };
@@ -36,7 +36,7 @@ interface Props {
 
 export default function AreaBuildings({ map, site, update, setStatus }: Props) {
   const [loaded, setLoaded] = useState<Record<string, Loaded>>({});
-  const layer = useRef(L.layerGroup([], { attribution: ATTRIBUTION }));
+  const layer = useRef(L.layerGroup([]));
   const renderer = useRef<L.Renderer | null>(null);
   const areas = (site?.sinks ?? []).filter((s) => s.area && s.outline && s.outline.length >= 3);
   const say = useRef(setStatus);
@@ -71,7 +71,7 @@ export default function AreaBuildings({ map, site, update, setStatus }: Props) {
   // the buildings as points, over the areas' fill, under the bubbles
   const shown = areas.map((a) => loaded[keyOf(a)]).filter((x): x is Extract<Loaded, { state: "done" }> => x?.state === "done");
   const points = shown.flatMap((x) => x.demand?.buildings ?? []);
-  const pointsKey = points.map((b) => b.id).join(",");
+  const pointsKey = points.map(sinkId).join(",");
   useEffect(() => {
     const g = layer.current;
     g.clearLayers();
@@ -93,6 +93,7 @@ export default function AreaBuildings({ map, site, update, setStatus }: Props) {
       })
         .bindTooltip(tooltipHtml(b), { sticky: true })
         .addTo(g);
+    g.options.attribution = `Wärmebedarf ${creditOf(points)}`;
     g.addTo(m);
     // eslint-disable-next-line react-hooks/exhaustive-deps -- redrawn when the set of buildings changes
   }, [pointsKey, map]);

@@ -1,7 +1,7 @@
-"""The district on the Site map: buildings with their modelled heat demand (Wärmeatlas Hessen), one map box at a
-time, and the machine-local example data centers.
+"""The district on the Site map: buildings with their heat demand (the Wärmeatlas Hessen and the open atlases of
+app/sources/), one map box at a time, and the machine-local example data centers.
 
-Reads the local SQLite made by scripts/import_waermeatlas.py; the map box is never sent anywhere.
+Reads the local SQLite files the import scripts made; the map box is never sent anywhere.
 """
 
 from collections.abc import Callable
@@ -27,7 +27,12 @@ def _in_box(request: Request, registry: Registry, bbox: str, query: Callable[...
         raise HTTPException(400, "bbox must be four numbers: south,west,north,east") from exc
     local, root = request.app.state.local_dir, request.app.state.versions_dir
     others = [getattr(Storage.of(local), which), *(getattr(Storage.of(root / v), which) for v in data_versions.versions(root))]
-    db = waermeatlas.find_db(getattr(registry.storage, which), others)
+    own = getattr(registry.storage, which)
+    # the heat demand: every source's folder beside the Wärmeatlas one (<folder>/<source>/buildings.sqlite)
+    if which == "waermeatlas_db":
+        db = waermeatlas.find_dbs([p.parent.parent for p in (own, *others)])
+    else:
+        db = waermeatlas.find_db(own, others)
     try:
         return query(db, south, west, north, east)
     except FileNotFoundError as exc:
@@ -38,18 +43,20 @@ def _in_box(request: Request, registry: Registry, bbox: str, query: Callable[...
 
 @router.get("/buildings", summary="Buildings with heat demand in a map box")
 def buildings(request: Request, registry: Registry, bbox: str = BBOX):
-    """The Wärmeatlas buildings in the box (outline, use, age class, floor area, heat demand kWh/a), at most 3000.
+    """The buildings in the box (outline, use, age class, floor area, heat demand kWh/a, `source`) of every local
+    import (the Wärmeatlas Hessen, the open atlases of app/sources/), at most 3000, and `sources`: each one's credit line.
 
-    400 for a malformed or too large box ("Zoom in"), 404 when the data has not been imported. The open data
-    folder's own import, else the one of the examples or of any version: the same city for every project.
+    400 for a malformed or too large box ("Zoom in"), 404 when nothing has been imported. Each source's newest import
+    of the open data folder, the examples or any version: the same city for every project.
     """
     return _in_box(request, registry, bbox, waermeatlas.buildings_in)
 
 
 @router.get("/heat-lines", summary="Street segments with their heat line density in a map box")
 def heat_lines(request: Request, registry: Registry, bbox: str = BBOX):
-    """The Wärmeatlas street segments in the box with their heat line density (Wärmeliniendichte, MWh per m and
-    year: the useful heat of the buildings LEA assigns to the segment over its length), densest first, at most 3000.
+    """The street segments in the box with their heat line density (Wärmeliniendichte, MWh per m and year: the heat
+    of the buildings the source assigns to the segment over its length), densest first, at most 3000, each with its
+    `source`, and `sources`: each one's credit line.
 
     400 for a malformed or too large box ("Zoom in"), 404 when the data, or its street segments, has not been imported.
     """

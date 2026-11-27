@@ -36,3 +36,7 @@ app/data/*/silver/
 
 # The lock file is tracked (CI's `uv sync --frozen` needs it), although the enclosing repository ignores uv.lock
 !app/uv.lock
+
+# Research notes and reports on outside data sources (kept locally, not part of the app)
+reports/
+research_notes/

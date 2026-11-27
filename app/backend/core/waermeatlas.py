@@ -1,15 +1,18 @@
-"""Buildings with their modelled heat demand from the Wärmeatlas Hessen (LEA), read one map box at a time.
+"""Buildings with their heat demand, and streets with their heat line density, read one map box at a time.
 
-`scripts/import_waermeatlas.py` turns the downloaded GeoPackage into a small local SQLite file once
-(`DB_FILE` in the data directory): one row per building, WGS84 coordinates, the outline as JSON, and an
-R-tree on the outline's bounding box. A query reads only the R-tree pages and rows of the box it asks
-for, so the city never sits in memory. The buildings are the city's, not a data center's: one import serves
-every data folder and the examples (find_db). Pure stdlib (sqlite3, math).
+Each source has its own small local SQLite file, `<source>/buildings.sqlite` beside the others (`DB_FILE`'s folder
+in the data directory): the Wärmeatlas Hessen (`scripts/import_waermeatlas.py`, folder `waermeatlas`) and the open
+atlases of `app/sources/` (NRW, Berlin, Hamburg, the national grid; each writes through `write_db`). One row per
+building (or block, or grid cell), WGS84 coordinates, the outline as JSON, and an R-tree on the outline's bounding
+box. A query reads only the R-tree pages and rows of the box it asks for, so the city never sits in memory. The
+buildings are the city's, not a data center's: one import serves every data folder and the examples (find_dbs).
+Pure stdlib (sqlite3, math).
 """
 
 import json
 import math
 import sqlite3
+from collections.abc import Iterable
 from pathlib import Path
 
 from .limits import WAERMEATLAS_MAX_BOX_KM, WAERMEATLAS_MAX_BUILDINGS, WAERMEATLAS_MAX_LINES
@@ -40,6 +43,7 @@ CREATE TABLE heat_lines (
     line TEXT NOT NULL                             -- JSON [[[lat, lon], ...], ...] (the parts of its MULTILINESTRING)
 );
 CREATE VIRTUAL TABLE heat_lines_rtree USING rtree(id, min_lat, max_lat, min_lon, max_lon);
+CREATE TABLE meta (key TEXT PRIMARY KEY, value TEXT);  -- "attribution": the source's credit line, shown on the map
 """
 LINE_COLUMNS = ("id", "name", "kind", "length_m", "mwh_per_m", "mwh")
 COLUMNS = (
@@ -48,6 +52,69 @@ COLUMNS = (
 )  # fmt: skip
 
 KM_PER_DEG_LAT = 111.32
+# the credit line of an import without one in its `meta` table (the Wärmeatlas Hessen's, made before it had one)
+ATTRIBUTION = {"waermeatlas": "© LEA Hessen (Wärmeatlas Hessen), modelled useful heat 2020"}
+NOT_IMPORTED = "No heat demand data on this machine: run scripts/import_waermeatlas.py or one of app/sources/ (in app/) once."
+
+
+def find_dbs(roots: list[Path]) -> list[Path]:
+    """Every source's newest import (`<root>/<source>/buildings.sqlite`) of the folders `roots` (the data folder's own,
+    the examples', each version's): one per source, the newest (it holds every municipality fetched so far)."""
+    newest: dict[str, Path] = {}
+    for root in roots:
+        for p in root.glob("*/buildings.sqlite") if root.is_dir() else []:
+            have = newest.get(p.parent.name)
+            if have is None or p.stat().st_mtime > have.stat().st_mtime:
+                newest[p.parent.name] = p
+    return [newest[k] for k in sorted(newest)]
+
+
+def attribution_of(con: sqlite3.Connection, source: str) -> str:
+    """The source's credit line: its `meta` table's, else the known one, else its folder name."""
+    if con.execute("SELECT 1 FROM sqlite_master WHERE name = 'meta'").fetchone():
+        row = con.execute("SELECT value FROM meta WHERE key = 'attribution'").fetchone()
+        if row and row[0]:
+            return row[0]
+    return ATTRIBUTION.get(source, source)
+
+
+def write_db(db: Path, attribution: str, buildings: Iterable[dict], lines: Iterable[dict] = ()) -> tuple[int, int]:
+    """Write one source's buildings (dicts of COLUMNS + "outline": [[lat, lon], ...] or None) and street segments
+    (dicts of "ref", "name", "kind", "length_m", "mwh_per_m", "mwh", "line": [[[lat, lon], ...], ...]) to `db`, the
+    format buildings_in and heat_lines_in read, through a temporary file; an id or ref twice is written once.
+    Returns (buildings, lines) written."""
+    db.parent.mkdir(parents=True, exist_ok=True)
+    tmp = db.with_suffix(".tmp")
+    tmp.unlink(missing_ok=True)
+    out = sqlite3.connect(tmp)
+    out.executescript(SCHEMA)
+    out.execute("INSERT INTO meta VALUES ('attribution', ?)", (attribution,))
+    n = m = 0
+    for b in buildings:
+        ring = b.get("outline")
+        row = [b.get(c) for c in COLUMNS] + [json.dumps(ring, separators=(",", ":")) if ring else None]
+        if out.execute("INSERT OR IGNORE INTO buildings VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)", row).rowcount != 1:
+            continue
+        lats, lons = ([q[0] for q in ring], [q[1] for q in ring]) if ring else ([b["lat"]], [b["lon"]])
+        out.execute("INSERT INTO buildings_rtree VALUES (?,?,?,?,?)", (b["id"], min(lats), max(lats), min(lons), max(lons)))
+        n += 1
+    for h in lines:
+        cur = out.execute(
+            "INSERT OR IGNORE INTO heat_lines (ref, name, kind, length_m, mwh_per_m, mwh, line) VALUES (?,?,?,?,?,?,?)",
+            (h["ref"], h.get("name"), h.get("kind"), h.get("length_m"), h["mwh_per_m"], h.get("mwh"),
+             json.dumps(h["line"], separators=(",", ":"))),
+        )  # fmt: skip
+        if cur.rowcount != 1:
+            continue
+        lats, lons = [q[0] for p in h["line"] for q in p], [q[1] for p in h["line"] for q in p]
+        box = (cur.lastrowid, min(lats), max(lats), min(lons), max(lons))
+        out.execute("INSERT INTO heat_lines_rtree VALUES (?,?,?,?,?)", box)
+        m += 1
+    out.commit()
+    out.execute("VACUUM")
+    out.close()
+    tmp.replace(db)
+    return n, m
 
 
 def find_db(own: Path, others: list[Path]) -> Path:
@@ -92,53 +159,83 @@ def check_box(south: float, west: float, north: float, east: float, max_km: floa
         )
 
 
-def buildings_in(db: Path, south: float, west: float, north: float, east: float, limit: int = WAERMEATLAS_MAX_BUILDINGS) -> dict:
-    """The buildings whose outline (or point) touches the box: {"buildings": [...], "truncated": bool}.
+def _as_list(db: Path | list[Path]) -> list[Path]:
+    """One source's file or several; FileNotFoundError when none exists (nothing imported)."""
+    dbs = [p for p in ([db] if isinstance(db, Path) else db) if p.exists()]
+    if not dbs:
+        raise FileNotFoundError(NOT_IMPORTED)
+    return dbs
+
+
+def buildings_in(
+    db: Path | list[Path], south: float, west: float, north: float, east: float, limit: int = WAERMEATLAS_MAX_BUILDINGS
+) -> dict:
+    """The buildings whose outline (or point) touches the box, of every source `db` names: {"buildings": [...],
+    "truncated": bool, "sources": {source: its credit line}} (a source: the folder name of its file; each building
+    carries its own as "source"; its id is unique within its source only).
 
     Biggest demand first, so a box over the cap drops the smallest buildings, not a random patch.
 
-    FileNotFoundError when the data has not been imported; ValueError for a bad or too large box.
+    FileNotFoundError when nothing has been imported; ValueError for a bad or too large box.
     Reads through the R-tree only: memory is proportional to the answer, not to the city.
     """
     check_box(south, west, north, east)
-    if not db.exists():
-        raise FileNotFoundError("No Wärmeatlas data on this machine: run scripts/import_waermeatlas.py (in app/) once.")
-    con = sqlite3.connect(f"file:{db}?mode=ro", uri=True)
-    try:
-        rows = con.execute(
-            f"SELECT {', '.join('b.' + c for c in COLUMNS)}, b.outline FROM buildings_rtree r JOIN buildings b ON b.id = r.id "
-            "WHERE r.max_lat >= ? AND r.min_lat <= ? AND r.max_lon >= ? AND r.min_lon <= ? ORDER BY b.total_kwh DESC LIMIT ?",
-            (south, north, west, east, limit + 1),
-        ).fetchall()
-    finally:
-        con.close()
-    out = [{**dict(zip(COLUMNS, r[:-1], strict=True)), "outline": json.loads(r[-1]) if r[-1] else None} for r in rows[:limit]]
-    return {"buildings": out, "truncated": len(rows) > limit}
+    rows, sources = [], {}
+    for path in _as_list(db):
+        con = sqlite3.connect(f"file:{path}?mode=ro", uri=True)
+        try:
+            got = con.execute(
+                f"SELECT {', '.join('b.' + c for c in COLUMNS)}, b.outline "
+                "FROM buildings_rtree r JOIN buildings b ON b.id = r.id "
+                "WHERE r.max_lat >= ? AND r.min_lat <= ? AND r.max_lon >= ? AND r.min_lon <= ? ORDER BY b.total_kwh DESC LIMIT ?",
+                (south, north, west, east, limit + 1),
+            ).fetchall()
+            if got:
+                sources[path.parent.name] = attribution_of(con, path.parent.name)
+        finally:
+            con.close()
+        rows += [(path.parent.name, r) for r in got]
+    rows.sort(key=lambda x: -(x[1][COLUMNS.index("total_kwh")] or 0))
+    out = [
+        {**dict(zip(COLUMNS, r[:-1], strict=True)), "outline": json.loads(r[-1]) if r[-1] else None, "source": src}
+        for src, r in rows[:limit]
+    ]
+    return {"buildings": out, "truncated": len(rows) > limit, "sources": sources}
 
 
-def heat_lines_in(db: Path, south: float, west: float, north: float, east: float, limit: int = WAERMEATLAS_MAX_LINES) -> dict:
-    """The street segments with a heat line density (Wärmeliniendichte) that touch the box: {"lines": [...], "truncated"}.
+def heat_lines_in(
+    db: Path | list[Path], south: float, west: float, north: float, east: float, limit: int = WAERMEATLAS_MAX_LINES
+) -> dict:
+    """The street segments with a heat line density (Wärmeliniendichte) that touch the box, of every source `db`
+    names: {"lines": [...], "truncated", "sources": {source: its credit line}} (each line carries its "source").
 
-    Densest first, so a box over the cap drops the thinnest streets. FileNotFoundError when the data, or its street
-    segments (an import from before they were read: run the import again with --rebuild), is missing; ValueError for a
-    bad or too large box. Reads through the R-tree only.
+    Densest first, so a box over the cap drops the thinnest streets. FileNotFoundError when nothing has been imported,
+    or no import has street segments (a Wärmeatlas import from before they were read: run the import again with
+    --rebuild); ValueError for a bad or too large box. Reads through the R-tree only.
     """
     check_box(south, west, north, east)
-    if not db.exists():
-        raise FileNotFoundError("No Wärmeatlas data on this machine: run scripts/import_waermeatlas.py (in app/) once.")
-    con = sqlite3.connect(f"file:{db}?mode=ro", uri=True)
-    try:
-        if not con.execute("SELECT 1 FROM sqlite_master WHERE name = 'heat_lines'").fetchone():
-            raise FileNotFoundError(
-                "The Wärmeatlas import has no street segments yet: run scripts/import_waermeatlas.py --rebuild (in app/)."
-            )
-        rows = con.execute(
-            f"SELECT {', '.join('h.' + c for c in LINE_COLUMNS)}, h.line "
-            "FROM heat_lines_rtree r JOIN heat_lines h ON h.id = r.id "
-            "WHERE r.max_lat >= ? AND r.min_lat <= ? AND r.max_lon >= ? AND r.min_lon <= ? ORDER BY h.mwh_per_m DESC LIMIT ?",
-            (south, north, west, east, limit + 1),
-        ).fetchall()
-    finally:
-        con.close()
-    out = [{**dict(zip(LINE_COLUMNS, r[:-1], strict=True)), "line": json.loads(r[-1])} for r in rows[:limit]]
-    return {"lines": out, "truncated": len(rows) > limit}
+    rows, sources, with_lines = [], {}, 0
+    for path in _as_list(db):
+        con = sqlite3.connect(f"file:{path}?mode=ro", uri=True)
+        try:
+            if not con.execute("SELECT 1 FROM sqlite_master WHERE name = 'heat_lines'").fetchone():
+                continue
+            with_lines += 1
+            got = con.execute(
+                f"SELECT {', '.join('h.' + c for c in LINE_COLUMNS)}, h.line "
+                "FROM heat_lines_rtree r JOIN heat_lines h ON h.id = r.id "
+                "WHERE r.max_lat >= ? AND r.min_lat <= ? AND r.max_lon >= ? AND r.min_lon <= ? ORDER BY h.mwh_per_m DESC LIMIT ?",
+                (south, north, west, east, limit + 1),
+            ).fetchall()
+            if got:
+                sources[path.parent.name] = attribution_of(con, path.parent.name)
+        finally:
+            con.close()
+        rows += [(path.parent.name, r) for r in got]
+    if not with_lines:
+        raise FileNotFoundError(
+            "The Wärmeatlas import has no street segments yet: run scripts/import_waermeatlas.py --rebuild (in app/)."
+        )
+    rows.sort(key=lambda x: -(x[1][LINE_COLUMNS.index("mwh_per_m")] or 0))
+    out = [{**dict(zip(LINE_COLUMNS, r[:-1], strict=True)), "line": json.loads(r[-1]), "source": src} for src, r in rows[:limit]]
+    return {"lines": out, "truncated": len(rows) > limit, "sources": sources}

@@ -3,6 +3,24 @@
 Newest first, one entry per change: the date, who (person · agent), the area, what changed and why, the files, the
 checks run (and what could not be checked), what stays open. Keep it short; the details are in the code and the docs.
 
+## 2026-11-25 · owner · Claude · heat demand of other states: app/sources/, NRW first
+
+The Site map's heat demand layer read one source (the Wärmeatlas Hessen). Now every source imported on this machine
+has its own `app/data/_external/<source>/buildings.sqlite` (git-ignored) and the layer reads them all for a box
+(`find_dbs`, `write_db` in `core/waermeatlas.py`); each building and street segment carries its `source`, each answer
+the sources' credit lines (`sources`), and the map's attribution and texts name the sources in view (`creditOf`). A
+building of another source gets the sink id `<source>-<id>` (Hessen's stay `wah-<id>`, as saved sites have them).
+First source: `app/sources/nrw/fetch.py`, LANUK's Kommunale Wärmeplanung NRW (dl-de/zero-2.0), per municipality,
+read inside the zip by a stdlib shapefile reader (`sources/shp.py`): Bonn 123,461 buildings, 7,932 street segments,
+~25 s, 65 MB RSS. `reports/` and `research_notes/` (the data-source research) are git-ignored.
+Files: `backend/core/waermeatlas.py`, `routers/waermeatlas.py`, `app/sources/` (README, `shp.py`, `nrw/`),
+`tests/test_heat_sources.py`, `web/src/api/waermeatlas.ts`, `pages/district/` (`waermeatlas.ts`, `WaermeatlasPanel.tsx`,
+`AreaBuildings.tsx`, `loadAreaBuildings.ts`, `HeatNetwork.tsx`, `useNetworkData.ts`, `network.ts`), `i18n.de.ts`,
+docs `district-demand`, `data-and-privacy`, `AGENTS.md`, CI's ruff paths (+ `sources`), `.gitignore`.
+Checks: ruff, pytest (884), typecheck, lint, vitest (730), build, docs `-W`, e2e `district` + `smoke` on 7614 (33),
+Bonn loaded on the Site map in a browser (buildings, heat lines, LANUK credit). Open: Berlin, Hamburg, the Zensus 2022
++ Hotmaps grid (next, in that order); the layer's checkbox still says "Heat demand (Wärmeatlas)".
+
 ## 2026-11-25 · owner · Claude · economics review: Operation's best case and prices, the network's asset lives
 
 A review of the economic calculations (every Case 1 figure reproduced by hand from the code; no unit or arithmetic

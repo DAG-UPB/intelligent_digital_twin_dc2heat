@@ -62,6 +62,7 @@ export interface NetworkInput {
 export interface HeatLineIn {
   line: [number, number][][]; // its parts, [lat, lon]
   mwhPerM: number;
+  source?: string; // the import it comes from (its credit line: waermeatlas.ts creditOf)
 }
 
 export type PipeKind = "transmission" | "distribution" | "service";

@@ -1,4 +1,5 @@
-/** Buildings with their modelled heat demand (Wärmeatlas Hessen), read from the local import one map box at a time. */
+/** Buildings with their heat demand (the Wärmeatlas Hessen and the open atlases of app/sources/), read from the local
+ * imports one map box at a time. */
 import { getJson } from "./http";
 
 /** One building of GET /api/district/buildings (kWh/a: modelled useful heat, 2020 unless named). */
@@ -17,11 +18,13 @@ export interface WaermeatlasBuilding {
   heating_2030_kwh: number | null; // moderate renovation
   heating_2045_kwh: number | null;
   outline: [number, number][] | null; // [lat, lon] ring
+  source?: string; // the import it comes from ("waermeatlas", "nrw", …): its id is unique within it only
 }
 
 export interface WaermeatlasBox {
   buildings: WaermeatlasBuilding[];
   truncated: boolean; // more buildings in the box than the cap: the smallest were left out
+  sources?: Record<string, string>; // each source in the box: its credit line
 }
 
 /** The buildings in a box (south, west, north, east in degrees). 400 "Zoom in" above 2 × 2 km, 404 before the import. */
@@ -34,14 +37,16 @@ export interface HeatLine {
   name: string | null;
   kind: string | null; // ALKIS class, e.g. "Gemeindestraße"
   length_m: number | null;
-  mwh_per_m: number; // the useful heat of the buildings LEA assigns to it, per m of street, MWh/(m·a)
+  mwh_per_m: number; // the useful heat of the buildings its source assigns to it, per m of street, MWh/(m·a)
   mwh: number | null; // their useful heat, MWh/a
   line: [number, number][][]; // its parts, each [lat, lon] points
+  source?: string; // the import it comes from: its id is unique within it only
 }
 
 export interface HeatLineBox {
   lines: HeatLine[];
   truncated: boolean; // more segments in the box than the cap: the thinnest were left out
+  sources?: Record<string, string>; // each source in the box: its credit line
 }
 
 /** The street segments with heat in a box (south, west, north, east). 400 "Zoom in" above 2 × 2 km, 404 before the import. */

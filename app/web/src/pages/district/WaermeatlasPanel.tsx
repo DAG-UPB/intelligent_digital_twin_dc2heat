@@ -16,13 +16,12 @@ import { InfoMark } from "../../ui/InfoMark";
 import { NumberField } from "../../ui/NumberField";
 import {
   annualKwh,
-  ATTRIBUTION,
   boxKm,
+  creditOf,
   HEAT_CLASSES,
   heatColor,
   LINE_CLASSES,
   lineColor,
-  LINES_ATTRIBUTION,
   MAX_ADD_ALL,
   MAX_BOX_KM,
   sinkId,
@@ -55,12 +54,14 @@ export default function WaermeatlasPanel({ map, bounds, site, active, update, se
   const [heat, setHeat] = useState<WaermeatlasBox | null>(null);
   const [lines, setLines] = useState<HeatLineBox | null>(null); // the streets' heat line density, loaded with the buildings
   const [showLines, setShowLines] = useState(true);
-  const lineLayer = useRef(L.layerGroup([], { attribution: LINES_ATTRIBUTION }));
+  const lineLayer = useRef(L.layerGroup([]));
   const [factor, setFactor] = useState(1);
   const [loading, setLoading] = useState(false);
-  const layer = useRef(L.layerGroup([], { attribution: ATTRIBUTION })); // the attribution shows while the layer is on the map
+  const layer = useRef(L.layerGroup([])); // its attribution (the sources in view) shows while the layer is on the map
   const renderer = useRef<L.Renderer | null>(null);
   const view = bounds && boxKm(boxOf(bounds));
+  const credit = heat ? creditOf(heat.buildings, heat.sources) : "";
+  const lineCredit = lines ? creditOf(lines.lines, lines.sources) : "";
 
   const sinkIds = new Set(site?.sinks.map((s) => s.id));
   const add = (buildings: WaermeatlasBuilding[]) => update((s) => withBuildings(s, buildings, factor));
@@ -107,6 +108,7 @@ export default function WaermeatlasPanel({ map, bounds, site, active, update, se
       shape.bindTooltip(() => tooltipHtml(b), { sticky: true }).on("click", () => onClick.current(b)); // its profile: in the popup of that click (sinkCard)
       shape.addTo(g);
     }
+    g.options.attribution = `Wärmebedarf ${creditOf(heat.buildings, heat.sources)}`; // read when the layer is added
     g.addTo(m);
   }, [heat, map, shown]);
 
@@ -122,6 +124,7 @@ export default function WaermeatlasPanel({ map, bounds, site, active, update, se
         .bindTooltip(tip, { sticky: true })
         .addTo(g);
     }
+    g.options.attribution = `Wärmeliniendichte ${creditOf(lines.lines, lines.sources)}`;
     g.addTo(m);
     // the buildings over the lines
     layer.current.eachLayer((x) => (x as L.Path).bringToFront?.());
@@ -204,7 +207,7 @@ export default function WaermeatlasPanel({ map, bounds, site, active, update, se
           term="the heat demand in view"
           mark="?"
           hover
-          text={`The buildings of this view (at most ${MAX_BOX_KM} × ${MAX_BOX_KM} km) from the local Wärmeatlas import, coloured by their modelled heat demand; nothing is sent anywhere. Click one to add it as a heat sink. ${ATTRIBUTION}.`}
+          text={`The buildings of this view (at most ${MAX_BOX_KM} × ${MAX_BOX_KM} km) from the local heat demand imports (the Wärmeatlas Hessen, the open atlases of app/sources/), coloured by their modelled heat demand; nothing is sent anywhere. Click one to add it as a heat sink.${credit ? ` Wärmebedarf ${credit}.` : ""}`}
         />
       </div>
       {tooBig && view && (
@@ -232,7 +235,7 @@ export default function WaermeatlasPanel({ map, bounds, site, active, update, se
           <span>MWh/(m·a)</span>
           <InfoMark
             term="the heat line density"
-            text={`Wärmeliniendichte: the modelled useful heat of the buildings LEA assigns to each street segment, per metre of street and year (${fmt(lines.lines.length)} segments in view${lines.truncated ? ", the densest" : ""}). Under about 1.5 MWh/(m·a) a heat network rarely pays; the heat network's plan prefers the dense streets. ${LINES_ATTRIBUTION}.`}
+            text={`Wärmeliniendichte: the modelled useful heat of the buildings its source assigns to each street segment, per metre of street and year (${fmt(lines.lines.length)} segments in view${lines.truncated ? ", the densest" : ""}). Under about 1.5 MWh/(m·a) a heat network rarely pays; the heat network's plan prefers the dense streets. Wärmeliniendichte ${lineCredit}.`}
           />
         </div>
       )}
@@ -242,7 +245,7 @@ export default function WaermeatlasPanel({ map, bounds, site, active, update, se
           <NumberField label="Non-residential correction" value={factor} onChange={setFactor} min={0.1} max={5} step={0.05} unit="×" />
           <InfoMark
             term="the non-residential correction"
-            text={`Multiplies the demand of non-residential buildings you add. LEA notes its modelled non-residential demand is about 45% below the state energy statistics (× 1.8 would undo that). Another municipality of Hessen: import it once with scripts/import_waermeatlas.py and its LEA delivery name (e.g. 06411000_Darmstadt); it shows here with the others.`}
+            text={`Multiplies the demand of non-residential buildings you add. LEA notes its modelled non-residential demand is about 45% below the state energy statistics (× 1.8 would undo that). Another municipality of Hessen: import it once with scripts/import_waermeatlas.py and its LEA delivery name (e.g. 06411000_Darmstadt); one of NRW: sources/nrw/fetch.py and its name (e.g. Bonn); it shows here with the others.`}
           />
         </div>
       )}

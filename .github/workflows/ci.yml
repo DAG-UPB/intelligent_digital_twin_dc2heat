@@ -39,9 +39,9 @@ jobs:
       - name: Install (without TabPFN)
         run: uv sync --frozen $(printf -- '--no-install-package %s ' $HEAVY)
       - name: Lint
-        run: uv run --no-sync ruff check backend tests scripts
+        run: uv run --no-sync ruff check backend tests scripts sources
       - name: Format
-        run: uv run --no-sync ruff format --check backend tests scripts
+        run: uv run --no-sync ruff format --check backend tests scripts sources
       - name: Tests (fast suite; slow = TabPFN, tigramite, gplearn)
         run: uv run --no-sync pytest -q
 

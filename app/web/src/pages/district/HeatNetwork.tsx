@@ -39,7 +39,7 @@ import MapTime from "./MapTime";
 import { atHour, dayOf, hourLabel, hourOf, midMonth, monthOf, notSupplied, presetsOf, type Why } from "./networkView";
 import { streetsIn } from "./osm";
 import { wasteKw } from "./siteEdits";
-import { LINES_ATTRIBUTION } from "./waermeatlas";
+import { creditOf } from "./waermeatlas";
 import { useNetworkData } from "./useNetworkData";
 import { useNetworkLayer } from "./useNetworkLayer";
 
@@ -461,7 +461,7 @@ export default function HeatNetwork({
               <dd>
                 {net.streetDensity == null
                   ? `No heat line density: ${lines.note ?? "not loaded"}; the pipes take the shortest ways.`
-                  : `The heat line density of ${fmt(heatLines?.length ?? 0)} street segments (${LINES_ATTRIBUTION}): the pipes prefer the dense streets (${fmt(params.densityPullPct)} %, under Costs and assumptions); the streets under the distribution pipe carry ${fmt(net.streetDensity, 1)} MWh/(m·a) on average.`}
+                  : `The heat line density of ${fmt(heatLines?.length ?? 0)} street segments (Wärmeliniendichte ${creditOf(heatLines ?? [])}): the pipes prefer the dense streets (${fmt(params.densityPullPct)} %, under Costs and assumptions); the streets under the distribution pipe carry ${fmt(net.streetDensity, 1)} MWh/(m·a) on average.`}
               </dd>
               <dt>The heat pump</dt>
               <dd>

@@ -2,7 +2,7 @@
 import { describe, expect, test } from "vitest";
 import type { Site, WaermeatlasBuilding } from "../../api";
 import { demandEntries, annualMwh } from "../../lib/demand";
-import { areaDemand, areasAsBuildings, boxKm, HEAT_CLASSES, heatColor, insideRing, LINE_CLASSES, lineColor, ringBox, sinkUseColors, tiles, toSink, tooltipHtml, USE_CLASSES, classOfUse, colorOfUse, withBuildings } from "./waermeatlas";
+import { areaDemand, areasAsBuildings, boxKm, creditOf, CREDITS, HEAT_CLASSES, heatColor, insideRing, LINE_CLASSES, lineColor, ringBox, sinkId, sinkUseColors, tiles, toSink, tooltipHtml, USE_CLASSES, classOfUse, colorOfUse, withBuildings } from "./waermeatlas";
 import { profileFor } from "./siteEdits";
 
 const building = (over: Partial<WaermeatlasBuilding> = {}): WaermeatlasBuilding => ({
@@ -170,4 +170,13 @@ test("a drawn district as its buildings: each a heat sink with its share of the 
   // not loaded, or no building inside: the area stays one heat sink
   expect(areasAsBuildings(s, new Map(), kwh)).toBe(s);
   expect(areasAsBuildings(s, new Map([["q", [out]]]), kwh)).toBe(s);
+});
+
+test("a building of another source has its own sink id, and each source its credit line", () => {
+  expect(sinkId({ id: 7 })).toBe("wah-7"); // the Wärmeatlas Hessen's, as saved sites have them
+  expect(sinkId({ id: 7, source: "waermeatlas" })).toBe("wah-7");
+  expect(sinkId({ id: 7, source: "nrw" })).toBe("nrw-7"); // the same id in another source: another building
+  expect(creditOf([{ source: "nrw" }, {}, { source: "nrw" }])).toBe(`${CREDITS.nrw} · ${CREDITS.waermeatlas}`);
+  expect(creditOf([{ source: "new" }], { new: "© Someone" })).toBe("© Someone"); // a source this page does not know: its stored line
+  expect(creditOf([])).toBe("");
 });
