@@ -3,7 +3,8 @@
 LANUK publishes, for each of NRW's 396 municipalities, a zip of shapefiles (EPSG:25832) under dl-de/zero-2.0
 (https://www.opengeodata.nrw.de/produkte/umwelt_klima/energie/kwp/; Bonn 134 MB, Köln 336 MB). This script downloads
 the municipalities asked for into `app/data/_external/nrw/` (the zips, git-ignored: their shapefiles are read inside
-the zip) and writes `buildings.sqlite` next to them (committed) with every municipality fetched so far: the format
+the zip) and writes `buildings_<AGS>_<name>.sqlite` next to them for each (committed; one file a municipality keeps
+each under GitHub's 100 MB, and a municipality added elsewhere drops none): the format
 `backend/core/waermeatlas.py` reads, so the Site map's heat demand layer shows NRW beside the Wärmeatlas Hessen.
 
 What is read (Kurzdokumentation_Raumwaermebedarfsmodell.pdf in the zip; model 2024, buildings as of summer 2022):
@@ -34,12 +35,11 @@ APP = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(APP))
 
 from backend.config import DATA_DIR  # noqa: E402
-from backend.core.waermeatlas import DB_FILE, parts_of, set_parts, utm32_to_wgs84, write_db  # noqa: E402
+from backend.core.waermeatlas import DB_FILE, utm32_to_wgs84, write_db  # noqa: E402
 from sources.shp import centroid, records, ring_area  # noqa: E402
 
 BASE = "https://www.opengeodata.nrw.de/produkte/umwelt_klima/energie/kwp/"
 DIR = DATA_DIR / DB_FILE.parent.parent / "nrw"
-DB = DIR / "buildings.sqlite"
 ATTRIBUTION = "© LANUK NRW (Kommunale Wärmeplanung NRW), dl-de/zero-2.0, modelled useful heat 2024"
 ZIP = re.compile(r"KWP-NRW_(\d{8})_([A-Za-z0-9_-]+)_EPSG25832_Shape\.zip")
 # GEBAEUDETY's age class (the last year of the span) -> its span (the model description's table)
@@ -81,6 +81,12 @@ def pick(asked: list[str], files: dict[str, str]) -> list[str]:
             raise ValueError(f"no NRW municipality {a!r}" + (f"; did you mean {', '.join(near)}?" if near else ""))
         out.append(hit)
     return out
+
+
+def db_of(zip_name: str) -> Path:
+    """The file of one municipality's zip: buildings_<AGS>_<name>.sqlite."""
+    m = ZIP.fullmatch(zip_name)
+    return DIR / f"buildings_{m.group(1)}_{m.group(2)}.sqlite"  # type: ignore[union-attr]
 
 
 def fetch(name: str) -> Path:
@@ -149,27 +155,27 @@ def build(zips: list[Path], db: Path) -> tuple[int, int]:
 
 
 def main() -> None:
-    """Fetch the municipalities asked for; rebuild the file from every zip, the ones it was built from included."""
+    """Fetch the municipalities asked for and write each one's file (once; again with --rebuild); no name: every zip
+    fetched so far."""
     asked = [a for a in sys.argv[1:] if not a.startswith("--")]
-    t0 = time.perf_counter()
-    if asked:
-        try:
-            names = pick(asked, listing())
-        except ValueError as exc:
-            sys.exit(str(exc))
-        new = [n for n in names if not (DIR / n).exists()]
-        for n in names:
-            print(f"{n}: {fetch(n).stat().st_size / 1e6:.0f} MB")
-        if DB.exists() and not new and "--rebuild" not in sys.argv:
-            return print(f"{DB} has these already (pass --rebuild to write it again)")
-    for n in parts_of(DB):  # the committed file's municipalities, not downloaded on this machine yet
-        fetch(n)
-    zips = sorted(p for p in DIR.glob("KWP-NRW_*_Shape.zip") if ZIP.fullmatch(p.name))
-    if not zips:
+    try:
+        names = (
+            pick(asked, listing()) if asked else sorted(p.name for p in DIR.glob("KWP-NRW_*_Shape.zip") if ZIP.fullmatch(p.name))
+        )
+    except ValueError as exc:
+        sys.exit(str(exc))
+    if not names:
         sys.exit("nothing fetched yet: name a municipality, e.g. Bonn")
-    n, m = build(zips, DB)
-    set_parts(DB, [p.name for p in zips])
-    print(f"{n} buildings, {m} street segments of {len(zips)} municipalities -> {DB} in {time.perf_counter() - t0:.0f} s")
+    for name in names:
+        db = db_of(name)
+        if db.exists() and "--rebuild" not in sys.argv:
+            print(f"{db.name} is there already (pass --rebuild to write it again)")
+            continue
+        t0 = time.perf_counter()
+        n, m = build([fetch(name)], db)
+        print(
+            f"{n} buildings, {m} street segments -> {db} ({db.stat().st_size / 1e6:.0f} MB) in {time.perf_counter() - t0:.0f} s"
+        )
 
 
 if __name__ == "__main__":

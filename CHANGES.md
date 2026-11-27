@@ -3,6 +3,34 @@
 Newest first, one entry per change: the date, who (person · agent), the area, what changed and why, the files, the
 checks run (and what could not be checked), what stays open. Keep it short; the details are in the code and the docs.
 
+## 2026-11-27 · owner · Claude · the app opens blank; NRW per municipality (Münster, Paderborn); a data check
+
+- **Opens blank**: a fresh browser opens `sim_blank` (`DEFAULT_DATASET`, was the main example); Home's *New here?*
+  card has *Start with the example* (`?case=1#/twin/map`: `openStartCase` puts Case 1 on), the tutorial beside it;
+  `start.sh` opens Home. A browser that visited before also opens blank in every new tab or browser start (the Blank
+  case; `reopened` in `cases.ts`: localStorage `app-opened`, sessionStorage `app-started`); a reload keeps the picks.
+  Files: `dataset.ts`, `HomePage.tsx`, `main.tsx`, `DataCenterPicker.tsx`, `cases.ts` (+test), `i18n.de.ts`,
+  `start.sh`, `dataset.test.ts`, e2e `shell-help` (new test), `operation` (renamed).
+- **NRW one file per municipality** (`buildings_<AGS>_<name>.sqlite`): with Münster and Paderborn one file was 115 MB,
+  over GitHub's 100 MB; now Bonn 44, Münster 42, Paderborn 27, Altenbeken 2 MB, and a municipality added on another
+  machine is one more file. `find_dbs` reads every `buildings*.sqlite` of a source folder (not the PfA's file).
+- **Data check** of every shared text file (company, site, people's names, paths, e-mails): only public citations,
+  the data providers' credits, the fictitious ACME of the tests, the generic dataset kind `testbed`, the repository
+  URL, and the main example's place (the European Central Bank's building, marked as a simulation everywhere). A
+  utility's name in a test comment removed (`pfa.test.ts`).
+Checks: ruff, pytest 886, vitest (730), typecheck, lint, build, e2e on 7614: shell-help, operation, smoke, tour,
+german (85), district, network (18); Paderborn, Münster, Bonn and Frankfurt answer on the local app.
+
+## 2026-11-27 · owner · Claude · the Hugging Face Space from GitHub
+
+`.github/workflows/space.yml`: on every push to `main` (or by hand) the commit's files, without the history and
+with the heat demand of Hessen and NRW (the owner's decision; `.dockerignore` now lets the two built files into the
+image), with the Space's settings (`sdk: docker`, `app_port: 7612`, `license: gpl-3.0`) on top of README.md, are uploaded to the Space named by the repository variable
+`HF_SPACE` with the secret `HF_TOKEN` (`hf upload --delete "*"`: one commit, the Space's history kept, no force push).
+Without `HF_SPACE` it does nothing. Checks: the YAML parses; the snapshot step run locally; a Docker build context
+holds exactly the two `buildings.sqlite`, no downloads.
+Not checked: a run on GitHub and the Space's build (the variable, secret and Space are not set up yet).
+
 ## 2026-11-27 · owner · Claude · GPL licence, the heat demand committed, 8 GB and every core
 
 - **Licence**: GPL-3.0-or-later (`LICENSE`, `app/pyproject.toml`, README). The heat demand data keeps its own terms.

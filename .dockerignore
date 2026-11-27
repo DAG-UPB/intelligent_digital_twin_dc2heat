@@ -15,6 +15,9 @@ app/data_versions
 app/.data_version
 **/_local
 **/_external
+# the Site map's heat demand (Hessen and NRW, built files only): in the image, the owner's decision
+!app/data/_external/waermeatlas/buildings.sqlite
+!app/data/_external/nrw/buildings_*.sqlite
 **/_status
 **/.venv
 **/node_modules

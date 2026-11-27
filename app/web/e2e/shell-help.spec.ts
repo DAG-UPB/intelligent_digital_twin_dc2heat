@@ -76,6 +76,21 @@ test("Home: the house button opens it; its cards lead to the pages and the links
   await expect(page.getByRole("tab", { name: "District" })).toHaveAttribute("aria-selected", "true");
 });
 
+test("a fresh browser opens blank; Home's Start with the example loads Case 1 on the Site map, a new tab blank again", async ({ page, context }) => {
+  await page.addInitScript(() => localStorage.clear()); // after beforeEach's: nothing remembered
+  await page.goto("/#/twin/map"); // the Case menu is beside a page's tabs, not on Home
+  await expect(page.getByRole("combobox", { name: "Case" })).toHaveValue("Blank · start from scratch");
+  await page.goto("/");
+  await page.locator("main.app__page").getByRole("link", { name: "Start with the example" }).click();
+  await expect(page).toHaveURL(/\/#\/twin\/map$/);
+  await expect(page.getByRole("combobox", { name: "Case" })).toHaveValue("Case 1 · Recovery, trained models");
+  await page.reload(); // a reload keeps it
+  await expect(page.getByRole("combobox", { name: "Case" })).toHaveValue("Case 1 · Recovery, trained models");
+  const tab = await context.newPage(); // the app opened again: blank
+  await tab.goto("/#/twin/map");
+  await expect(tab.getByRole("combobox", { name: "Case" })).toHaveValue("Blank · start from scratch");
+});
+
 test("theme toggle restyles the app; one palette, the language button beside it", async ({ page }) => {
   await page.goto("/#/help/about");
   const html = page.locator("html");

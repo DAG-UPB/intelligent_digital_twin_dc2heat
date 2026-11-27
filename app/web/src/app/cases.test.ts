@@ -1,5 +1,5 @@
 import { beforeEach, expect, test, vi } from "vitest";
-import { caseOn, caseShort, EXAMPLE_CASES, pickCase, pickedCase, removeCase, saveCase, savedCases, type Case } from "./cases";
+import { caseOn, caseShort, EXAMPLE_CASES, pickCase, pickedCase, removeCase, reopened, saveCase, savedCases, type Case } from "./cases";
 
 beforeEach(() => {
   const m = new Map<string, string>();
@@ -28,4 +28,14 @@ test("the case picked last stays on while its datasets do, though a model did no
   pickCase("Case 2 · Recovery, physical models");
   expect(caseOn(EXAMPLE_CASES, { ...now, dcModel: null }, pickedCase())?.name).toBe("Case 2 · Recovery, physical models");
   expect(caseOn(EXAMPLE_CASES, { ...now, district: "sim_district_heat" }, pickedCase())?.name).toBe("Case 3 · Recovery, measured district");
+});
+
+test("a new tab after an earlier visit opens blank; a first visit and a reload keep what is stored", () => {
+  const tab = new Map<string, string>();
+  vi.stubGlobal("sessionStorage", { getItem: (k: string) => tab.get(k) ?? null, setItem: (k: string, v: string) => void tab.set(k, v) });
+  expect(reopened()).toBe(false); // the first visit
+  expect(reopened()).toBe(false); // a reload
+  tab.clear(); // a new tab, or the browser started again
+  expect(reopened()).toBe(true);
+  expect(reopened()).toBe(false);
 });

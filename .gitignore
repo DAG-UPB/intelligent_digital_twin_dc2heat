@@ -7,11 +7,11 @@
 app/data/*
 !app/data/sim_*/
 # The Site map's heat demand: the built files of the Wärmeatlas Hessen (the owner's decision; © LEA, no open
-# licence: never in a public copy) and of NRW (dl-de/zero-2.0) are shared; the downloads they come from are not.
+# licence) and of NRW (dl-de/zero-2.0) are shared; the downloads they come from are not.
 !app/data/_external/
 app/data/_external/*/*
 !app/data/_external/waermeatlas/buildings.sqlite
-!app/data/_external/nrw/buildings.sqlite
+!app/data/_external/nrw/buildings_*.sqlite
 app/data/*/.backup/
 # P&ID drawings put into the app (may be confidential), also in simulation folders
 app/data/*/pid.png

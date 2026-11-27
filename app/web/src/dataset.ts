@@ -8,7 +8,7 @@ import type { Derived } from "./lib/sourceMap";
 
 const KEY = "dataset"; // the last one chosen: where a page without a choice of its own opens
 const pageKey = (route: string) => `dataset:${route}`;
-export const DEFAULT_DATASET = "sim_recovery_air"; // a fresh browser opens the main example: Case 1, at the European Central Bank
+export const DEFAULT_DATASET = "sim_blank"; // a fresh browser opens blank; Home's "Start with the example" loads Case 1
 
 const read = (key: string) => {
   try {

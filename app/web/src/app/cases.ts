@@ -78,3 +78,20 @@ export function caseOn(cases: Case[], now: Case, picked: string | null = null): 
 
 /** "Case 1 · Recovery, trained models" → "Case 1" (the closed pill). */
 export const caseShort = (name: string) => name.split(" · ")[0];
+
+const OPENED = "app-opened"; // in this browser: the app was opened here before
+const STARTED = "app-started"; // in this tab (sessionStorage): the app started already, a reload keeps the user's picks
+
+/** Whether the app opens again in a new tab or browser start after an earlier visit: then it opens blank (Blank case),
+ * not on what was picked last. A first visit opens blank anyway (DEFAULT_DATASET), so it keeps what a test put into
+ * storage before; a reload of the same tab keeps the picks. */
+export function reopened(): boolean {
+  try {
+    const again = sessionStorage.getItem(STARTED) === null && localStorage.getItem(OPENED) !== null;
+    sessionStorage.setItem(STARTED, "1");
+    localStorage.setItem(OPENED, "1");
+    return again;
+  } catch {
+    return false; // storage off: nothing remembered, it opens blank anyway
+  }
+}

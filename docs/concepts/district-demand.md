@@ -415,7 +415,7 @@ where $f$ is the **non-residential correction** (default 1, applied only to buil
 
 ### Other states: the open atlases of `app/sources/`
 
-Each folder of `app/sources/` imports one more source into the same format, its own `buildings.sqlite` beside the Wärmeatlas one (`app/data/_external/<source>/`; NRW's file is committed, the downloads git-ignored); the layer reads every source's import for the box, biggest demand first, and each building and street segment carries its `source`. The attribution and the information texts name the sources in view.
+Each folder of `app/sources/` imports one more source into the same format, its own `buildings*.sqlite` beside the Wärmeatlas one (`app/data/_external/<source>/`; NRW one file per municipality, committed, the downloads git-ignored); the layer reads every source's import for the box, biggest demand first, and each building and street segment carries its `source`. The attribution and the information texts name the sources in view.
 
 | Source | Folder · run (in `app/`) | What it adds | Licence |
 |---|---|---|---|

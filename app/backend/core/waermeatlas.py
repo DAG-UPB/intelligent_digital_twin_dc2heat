@@ -58,14 +58,15 @@ NOT_IMPORTED = "No heat demand data on this machine: run scripts/import_waermeat
 
 
 def find_dbs(roots: list[Path]) -> list[Path]:
-    """Every source's newest import (`<root>/<source>/buildings.sqlite`) of the folders `roots` (the data folder's own,
-    the examples', each version's): one per source, the newest (it holds every municipality fetched so far)."""
-    newest: dict[str, Path] = {}
+    """Every source's imports (`<root>/<source>/buildings*.sqlite`: one file for the source, or one per municipality,
+    as NRW's `buildings_<AGS>_<name>.sqlite`, each under GitHub's 100 MB) of the folders `roots` (the data folder's
+    own, the examples', each version's): of a file in several roots the newest."""
+    newest: dict[tuple[str, str], Path] = {}
     for root in roots:
-        for p in root.glob("*/buildings.sqlite") if root.is_dir() else []:
-            have = newest.get(p.parent.name)
+        for p in root.glob("*/buildings*.sqlite") if root.is_dir() else []:
+            have = newest.get((p.parent.name, p.name))
             if have is None or p.stat().st_mtime > have.stat().st_mtime:
-                newest[p.parent.name] = p
+                newest[(p.parent.name, p.name)] = p
     return [newest[k] for k in sorted(newest)]
 
 

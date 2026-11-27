@@ -149,7 +149,7 @@ test("cases: one pick sets the three systems and shows which models they run", a
   await expect(page.locator("label.heat-load", { has: page.getByLabel("District: demand and system") })).toHaveAttribute("title", /District · heat demand/); // Heat Matching follows it
 });
 
-test("started with ?case=1 (start.sh): Case 1 on the Site map, whatever was picked before; the address without it", async ({ page }) => {
+test("started with ?case=1 (Home's Start with the example): Case 1 on the Site map, whatever was picked before; the address without it", async ({ page }) => {
   await page.addInitScript(() => localStorage.getItem("case") === null && localStorage.setItem("dataset:district/map", "sim_district_heat"));
   await page.goto("/?case=1#/twin/map");
   await expect(page.getByRole("combobox", { name: "Case" })).toHaveValue("Case 1 · Recovery, trained models");

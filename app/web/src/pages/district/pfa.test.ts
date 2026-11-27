@@ -50,7 +50,7 @@ describe("a source's heat over the typical year", () => {
   });
 
   test("the months only shape the year: months far below it (another unit) are scaled to it; without a year they count", () => {
-    // as a Mainova boiler: 1,473 MWh a year, months that sum to 0.44, none in August
+    // as a boiler in the register: 1,473 MWh a year, months that sum to 0.44, none in August
     const months = [0.05, 0.02, 0.02, 0.05, 0.04, 0.05, 0.04, 0, 0.05, 0.03, 0.02, 0.04];
     const y = sourceYear(source({ mwh: 1472.8, max_kw: 409, months_mwh: months }));
     expect(sum(y.q) / 1000).toBeGreaterThan(1300); // the year's amount (less only where the max kW caps a month)

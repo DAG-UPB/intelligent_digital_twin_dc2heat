@@ -69,12 +69,16 @@ export default function HomePage() {
         <section className="card card--lg">
           <h2 className="help__h2">New here?</h2>
           <p>
-            Pick a case in the <b>Case</b> menu, right of the page tabs: <b>Case 1</b> is the example, a 5 MW data center in the European Central Bank&apos;s
-            building with the district around it and its models; <b>Blank</b> starts from scratch. Then start the tutorial: three paths, ideation, planning and
-            operation. On every page, <b>?</b> at the top right says what the page is for and shows it step by step.
+            The app opens blank. <b>Start with the example</b> loads Case 1, a 5 MW data center in the European Central Bank&apos;s building with the district
+            around it and its models; the <b>Case</b> menu, right of the page tabs, has the others, and <b>Blank</b> starts from scratch. Then start the tutorial:
+            three paths, ideation, planning and operation. On every page, <b>?</b> at the top right says what the page is for and shows it step by step.
           </p>
           <div className="help-section__links">
-            <a className="btn btn--pill btn--primary" href={hrefOf("help", "guide")}>
+            {/* a new load: openStartCase (main.tsx) puts Case 1 on before the first page reads its dataset, as start.sh did */}
+            <a className="btn btn--pill btn--primary" href="?case=1#/twin/map">
+              Start with the example
+            </a>
+            <a className="btn btn--pill" href={hrefOf("help", "guide")}>
               Start the tutorial
             </a>
           </div>

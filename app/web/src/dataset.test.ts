@@ -16,11 +16,11 @@ async function load(storage: Partial<Storage>) {
 
 test("DATASET is the remembered one, else the default (also when storage is blocked)", async () => {
   expect((await load({ getItem: () => "plant_b_1" })).DATASET).toBe("plant_b_1");
-  expect((await load({ getItem: () => null })).DATASET).toBe("sim_recovery_air");
+  expect((await load({ getItem: () => null })).DATASET).toBe("sim_blank"); // a fresh browser opens blank
   const blocked = () => {
     throw new Error("SecurityError");
   };
-  expect((await load({ getItem: blocked })).DATASET).toBe("sim_recovery_air");
+  expect((await load({ getItem: blocked })).DATASET).toBe("sim_blank");
 });
 
 test("switchDataset remembers the choice and reloads, even when storage is blocked", async () => {
@@ -40,7 +40,7 @@ test("switchDataset remembers the choice and reloads, even when storage is block
 test("each page has its own dataset: its choice, else the last one chosen, else the default", async () => {
   const store: Record<string, string> = {};
   const m = await load({ getItem: (k) => store[k] ?? null, setItem: (k, v) => void (store[k] = v) });
-  expect(m.datasetOf("dc/pid")).toBe("sim_recovery_air");
+  expect(m.datasetOf("dc/pid")).toBe("sim_blank");
   m.chooseDataset("dc/pid", "lab_exp_1");
   expect(m.datasetOf("dc/pid")).toBe("lab_exp_1");
   expect(m.datasetOf("twin/map")).toBe("lab_exp_1"); // a page without a choice opens on the last one

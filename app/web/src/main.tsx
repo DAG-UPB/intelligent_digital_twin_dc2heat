@@ -11,7 +11,7 @@ import "./index.css";
 import "./ui/ui.css";
 import "./ui/look.css"; // the look on every page: texture, cards, neumorphism as an accent
 
-openStartCase(); // started by start.sh: its case before the first page reads its dataset
+openStartCase(); // ?case=1 (Home's "Start with the example"): its case before the first page reads its dataset
 
 // a page file of the build this tab was opened on is gone (the app was rebuilt since): load the new build, once, unless
 // the open page has unsaved edits (then the page's error box says so and offers the reload)

@@ -10,7 +10,7 @@ import { fetchSite, saveSite, type DataFolderEntry, type DataVersions } from "..
 import { chooseDataset, chooseSectionDataset, DATASET, datasetOf, PICKED } from "../dataset";
 import { STRUCTURES } from "../lib/modelCatalog";
 import { TABS } from "./routes";
-import { caseOn, caseShort, EXAMPLE_CASES, pickCase, pickedCase, removeCase, saveCase, savedCases, type Case } from "./cases";
+import { caseOn, caseShort, EXAMPLE_CASES, pickCase, pickedCase, removeCase, reopened, saveCase, savedCases, type Case } from "./cases";
 import { AddDataCenterDialog } from "./AddDataCenterDialog";
 
 export const LOCAL = "local";
@@ -64,13 +64,15 @@ export const SYSTEMS: { id: string; label: string; tabs: string[] }[] = [
 const routesOf = (tabs: string[]) => TABS.filter((t) => tabs.includes(t.id)).flatMap((t) => t.subs.map((s) => `${t.id}/${s.id}`));
 
 /**
- * The case the app was started with (`?case=1`: start.sh opens it so), before the first page renders: its three
+ * The case the app was started with (`?case=1`: Home's "Start with the example" opens it so), before the first page renders: its three
  * datasets for their sections, its models into their site.json, then the address without it (a reload keeps the
- * user's own choice). Nothing without the parameter or for an unknown case.
+ * user's own choice). Without the parameter a new tab or browser start opens blank (the Blank case, `reopened`); a
+ * reload keeps the picks. Nothing for an unknown case.
  */
 export function openStartCase(search = window.location.search) {
   const want = new URLSearchParams(search).get("case");
-  const c = want && EXAMPLE_CASES.find((x) => caseShort(x.name) === `Case ${want}` || x.name === want);
+  const again = reopened();
+  const c = want ? EXAMPLE_CASES.find((x) => caseShort(x.name) === `Case ${want}` || x.name === want) : again ? EXAMPLE_CASES[0] : undefined;
   if (!c) return;
   pickCase(c.name);
   for (const sys of SYSTEMS) chooseSectionDataset(routesOf(sys.tabs), c[sys.id as "dc" | "heat" | "district"]);

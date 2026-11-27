@@ -41,7 +41,7 @@ source_suffix = {
 html_theme = "sphinx_book_theme"
 html_title = "Intelligent Digital Twin — Technical documentation"
 html_theme_options = {
-    "repository_url": "https://github.com/drzg15/intelligent_digital_twin_dc2heat",
+    "repository_url": "https://github.com/DAG-UPB/intelligent_digital_twin_dc2heat",
     "use_repository_button": True,
     "show_toc_level": 2,
     "navigation_with_keys": True,

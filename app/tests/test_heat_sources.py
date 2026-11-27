@@ -46,6 +46,13 @@ def test_find_dbs_takes_each_sources_newest(tmp_path: Path) -> None:
     assert find_dbs([tmp_path / "one", tmp_path / "two"]) == [new]
 
 
+def test_find_dbs_reads_a_file_per_municipality_and_nothing_else(tmp_path: Path) -> None:
+    for name in ("nrw/buildings_05314000_Bonn.sqlite", "nrw/buildings_05774032_Paderborn.sqlite", "pfa/sources.sqlite"):
+        (tmp_path / name).parent.mkdir(exist_ok=True)
+        (tmp_path / name).write_text("db")
+    assert [p.name for p in find_dbs([tmp_path])] == ["buildings_05314000_Bonn.sqlite", "buildings_05774032_Paderborn.sqlite"]
+
+
 # ---- a tiny NRW municipality: shapefiles written by hand, zipped as LANUK names them ----
 
 

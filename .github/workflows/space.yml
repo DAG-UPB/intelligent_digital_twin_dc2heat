@@ -1,0 +1,33 @@
+# The Hugging Face Space: on every push to main (or by hand, Actions › Deploy to the Space › Run workflow), the
+# repository's files as they are in that commit, without the history, with the Space's settings on top of README.md;
+# the heat demand of Hessen and NRW (app/data/_external/*/buildings.sqlite) included, the owner's decision. The
+# Space builds the Dockerfile (the examples only, port 7612).
+# Needs, in this repository's Settings › Secrets and variables › Actions: the variable HF_SPACE (owner/name of the
+# Space) and the secret HF_TOKEN (a Hugging Face token that may write to it). Without HF_SPACE nothing runs.
+# The Space itself needs the variable IDT_ALLOWED_HOSTS = its host name (<owner>-<name>.hf.space).
+name: Deploy to the Space
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    if: vars.HF_SPACE != ''
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Snapshot without history
+        run: |
+          mkdir "$RUNNER_TEMP/space"
+          git archive HEAD | tar -x -C "$RUNNER_TEMP/space"
+          { printf -- '---\ntitle: Intelligent Digital Twin\nemoji: 🔥\ncolorFrom: red\ncolorTo: yellow\nsdk: docker\napp_port: 7612\nlicense: gpl-3.0\n---\n\n'
+            cat README.md; } > "$RUNNER_TEMP/space/README.md"
+      - name: Upload (replaces every file of the Space; its history keeps the earlier versions)
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+          HF_SPACE: ${{ vars.HF_SPACE }}
+        run: |
+          pip install --quiet "huggingface_hub>=1.0"
+          hf upload "$HF_SPACE" "$RUNNER_TEMP/space" . --repo-type space --delete "*" --commit-message "GitHub ${GITHUB_SHA::7}"

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Build the page when its sources changed, then run a single Python process on http://localhost:7600.
 # `./start.sh examples`: the app on the examples only (no data folder, no real data) on http://localhost:7612.
-# Once it answers, the browser opens on the Site map with Case 1 (the 5 MW example at the European Central Bank);
+# Once it answers, the browser opens on Home (a fresh browser: blank; Home's "Start with the example" loads Case 1);
 # NO_BROWSER=1 skips that (agents, tests). The first start of a new person makes their project folder (below).
 set -e
 cd "$(dirname "$0")"
@@ -27,7 +27,7 @@ fi
 port="${PORT:-7600}"
 [ "${1:-}" = "examples" ] && port="${PORT:-7612}"
 if [ -z "${NO_BROWSER:-}" ]; then
-  url="http://localhost:${port}/?case=1#/twin/map"
+  url="http://localhost:${port}/"
   opener="$(command -v open || command -v xdg-open || true)"
   if [ -n "$opener" ]; then
     (for _ in $(seq 1 120); do curl -sf "http://localhost:${port}/health" >/dev/null 2>&1 && { "$opener" "$url" >/dev/null 2>&1; break; }; sleep 1; done) &
