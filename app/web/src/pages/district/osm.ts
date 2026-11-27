@@ -20,9 +20,32 @@ export interface Building {
 }
 
 const NOMINATIM = "https://nominatim.openstreetmap.org";
-// Fallback only, when Nominatim does not return a building: slow public server (~30 s).
-const OVERPASS = "https://overpass-api.de/api/interpreter";
-const OVERPASS_TIMEOUT_MS = 45000;
+// A slow public server (~30 s a query): overpass-api.de, then its two servers directly (the same operator, FOSSGIS), as
+// the one asked is often busy (429, 502, 504) while another answers; all three busy at once: once more after a pause.
+const OVERPASS = ["overpass-api.de", "lz4.overpass-api.de", "z.overpass-api.de"].map((host) => `https://${host}/api/interpreter`);
+const OVERPASS_TIMEOUT_MS = 75000;
+const OVERPASS_PAUSE_MS = 10000;
+const busy = (status: number) => status === 429 || status >= 500;
+
+/** POST an Overpass query: the next server when one is busy or cannot be reached, each twice; a timeout ends it (a slow
+ * answer, not a refusal: asking again would only wait longer). The last answer, ok or not; throws the last error when
+ * none answered. */
+async function overpass(query: string): Promise<Response> {
+  let last: Response | undefined;
+  let error: unknown;
+  for (const [i, url] of [...OVERPASS, ...OVERPASS].entries()) {
+    if (i === OVERPASS.length) await new Promise((done) => setTimeout(done, OVERPASS_PAUSE_MS));
+    try {
+      last = await fetch(url, { method: "POST", body: new URLSearchParams({ data: query }), signal: AbortSignal.timeout(OVERPASS_TIMEOUT_MS) });
+      if (!busy(last.status)) return last;
+    } catch (err) {
+      if ((err as Error).name === "TimeoutError") throw err;
+      error = err; // a busy server's error page often lacks CORS headers: the browser reports a network error
+    }
+  }
+  if (last) return last;
+  throw error;
+}
 /**
  * The OSM highways a heating pipe can run under or along: roads of every rank but motorways (fenced, never dug up for
  * a house), service roads and squares (into courtyards and campuses), foot and cycle paths, tracks. Not steps, indoor
@@ -94,22 +117,20 @@ const r6 = (x: number) => Math.round(x * 1e6) / 1e6;
 
 /**
  * The streets and paths in a south, west, north, east box, from Overpass (the example's are stored instead): on the
- * user's click only, never on load (a slow public server, ~5-30 s), as streetWays. Throws a readable error for a box
+ * user's click only, never on load (a slow public server, ~5-40 s), as streetWays. Throws a readable error for a box
  * over 3 km, a timeout or a refusal.
  */
 export async function streetsIn([s, w, n, e]: [number, number, number, number]): Promise<StreetWay[]> {
   const km = Math.max(n - s, (e - w) * Math.cos((((n + s) / 2) * Math.PI) / 180)) * 111.32;
   if (km > MAX_STREETS_KM) throw new Error(`The heat sinks spread over ${Math.round(km)} km: streets are loaded for at most ${MAX_STREETS_KM} km`);
-  const q = `[out:json][timeout:25];way["highway"~"^(${PIPE_HIGHWAYS})$"]["tunnel"!="yes"](${s},${w},${n},${e});out geom;`;
-  const res = await fetch(OVERPASS, { method: "POST", body: new URLSearchParams({ data: q }), signal: AbortSignal.timeout(OVERPASS_TIMEOUT_MS) }).catch(
-    (err: Error) => {
-      throw new Error(
-        err.name === "TimeoutError"
-          ? "OpenStreetMap (Overpass) did not send the streets within 45 s: try again later"
-          : `OpenStreetMap could not be reached: ${err.message}`,
-      );
-    },
-  );
+  const q = `[out:json][timeout:60];way["highway"~"^(${PIPE_HIGHWAYS})$"]["tunnel"!="yes"](${s},${w},${n},${e});out geom;`;
+  const res = await overpass(q).catch((err: Error) => {
+    throw new Error(
+      err.name === "TimeoutError"
+        ? "OpenStreetMap (Overpass) did not send the streets within 75 s: try again later"
+        : `OpenStreetMap could not be reached: ${err.message}`,
+    );
+  });
   if (!res.ok) throw new Error(`OpenStreetMap (Overpass) refused the streets (${res.status}): try again in a minute`);
   return streetWays((await res.json()).elements ?? []);
 }
@@ -147,7 +168,7 @@ export async function buildingAt(lat: number, lon: number): Promise<Building | n
 
   // 3. Last resort: ask Overpass which building contains the point. Slow (~30 s).
   const q = `[out:json][timeout:25];is_in(${lat},${lon})->.a;way(pivot.a)["building"];out geom tags;`;
-  const res = await fetch(OVERPASS, { method: "POST", body: new URLSearchParams({ data: q }), signal: AbortSignal.timeout(OVERPASS_TIMEOUT_MS) });
+  const res = await overpass(q);
   const w = res.ok ? (await res.json()).elements?.[0] : undefined;
   if (!w) return null;
   const t = w.tags ?? {};
@@ -183,7 +204,7 @@ export function pickForest(found: Bounded[], lat: number, lon: number, minHa = 3
 export async function nearestForest(lat: number, lon: number) {
   const around = `(around:20000,${lat},${lon})`;
   const q = `[out:json][timeout:25];(way["landuse"="forest"]${around};relation["landuse"="forest"]${around};way["natural"="wood"]${around};relation["natural"="wood"]${around};);out bb;`;
-  const res = await fetch(OVERPASS, { method: "POST", body: new URLSearchParams({ data: q }), signal: AbortSignal.timeout(OVERPASS_TIMEOUT_MS) });
+  const res = await overpass(q);
   if (!res.ok) throw new Error(`OpenStreetMap (Overpass) refused (${res.status})`);
   return pickForest((await res.json()).elements ?? [], lat, lon);
 }

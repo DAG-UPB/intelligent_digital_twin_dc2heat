@@ -3,6 +3,17 @@
 Newest first, one entry per change: the date, who (person · agent), the area, what changed and why, the files, the
 checks run (and what could not be checked), what stays open. Keep it short; the details are in the code and the docs.
 
+## 2026-11-27 · owner · Claude · Site map: streets from OpenStreetMap when Overpass is busy
+
+- *Load streets from OpenStreetMap* failed with "refused (502)": overpass-api.de answers 502 "Gateway Timeout" within a
+  second when busy. Every Overpass query (streets, the building under a click, the nearest forest) now asks the next
+  server of the same operator (overpass-api.de, lz4., z.) on 429/5xx or a network error, all three once more after
+  10 s; a timeout still ends it. Street query timeout 25 → 60 s, the page's 45 → 75 s.
+  Files: `pages/district/osm.ts` (+test), `HeatNetwork.tsx`, `i18n.de.ts`.
+- Checked: vitest (732), typecheck, lint, build; e2e district + network on 7614; live on 7614 against the real servers:
+  overpass-api.de 502, then lz4 200, streets loaded and the network planned. Note: the e2e `readOnly` guard
+  (`**/api/**`) also stops Overpass POSTs, so the specs never reach the public servers.
+
 ## 2026-11-27 · owner · Claude · the repository moved to DAG-UPB
 
 - The repository is `DAG-UPB/intelligent_digital_twin_dc2heat` (all history, `main` and `general_dev`); a fork in the

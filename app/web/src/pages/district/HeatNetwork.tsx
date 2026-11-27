@@ -194,7 +194,7 @@ export default function HeatNetwork({
   const fromOsm = async () => {
     if (!box) return;
     setError(null);
-    setBusy("Asking OpenStreetMap for the streets… (up to 45 s)");
+    setBusy("Asking OpenStreetMap for the streets… (up to 75 s)");
     try {
       const ways = await streetsIn(box);
       setStreets({ ways, from: "from OpenStreetMap just now (not saved), © OpenStreetMap contributors (ODbL)" });

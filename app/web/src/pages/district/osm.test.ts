@@ -127,6 +127,29 @@ describe("streetsIn", () => {
     expect(streetKind({ highway: "pedestrian" })).toBe("path"); // a car-free street
   });
 
+  test("a busy server (502, 429): the next one; a refusal: no other asked", async () => {
+    const calls: string[] = [];
+    const status = [502, 429, 200];
+    vi.stubGlobal("fetch", async (url: string) => {
+      const s = status[calls.push(url) - 1];
+      return { ok: s === 200, status: s, json: async () => ({ elements: [] }) };
+    });
+    expect(await streetsIn([50, 8, 50.01, 8.01])).toEqual([]);
+    expect(calls.map((u) => new URL(u).host)).toEqual(["overpass-api.de", "lz4.overpass-api.de", "z.overpass-api.de"]);
+    calls.length = 0;
+    vi.useFakeTimers(); // every server busy: each once more after the pause
+    status.splice(0, 3, 502, 502, 502, 504, 502, 200);
+    const again = streetsIn([50, 8, 50.01, 8.01]);
+    await vi.advanceTimersByTimeAsync(10_000);
+    expect(await again).toEqual([]);
+    expect(calls).toHaveLength(6);
+    vi.useRealTimers();
+    calls.length = 0;
+    status.splice(0, 6, 400);
+    await expect(streetsIn([50, 8, 50.01, 8.01])).rejects.toThrow("refused the streets (400)");
+    expect(calls).toHaveLength(1);
+  });
+
   test("a box over 3 km is not asked for, a refusal is a readable error", async () => {
     const calls = stubFetch([]);
     await expect(streetsIn([50, 8, 50.1, 8.01])).rejects.toThrow("11 km");
