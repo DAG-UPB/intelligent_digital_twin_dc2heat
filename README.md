@@ -6,7 +6,7 @@ A local planning tool of the **DC2HEAT** project. It shows how much of a data ce
 - **Heat Distribution:** the waste heat at an extraction point, through a direct heat exchanger or a heat pump and a storage tank, matched step by step against the district's demand.
 - **District:** heat sinks on a map, with their heat demand generated from houses, weather and daily curves.
 
-The app is one Python process (FastAPI) that serves a React web page. It uses no database and no cloud service, and it stays within a 2 GB memory budget.
+The app is one Python process (FastAPI) that serves a React web page. It uses no database and no cloud service, and it stays within an 8 GB memory budget.
 
 ## Quick start
 
@@ -75,7 +75,7 @@ The image (`Dockerfile`) builds the page, the documentation (served at `/docs/`)
 (`.dockerignore`). The `data` service mounts `IDT_DATA` at `/data` (one sub-folder per version, as above; an empty
 folder gets a `version_1`; without `IDT_DATA` a Docker volume is used); the app saves into it, so it must be writable
 by the container's user (uid 1000; `docker compose build --build-arg UID=$(id -u)` for yours). SMARD's market CSVs go
-into `<data folder>/_market/elec_price/` and `elec_generation/`. The container has a memory limit of 2 GB and a
+into `<data folder>/_market/elec_price/` and `elec_generation/`. The container has a memory limit of 8 GB and a
 health check on `/health`. `PORT` changes the port (the same on both sides: the app's `/mcp` calls itself on it).
 
 **The app has no login.** Its only protection is that it answers to `localhost` alone (`IDT_ALLOWED_HOSTS`, checked
@@ -122,7 +122,7 @@ project files) goes to the agent's model provider: use it on real data only when
 
 ## Privacy
 
-Everything runs on your machine, and measurements, models and drawings never leave it. Only the simulated datasets (`app/data/sim_*`) are in this repository. Real data-center data and every P&ID drawing (`pid.png`, `pid_plant.json`) are git-ignored and must never be committed. Internet access is limited to the Site map, which calls OpenStreetMap / Esri tiles and OpenStreetMap address and building look-ups from the browser, plus the web fonts (Google Fonts), TabPFN's one-time weight download, and the MathJax / Mermaid scripts of the documentation site (jsDelivr). No data is sent. A saved project file is **not** free of measured data (TabPFN models keep up to 1000 measured rows per variable, and `pid_plant.json` is included): treat a project of a real data center as confidential. See `docs/architecture/data-and-privacy.md`.
+Everything runs on your machine, and measurements, models and drawings never leave it. Only the simulated datasets (`app/data/sim_*`) and the Site map's heat demand of Frankfurt (Wärmeatlas Hessen, © LEA, not for a public copy) and of Bonn and Altenbeken (NRW, dl-de/zero-2.0) are in this repository. Real data-center data and every P&ID drawing (`pid.png`, `pid_plant.json`) are git-ignored and must never be committed. Internet access is limited to the Site map, which calls OpenStreetMap / Esri tiles and OpenStreetMap address and building look-ups from the browser, plus the web fonts (Google Fonts), TabPFN's one-time weight download, and the MathJax / Mermaid scripts of the documentation site (jsDelivr). No data is sent. A saved project file is **not** free of measured data (TabPFN models keep up to 1000 measured rows per variable, and `pid_plant.json` is included): treat a project of a real data center as confidential. See `docs/architecture/data-and-privacy.md`.
 
 ## Repository
 
@@ -132,3 +132,10 @@ Everything runs on your machine, and measurements, models and drawings never lea
 | `docs/` | Technical documentation (Sphinx) |
 | `wiki/` | The agent wiki (domain knowledge for AI agents, read by the MCP tools) |
 | `Dockerfile` · `compose.yaml` · `.dockerignore` | The container (above) |
+
+## Licence
+
+The code and documentation are free software under the GNU General Public License, version 3 or (at your option) any
+later version: see [`LICENSE`](LICENSE). The heat demand data under `app/data/_external/` keeps its own terms and is
+not covered by it: the Wärmeatlas Hessen is © LEA LandesEnergieAgentur Hessen GmbH (no open licence; keep it out of
+any public copy), the Kommunale Wärmeplanung NRW is © LANUK NRW under dl-de/zero-2.0.

@@ -3,6 +3,25 @@
 Newest first, one entry per change: the date, who (person · agent), the area, what changed and why, the files, the
 checks run (and what could not be checked), what stays open. Keep it short; the details are in the code and the docs.
 
+## 2026-11-27 · owner · Claude · GPL licence, the heat demand committed, 8 GB and every core
+
+- **Licence**: GPL-3.0-or-later (`LICENSE`, `app/pyproject.toml`, README). The heat demand data keeps its own terms.
+- **Heat demand in the repository** (the owner's decision): `app/data/_external/waermeatlas/buildings.sqlite`
+  (Frankfurt, © LEA, no open licence: never in a public copy; `.dockerignore` keeps `_external/` out of the image)
+  and `.../nrw/buildings.sqlite` (Bonn, Altenbeken, dl-de/zero-2.0); the downloads stay git-ignored. Both import
+  scripts no longer refuse to run when git does not ignore the file; each file records the downloads it was built from
+  (`parts_of`/`set_parts` in `core/waermeatlas.py`) and a rebuild fetches the missing ones first, so adding a
+  municipality on another machine does not drop the others. Hard rule 1 names the two files.
+- **Memory budget 8 GB** (was 2): `guard.sh` default 8192, `compose.yaml` `mem_limit: 8g`, Hard rule 2, docs. The
+  model knobs of `limits.py` (TabPFN 500 rows / 30 inputs, symbolic 3000 rows) stay as they were.
+- **Every core**: `start.sh` and the Dockerfile no longer set `OMP_NUM_THREADS=1`; XGBoost has no `nthread` (every
+  core, or `OMP_NUM_THREADS`). Measured: XGBoost on all cores then TabPFN with torch on 8 threads hangs (macOS), so
+  TabPFN keeps one thread; Chronos-2 runs on mps beside XGBoost without trouble; gplearn on all cores was slower
+  (3.6 vs 2.1 s), so `n_jobs=1` stays. XGBoost's predictions on 1 and 8 threads are identical (max diff 0.0): the
+  examples' numbers do not move, `make.py` not re-run. CI keeps `OMP_NUM_THREADS=1`.
+Checks: ruff, pytest 885 and `-m slow` 10 (both without the thread variables), docs `-W`, `uv lock --check`.
+Not checked: the container with 8 GB and all cores, the app restarted under the new `start.sh` (one export removed).
+
 ## 2026-11-25 · owner · Claude · heat demand of other states: app/sources/, NRW first
 
 The Site map's heat demand layer read one source (the Wärmeatlas Hessen). Now every source imported on this machine

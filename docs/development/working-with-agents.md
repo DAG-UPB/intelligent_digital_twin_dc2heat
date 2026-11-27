@@ -99,7 +99,7 @@ Change the constant in `app/backend/core/limits.py` (nowhere else), run the affe
 ## Rules
 
 1. **Privacy.** Never open, print, copy or commit anything under `app/data/` except the simulations `app/data/sim_*`. Never commit a P&ID drawing, `pid.png` or `pid_plant.json`. Tests use synthetic data and synthetic drawings only. Nothing about a data center leaves the machine.
-2. **Memory.** Run servers and Python test suites under the 2 GB watchdog, `bash app/scripts/guard.sh <cmd>` ({doc}`development`). Heavy libraries are imported lazily; limits live in `limits.py`.
+2. **Memory.** Run servers and Python test suites under the 8 GB watchdog, `bash app/scripts/guard.sh <cmd>` ({doc}`development`). Heavy libraries are imported lazily; limits live in `limits.py`.
 3. **Lags.** Graph files store negative lags; inside the twin and in lag discovery they are positive (see {doc}`../concepts/causal-graph`). Links start at lag 1. Discovered lags are a suggestion: **never write them to a graph file automatically** — only the user's save does.
 4. **Stable contracts.** Keep these byte-identical unless a migration is planned: HTTP URLs and JSON shapes, hash routes (and the `OLD` aliases), `localStorage` keys, dataset file names and formats (`causal_graph*.json`, `dataset.json`, `site.json`, `equations.json`, `models/*`, `pid.png`, `pid_plant.json`), the project format (`"dc-twin-project"`), and the model names (`linear`, `linear_all`, `xgb`, `xgb_all`, `phys`, `sym`, `tabpfn`).
 5. **Style.** Comments say *why*, not what. Short docstrings on every module and public function. Python: type hints on public functions, `ruff check` and `ruff format` clean. TypeScript: strict, no `any` without a reason, no unused code.

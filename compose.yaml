@@ -15,7 +15,7 @@ x-app: &app
     args:
       ML: ${IDT_ML:-0}
   image: intelligent-digital-twin
-  mem_limit: 2g # the app's memory budget (app/scripts/guard.sh outside a container)
+  mem_limit: 8g # the app's memory budget (app/scripts/guard.sh outside a container)
 
 services:
   examples:

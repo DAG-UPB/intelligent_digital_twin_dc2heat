@@ -1,9 +1,9 @@
 """How long training a model would take, before it starts: the plan fit() follows (fit.py plan: which variables get
 a model, with how many inputs) times what each learner costs per model.
 
-The costs were measured on an Apple-silicon laptop with one thread per process (start.sh sets OMP_NUM_THREADS=1) on
-synthetic data, 2 000 and 8 000 rows, 4 and 12 inputs; another computer or other data can take half to twice as
-long, so the answer is a range.
+The costs were measured on an Apple-silicon laptop with one thread per process (before XGBoost used every core:
+for it now an upper bound) on synthetic data, 2 000 and 8 000 rows, 4 and 12 inputs; another computer or other data
+can take half to twice as long, so the answer is a range.
 """
 
 import pandas as pd

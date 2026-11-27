@@ -24,7 +24,7 @@ GP_PARAMS = dict(
     generations=15,
     function_set=("add", "sub", "mul", "max", "min"),
     parsimony_coefficient=0.01,
-    n_jobs=1,
+    n_jobs=1,  # all cores was slower (3.6 s vs 2.1 s on 3000 rows, 8 cores: joblib's processes cost more)
     random_state=0,
 )
 

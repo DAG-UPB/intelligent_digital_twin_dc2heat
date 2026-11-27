@@ -6,7 +6,7 @@ FastAPI backend (`backend/`) and Vite + React + TypeScript web page (`web/`), se
 
 ```bash
 ./start.sh                          # http://localhost:7600 (builds web/dist when web/src changed)
-bash scripts/guard.sh ./start.sh    # the same under the 2 GB memory watchdog (GUARD_MB to change it)
+bash scripts/guard.sh ./start.sh    # the same under the 8 GB memory watchdog (GUARD_MB to change it)
 ```
 
 While working on the page, run the backend and the Vite dev server side by side:

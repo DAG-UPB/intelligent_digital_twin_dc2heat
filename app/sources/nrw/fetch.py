@@ -2,8 +2,8 @@
 
 LANUK publishes, for each of NRW's 396 municipalities, a zip of shapefiles (EPSG:25832) under dl-de/zero-2.0
 (https://www.opengeodata.nrw.de/produkte/umwelt_klima/energie/kwp/; Bonn 134 MB, Köln 336 MB). This script downloads
-the municipalities asked for into the git-ignored `app/data/_external/nrw/` (the zips only: their shapefiles are
-read inside the zip) and writes `buildings.sqlite` next to them with every municipality fetched so far: the format
+the municipalities asked for into `app/data/_external/nrw/` (the zips, git-ignored: their shapefiles are read inside
+the zip) and writes `buildings.sqlite` next to them (committed) with every municipality fetched so far: the format
 `backend/core/waermeatlas.py` reads, so the Site map's heat demand layer shows NRW beside the Wärmeatlas Hessen.
 
 What is read (Kurzdokumentation_Raumwaermebedarfsmodell.pdf in the zip; model 2024, buildings as of summer 2022):
@@ -24,7 +24,6 @@ Run from app/:  bash scripts/guard.sh .venv/bin/python sources/nrw/fetch.py Bonn
 """
 
 import re
-import subprocess
 import sys
 import time
 import urllib.request
@@ -35,7 +34,7 @@ APP = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(APP))
 
 from backend.config import DATA_DIR  # noqa: E402
-from backend.core.waermeatlas import DB_FILE, utm32_to_wgs84, write_db  # noqa: E402
+from backend.core.waermeatlas import DB_FILE, parts_of, set_parts, utm32_to_wgs84, write_db  # noqa: E402
 from sources.shp import centroid, records, ring_area  # noqa: E402
 
 BASE = "https://www.opengeodata.nrw.de/produkte/umwelt_klima/energie/kwp/"
@@ -150,10 +149,7 @@ def build(zips: list[Path], db: Path) -> tuple[int, int]:
 
 
 def main() -> None:
-    """Refuse unless git ignores the folder; fetch the municipalities asked for; rebuild the file from every zip."""
-    ignored = subprocess.run(["git", "check-ignore", "-q", str(DB)], cwd=APP, check=False).returncode == 0
-    if not ignored:
-        sys.exit(f"git does not ignore {DIR}: add a .gitignore rule first")
+    """Fetch the municipalities asked for; rebuild the file from every zip, the ones it was built from included."""
     asked = [a for a in sys.argv[1:] if not a.startswith("--")]
     t0 = time.perf_counter()
     if asked:
@@ -166,10 +162,13 @@ def main() -> None:
             print(f"{n}: {fetch(n).stat().st_size / 1e6:.0f} MB")
         if DB.exists() and not new and "--rebuild" not in sys.argv:
             return print(f"{DB} has these already (pass --rebuild to write it again)")
+    for n in parts_of(DB):  # the committed file's municipalities, not downloaded on this machine yet
+        fetch(n)
     zips = sorted(p for p in DIR.glob("KWP-NRW_*_Shape.zip") if ZIP.fullmatch(p.name))
     if not zips:
         sys.exit("nothing fetched yet: name a municipality, e.g. Bonn")
     n, m = build(zips, DB)
+    set_parts(DB, [p.name for p in zips])
     print(f"{n} buildings, {m} street segments of {len(zips)} municipalities -> {DB} in {time.perf_counter() - t0:.0f} s")
 
 

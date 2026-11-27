@@ -3,6 +3,7 @@ name = "intelligent-digital-twin"
 version = "1.3.0"
 description = "Local digital twin of a data center: causal graphs, learned models, what-if scenarios and heat reuse."
 requires-python = ">=3.12"
+license = "GPL-3.0-or-later"
 dependencies = [
     "anyio>=4.0",  # P&ID uploads run off the event loop
     "fastapi>=0.135.2",

@@ -12,12 +12,12 @@ import numpy as np
 
 from ..limits import TABPFN_CHUNK_ROWS, TABPFN_ROWS
 
+# no "nthread": XGBoost takes OMP_NUM_THREADS, every core when it is unset (start.sh leaves it unset)
 XGB_PARAMS = {
     "max_depth": 4,
     "eta": 0.05,
     "subsample": 0.8,
     "colsample_bytree": 0.8,
-    "nthread": 1,
     "objective": "reg:squarederror",
 }
 XGB_ROUNDS = 300
@@ -40,7 +40,7 @@ def fit_linear(X: np.ndarray, y: np.ndarray, tr: np.ndarray, ok: np.ndarray) -> 
 
 
 def fit_xgboost(X: np.ndarray, y: np.ndarray, tr: np.ndarray, ok: np.ndarray) -> Learned:
-    """Gradient-boosted trees, fixed hyperparameters, one thread."""
+    """Gradient-boosted trees, fixed hyperparameters, every core."""
     import xgboost as xgb
 
     # ponytail: fixed hyperparameters, tune per variable if XGBoost becomes the main model
@@ -77,7 +77,8 @@ def tabpfn_regressor(X: np.ndarray, y: np.ndarray) -> Any:
     except ImportError:
         raise NotInstalled("TabPFN is not installed here (uv sync installs it; the container needs IDT_ML=1)") from None
 
-    # one thread: with XGBoost's OpenMP already loaded, torch's thread pool deadlocks on macOS
+    # one thread: with XGBoost's OpenMP already loaded, torch's thread pool deadlocks on macOS (8 threads hung in
+    # 2026-11; Chronos-2 runs on the GPU, mps, and is not affected)
     torch.set_num_threads(1)
     reg = TabPFNRegressor.create_default_for_version(
         ModelVersion.V2, n_estimators=1, device="cpu", fit_mode="fit_with_cache", random_state=0, ignore_pretraining_limits=True

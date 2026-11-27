@@ -11,7 +11,7 @@ energy and check it", or "fit the 5 MW heat pump to my CSV".
 
 `app/backend/mcp_server.py` is a small program (standard library only) that speaks MCP over stdin/stdout. It
 does not hold any data itself: every call goes to the running app on port 7600, so there is one process within
-the 2 GB budget, and the page and the agent see the same files.
+the 8 GB budget, and the page and the agent see the same files.
 
 - **Every API route is a tool.** The tool list is generated from the app's own OpenAPI schema (read from the code,
   so the list is there even when the app is not running yet). A new endpoint is a new tool, with no change in the

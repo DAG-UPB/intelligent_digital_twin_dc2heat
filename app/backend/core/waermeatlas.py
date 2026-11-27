@@ -117,6 +117,30 @@ def write_db(db: Path, attribution: str, buildings: Iterable[dict], lines: Itera
     return n, m
 
 
+def parts_of(db: Path) -> list[str]:
+    """The downloads (a source's municipalities) a committed file was built from: a rebuild fetches the missing ones
+    first, so adding a municipality on another machine does not drop the others."""
+    if not db.exists():
+        return []
+    con = sqlite3.connect(db)
+    try:
+        row = con.execute("SELECT value FROM meta WHERE key = 'parts'").fetchone()
+    except sqlite3.OperationalError:
+        row = None  # a file from before the meta table
+    finally:
+        con.close()
+    return json.loads(row[0]) if row else []
+
+
+def set_parts(db: Path, parts: list[str]) -> None:
+    """Record the downloads `db` was built from (parts_of)."""
+    con = sqlite3.connect(db)
+    con.execute("CREATE TABLE IF NOT EXISTS meta (key TEXT PRIMARY KEY, value TEXT)")
+    con.execute("INSERT OR REPLACE INTO meta VALUES ('parts', ?)", (json.dumps(sorted(parts)),))
+    con.commit()
+    con.close()
+
+
 def find_db(own: Path, others: list[Path]) -> Path:
     """The newest import of the data folder's own and `others` (it has the most municipalities: each import holds
     every one fetched so far); `own` when none exists (the query's error then says how to import)."""

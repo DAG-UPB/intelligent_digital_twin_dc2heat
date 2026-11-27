@@ -1,7 +1,7 @@
 """Delivered CSV data files: read what the app needs to list them without loading them.
 
 A data center delivered as one big CSV (gigabytes, hundreds of columns) must not be read into memory to be listed:
-the app's budget is 2 GB. `csv_meta` reads only the header, the first rows (which columns are numbers, the time
+the app's budget is 8 GB. `csv_meta` reads only the header, the first rows (which columns are numbers, the time
 column, the step) and the last line (the end of the time span); the row count is estimated from the file size.
 `read_csv_data` loads a CSV small enough to fit (CSV_LOAD_MAX_BYTES) and refuses a bigger one with a message that
 says what to do, so the pages that need the values (Dashboard, training) explain instead of crashing the app.

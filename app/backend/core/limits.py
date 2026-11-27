@@ -1,13 +1,13 @@
-"""Memory and size limits, in one place so the 2 GB budget of the app can be reviewed together.
+"""Memory and size limits, in one place so the 8 GB budget of the app can be reviewed together.
 
-The app runs as one local process watched by a 2 GB RSS watchdog. These are the knobs that keep
-it under that: TabPFN context size and inputs, prediction chunks, free-run length, symbolic
-regression rows and the request caps on simulation and evaluation.
+The app runs as one local process watched by an 8 GB RSS watchdog (scripts/guard.sh; 2 GB until 2026-11). The
+model knobs below (TabPFN context size and inputs, prediction chunks, free-run length, symbolic regression rows and
+the request caps on simulation and evaluation) were sized for the earlier 2 GB and stay until raised on purpose.
 """
 
 # TabPFN (v2 weights): in-context learning on a sample of the training rows.
 # Each fitted regressor keeps an attention cache of its context rows (~50 MB per variable at 500 rows, ~100 MB at
-# 1000), on top of ~400 MB for TabPFN itself: 9 variables at 1000 rows went past the 2 GB budget. Saved models with
+# 1000), on top of ~400 MB for TabPFN itself: 9 variables at 1000 rows went past the old 2 GB budget. Saved models with
 # more rows are thinned to this many when loaded.
 # ponytail: 500 rows and 1 estimator for speed and memory (~20 ms per prediction on CPU); raise if accuracy matters more
 TABPFN_ROWS = 500

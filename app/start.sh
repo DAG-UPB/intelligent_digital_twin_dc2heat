@@ -6,8 +6,7 @@
 set -e
 cd "$(dirname "$0")"
 
-# Single-threaded math libs keep causal discovery from grabbing every core.
-export OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1
+# Every core for XGBoost and numpy (OMP_NUM_THREADS etc. unset); TabPFN's torch keeps one thread (learners.py).
 # Nothing about the data leaves this machine: no telemetry from FastAPI/OpenTelemetry or Hugging Face.
 export OTEL_SDK_DISABLED=true HF_HUB_DISABLE_TELEMETRY=1
 

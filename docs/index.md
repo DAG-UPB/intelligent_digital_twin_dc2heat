@@ -51,7 +51,7 @@ flowchart TD
 
 ### Where it runs
 
-Everything runs **locally**, as one Python process (FastAPI) that also serves the web page. There is no cloud service, no telemetry and no upload of data or drawings. The process is designed to stay under a **2 GB** memory budget. See {doc}`architecture/overview`.
+Everything runs **locally**, as one Python process (FastAPI) that also serves the web page. There is no cloud service, no telemetry and no upload of data or drawings. The process is designed to stay under an **8 GB** memory budget. See {doc}`architecture/overview`.
 
 ### Other help
 

@@ -72,7 +72,7 @@ show the user, then refine. Unsaved structure work stays a browser draft until t
 - Tool results go to the LLM provider, including P&ID images, time series and project exports of real data centers.
 - No `[writes]` tool and no Save/Train/*Use as P&ID*/*Open project* on real data unless the user asked for it.
 - Lag discovery is a suggestion. Never save discovered lags on your own.
-- Run Python under `app/scripts/guard.sh` (2 GB budget).
+- Run Python under `app/scripts/guard.sh` (8 GB budget).
 
 ## See also
 

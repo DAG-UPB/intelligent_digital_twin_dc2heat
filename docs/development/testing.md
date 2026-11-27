@@ -22,7 +22,7 @@ cd app
 .venv/bin/python -m pytest -q -m slow    # slow tests only: TabPFN, gplearn, tigramite (minutes, more memory)
 ```
 
-Run both under the 2 GB watchdog, `bash scripts/guard.sh .venv/bin/python -m pytest -q` (see {doc}`development`). The `slow` marker is for tests that load torch/TabPFN, run gplearn or run tigramite: `test_tabpfn.py`, `test_causal_discovery.py`, single tests in `test_symbolic.py`, `test_twin.py` and `test_api_graphs.py`, and the lag-discovery case of `test_routes.py`.
+Run both under the 8 GB watchdog, `bash scripts/guard.sh .venv/bin/python -m pytest -q` (see {doc}`development`). The `slow` marker is for tests that load torch/TabPFN, run gplearn or run tigramite: `test_tabpfn.py`, `test_causal_discovery.py`, single tests in `test_symbolic.py`, `test_twin.py` and `test_api_graphs.py`, and the lag-discovery case of `test_routes.py`.
 
 ### Synthetic fixtures
 

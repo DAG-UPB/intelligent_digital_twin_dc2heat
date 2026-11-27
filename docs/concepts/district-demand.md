@@ -381,7 +381,7 @@ For Frankfurt (and any other Hessian municipality, after a one-line change of th
 
 The layers share no key, so each point is joined to the outline that contains it. The other layers (blocks, 100 m and 1 km grid, street segments, parcels, renovation levels "stärker" and "ambitioniert") are not used.
 
-**Import, once.** `app/scripts/import_waermeatlas.py` downloads the zip into `app/data/_external/waermeatlas/` (git-ignored; the script refuses to run otherwise), unpacks the GeoPackage and writes `buildings.sqlite`: one row per heated building with WGS84 coordinates, its outline as `[lat, lon]` JSON, the most likely age class and its probability, and an SQLite **R-tree** over each outline's bounding box. It streams row by row through the GeoPackage's own R-tree indexes (each point finds the outlines whose box contains it, then a ray-casting test picks the one around it): about 9 s and 35 MB of memory, 39 MB on disk. Coordinates go from UTM 32N to WGS84 with Krüger's series in `backend/core/waermeatlas.py` (millimetre accuracy, no GDAL or pyproj; `tests/test_waermeatlas.py` checks it against the exact meridian arc and the forward series).
+**Import, once.** `app/scripts/import_waermeatlas.py` downloads the zip into `app/data/_external/waermeatlas/` (git-ignored; the built `buildings.sqlite` is committed), unpacks the GeoPackage and writes `buildings.sqlite`: one row per heated building with WGS84 coordinates, its outline as `[lat, lon]` JSON, the most likely age class and its probability, and an SQLite **R-tree** over each outline's bounding box. It streams row by row through the GeoPackage's own R-tree indexes (each point finds the outlines whose box contains it, then a ray-casting test picks the one around it): about 9 s and 35 MB of memory, 39 MB on disk. Coordinates go from UTM 32N to WGS84 with Krüger's series in `backend/core/waermeatlas.py` (millimetre accuracy, no GDAL or pyproj; `tests/test_waermeatlas.py` checks it against the exact meridian arc and the forward series).
 
 ```bash
 cd app && bash scripts/guard.sh .venv/bin/python scripts/import_waermeatlas.py   # --rebuild to write the SQLite again
@@ -415,7 +415,7 @@ where $f$ is the **non-residential correction** (default 1, applied only to buil
 
 ### Other states: the open atlases of `app/sources/`
 
-Each folder of `app/sources/` imports one more source into the same format, its own `buildings.sqlite` beside the Wärmeatlas one (`app/data/_external/<source>/`, git-ignored); the layer reads every source's import for the box, biggest demand first, and each building and street segment carries its `source`. The attribution and the information texts name the sources in view.
+Each folder of `app/sources/` imports one more source into the same format, its own `buildings.sqlite` beside the Wärmeatlas one (`app/data/_external/<source>/`; NRW's file is committed, the downloads git-ignored); the layer reads every source's import for the box, biggest demand first, and each building and street segment carries its `source`. The attribution and the information texts name the sources in view.
 
 | Source | Folder · run (in `app/`) | What it adds | Licence |
 |---|---|---|---|

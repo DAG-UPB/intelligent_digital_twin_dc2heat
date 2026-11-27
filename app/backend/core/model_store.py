@@ -80,7 +80,7 @@ def save(path: Path, bdir: Path, result: dict, boosters: dict | None, samples: d
 
 
 def _keep_one_tabpfn(key: str) -> None:
-    """Drop the TabPFN model held in memory (if another) before `key` loads: two at once can pass the 2 GB budget."""
+    """Drop the TabPFN model held in memory (if another) before `key` loads: two at once hold twice its memory."""
     for old in [k for k in _tabpfn_key if k != key]:
         _boosters.pop(old, None)
         _tabpfn_key.remove(old)

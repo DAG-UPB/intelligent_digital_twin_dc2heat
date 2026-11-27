@@ -2,13 +2,14 @@
 tiny synthetic shapefile zip (app/sources/)."""
 
 import os
+import sqlite3
 import struct
 import zipfile
 from pathlib import Path
 
 import pytest
 
-from backend.core.waermeatlas import buildings_in, find_dbs, heat_lines_in, utm32_to_wgs84, write_db
+from backend.core.waermeatlas import buildings_in, find_dbs, heat_lines_in, parts_of, set_parts, utm32_to_wgs84, write_db
 from sources import shp
 from sources.nrw import fetch as nrw
 
@@ -134,3 +135,14 @@ def test_nrw_names_are_found_by_name_or_ags() -> None:
     assert nrw.pick(["Köln", "05314000", "bonn"], files) == [files["05315000"], files["05314000"], files["05314000"]]
     with pytest.raises(ValueError, match="Koeln"):
         nrw.pick(["Koelnx"], files)
+
+
+def test_a_file_remembers_the_downloads_it_was_built_from(tmp_path: Path) -> None:
+    db = tmp_path / "nrw" / "buildings.sqlite"
+    assert parts_of(db) == []  # not built yet
+    db.parent.mkdir()
+    sqlite3.connect(db).close()  # a file from before the meta table
+    assert parts_of(db) == []
+    write_db(db, "credit", [])
+    set_parts(db, ["b.zip", "a.zip"])
+    assert parts_of(db) == ["a.zip", "b.zip"]

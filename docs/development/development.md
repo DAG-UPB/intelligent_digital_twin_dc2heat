@@ -25,12 +25,12 @@ cd web && npm install   # web app
 ```bash
 cd app
 ./start.sh                          # http://localhost:7600
-bash scripts/guard.sh ./start.sh    # the same, under the 2 GB watchdog (below)
+bash scripts/guard.sh ./start.sh    # the same, under the 8 GB watchdog (below)
 ```
 
 The app answers only requests addressed to `localhost`, `127.0.0.1` or `[::1]`, and refuses writes sent from a page of another site (see {doc}`../architecture/data-and-privacy`). To open it under another host name, set `IDT_ALLOWED_HOSTS` (comma-separated, for example `localhost,127.0.0.1,mybox.local`) before starting it.
 
-`start.sh` rebuilds the web app when any file in `web/src` (or `web/index.html`) is newer than the last build, syncs the Python environment, and starts one uvicorn process on port `7600` (override with `PORT`). It sets single-threaded math libraries (`OMP_NUM_THREADS=1` and friends, so causal discovery does not take every core) and disables telemetry.
+`start.sh` rebuilds the web app when any file in `web/src` (or `web/index.html`) is newer than the last build, syncs the Python environment, and starts one uvicorn process on port `7600` (override with `PORT`). It leaves the math libraries their threads (XGBoost and numpy use every core; TabPFN's torch keeps one, as two OpenMP runtimes in one process hang on macOS; set `OMP_NUM_THREADS=1` to hold the app to one core) and disables telemetry.
 
 **While developing the web app**, run the backend and the Vite dev server side by side:
 
@@ -58,15 +58,15 @@ bash build.sh -E        # sphinx-build -W --keep-going: every warning is an erro
 
 The backend serves `docs/_build/html` at `/docs/` (the bare `/docs` redirects there). Whether the folder exists is checked **once, at startup**: after the *first* build, restart the app. Later rebuilds need no restart, because the files are read from disk on every request; reload the page.
 
-## The 2 GB watchdog
+## The 8 GB watchdog
 
-The app has a memory budget of 2 GB (see {doc}`../architecture/overview`). TabPFN in particular can exceed it with too many inputs or rows. When you run the server or a heavy test run during development, run it under **`app/scripts/guard.sh`** instead of letting the machine swap. The script sums the resident memory (RSS) of the whole process tree every 0.5 s, kills the tree when the sum goes over the limit, and finally prints `peak RSS: <n> MB, exit <rc>`. It exits with the command's own exit code.
+The app has a memory budget of 8 GB (see {doc}`../architecture/overview`). TabPFN in particular can exceed it with too many inputs or rows. When you run the server or a heavy test run during development, run it under **`app/scripts/guard.sh`** instead of letting the machine swap. The script sums the resident memory (RSS) of the whole process tree every 0.5 s, kills the tree when the sum goes over the limit, and finally prints `peak RSS: <n> MB, exit <rc>`. It exits with the command's own exit code.
 
 ```bash
 cd app
-bash scripts/guard.sh ./start.sh                                  # the app, 2 GB limit
+bash scripts/guard.sh ./start.sh                                  # the app, 8 GB limit
 bash scripts/guard.sh .venv/bin/python -m pytest -q               # fast tests
-GUARD_MB=4096 bash scripts/guard.sh .venv/bin/python -m pytest -q -m slow   # another limit (MB)
+GUARD_MB=12288 bash scripts/guard.sh .venv/bin/python -m pytest -q -m slow   # another limit (MB)
 ```
 
 Because it samples every 0.5 s, a very short spike can slip past it. When a limit has to move, change it in `backend/core/limits.py` and check the peak again.

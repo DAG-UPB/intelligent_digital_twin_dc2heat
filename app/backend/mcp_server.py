@@ -3,7 +3,7 @@
 Model Context Protocol over stdio (JSON-RPC, one message per line), stdlib only. Every HTTP route becomes a tool,
 generated from the app's own OpenAPI schema, so a new endpoint is a new tool without a change here. Calls go to
 the running app (env IDT_URL, default http://127.0.0.1:7600): one process holds the data and models within the
-2 GB budget, and the page and the agent see the same files. Tools added for working with an LLM:
+8 GB budget, and the page and the agent see the same files. Tools added for working with an LLM:
 
   ui_snapshot the page the user has open: images, controls, text, its details and commands (ui_do acts on it)
   pid_view    the P&ID as an image with a coordinate grid, the placed variables and the drawing's components;

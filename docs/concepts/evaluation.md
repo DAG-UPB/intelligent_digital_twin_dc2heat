@@ -226,7 +226,7 @@ The page asks to keep each evaluation (`store: true` in `POST .../models/evaluat
 
 ## Limits
 
-The limits that keep evaluation and simulation within the app's 2 GB budget are named constants in one file:
+The limits that keep evaluation and simulation within the app's 8 GB budget are named constants in one file:
 
 <details>
 <summary><b>Source code:</b> <code>backend/core/limits.py</code></summary>

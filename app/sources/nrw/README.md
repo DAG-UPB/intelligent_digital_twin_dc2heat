@@ -12,7 +12,8 @@ bash scripts/guard.sh .venv/bin/python sources/nrw/fetch.py --rebuild     # the 
 - **Where from:** https://www.opengeodata.nrw.de/produkte/umwelt_klima/energie/kwp/ (`KWP-NRW_<AGS>_<name>_EPSG25832_Shape.zip`,
   one per municipality; Bonn 134 MB, Köln 336 MB). The model description is in each zip
   (`Kurzdokumentation_Raumwaermebedarfsmodell.pdf`).
-- **Where to:** `app/data/_external/nrw/` (git-ignored): the zips, read where they are, and `buildings.sqlite`.
+- **Where to:** `app/data/_external/nrw/`: the zips (git-ignored), read where they are, and `buildings.sqlite`
+  (committed: Bonn and Altenbeken are in the repository; a rebuild first downloads the municipalities it holds).
 - **What:** every heated building (outline, ALKIS use, EFH/RH/MFH/GMH or the non-residential use, age class, useful floor
   area, space heating and hot water kWh/a, space heating 2030 and 2045 with moderate renovation) and every street
   segment with heat (heat line density, the buildings' heat including commerce's process heat).

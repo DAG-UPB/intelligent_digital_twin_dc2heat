@@ -1,7 +1,7 @@
 """Import the Wärmeatlas Hessen buildings of Frankfurt am Main (or other municipalities) once, for the Site map.
 
 Downloads LEA's per-municipality delivery (Frankfurt: 255 MB zip, a GeoPackage) into app/data/_external/waermeatlas/
-(git-ignored), unpacks the GeoPackage and its data description, and writes `buildings.sqlite` next to them, with
+(the downloads git-ignored), unpacks the GeoPackage and its data description, and writes `buildings.sqlite` next to them, with
 the buildings of every municipality imported so far (another one: pass its delivery, e.g. 06411000_Darmstadt, or
 its URL; the names are LEA's, https://www.waermeatlas-hessen.de/daten_auslieferung/):
 one row per heated building (useful heat > 0) with WGS84 coordinates, its ALKIS outline and an R-tree, and the
@@ -36,7 +36,6 @@ Run from app/:  bash scripts/guard.sh .venv/bin/python scripts/import_waermeatla
 import json
 import sqlite3
 import struct
-import subprocess
 import sys
 import time
 import urllib.request
@@ -47,7 +46,7 @@ APP = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(APP))
 
 from backend.config import DATA_DIR  # noqa: E402
-from backend.core.waermeatlas import DB_FILE, SCHEMA, utm32_to_wgs84  # noqa: E402
+from backend.core.waermeatlas import DB_FILE, SCHEMA, parts_of, set_parts, utm32_to_wgs84  # noqa: E402
 
 BASE = "https://www.waermeatlas-hessen.de/daten_auslieferung/"
 FRANKFURT = "06412000_Frankfurt_am_Main"
@@ -253,12 +252,8 @@ def _copy_lines(src: Path, out: sqlite3.Connection) -> int:
 
 
 def main() -> None:
-    """Refuse unless git ignores the folder; fetch the deliveries asked for (Frankfurt by default); build the index
-    of every delivery fetched so far, when one is new (or with --rebuild)."""
-    probe = DIR / "buildings.sqlite"
-    ignored = subprocess.run(["git", "check-ignore", "-q", str(probe)], cwd=APP, check=False).returncode == 0
-    if not ignored:
-        sys.exit(f"git does not ignore {DIR}: add a .gitignore rule first (LEA's data must never be committed)")
+    """Fetch the deliveries asked for (Frankfurt by default); build the index of every delivery fetched so far and
+    every one the committed file was built from, when one is new (or with --rebuild)."""
     try:
         asked = [delivery_of(a) for a in sys.argv[1:] if not a.startswith("--")] or [FRANKFURT]
     except ValueError as exc:
@@ -272,8 +267,11 @@ def main() -> None:
     if DB.exists() and not new and "--rebuild" not in sys.argv:
         print(f"{DB} exists with these deliveries (pass --rebuild to write it again)")
         return
+    for d in parts_of(DB):  # the committed file's deliveries, not downloaded on this machine yet
+        fetch(d)
     srcs = imported()
     n = build(srcs, DB)
+    set_parts(DB, [FRANKFURT if p.parent == RAW else p.parent.name for p in srcs])
     print(
         f"{n} buildings of {len(srcs)} deliveries -> {DB} ({DB.stat().st_size / 1e6:.1f} MB) in {time.perf_counter() - t1:.1f} s"
     )
